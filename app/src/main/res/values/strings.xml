@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Kolejka</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="change_pwd_visibility">Change password visibility</string>
+    <string name="password">Password</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="sign_up">Sign up!</string>
+</resources>
