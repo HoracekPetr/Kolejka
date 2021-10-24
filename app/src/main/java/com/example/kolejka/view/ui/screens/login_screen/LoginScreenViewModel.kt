@@ -9,21 +9,21 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginScreenViewModel @Inject constructor(): ViewModel() {
 
-    private val _usernameText = mutableStateOf("")
-    val usernameText: State<String> = _usernameText
+    private val _username = mutableStateOf("")
+    val username: State<String> = _username
 
-    private val _passwordText = mutableStateOf("")
-    val passwordText: State<String> = _passwordText
+    private val _password = mutableStateOf("")
+    val password: State<String> = _password
 
     private val _passwordVisibility = mutableStateOf(false)
     val passwordVisibility: State<Boolean> = _passwordVisibility
 
-    fun setUsernameText(username: String){
-        _usernameText.value = username
+    fun setUsername(username: String){
+        _username.value = username
     }
 
-    fun setPasswordText(password: String){
-        _passwordText.value = password
+    fun setPassword(password: String){
+        _password.value = password
     }
 
     fun setPasswordVisibility(){

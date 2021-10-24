@@ -1,7 +1,5 @@
 package com.example.kolejka.view.ui.screens.login_screen
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -14,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -38,11 +35,15 @@ fun LoginScreen(viewModel: LoginScreenViewModel = hiltViewModel(), navController
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) { localFocusManager.clearFocus() }
             .padding(
                 start = PaddingMedium,
                 end = PaddingMedium,
                 top = PaddingMedium,
-                bottom = PaddingLarge
+                bottom = PaddingExtraLarge
             )
     ) {
         Column(
@@ -50,12 +51,6 @@ fun LoginScreen(viewModel: LoginScreenViewModel = hiltViewModel(), navController
             modifier = Modifier
                 .fillMaxSize()
                 .align(Alignment.Center)
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null
-                ) { localFocusManager.clearFocus() },
-/*            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Center*/
         )
         {
             Text(
@@ -67,16 +62,16 @@ fun LoginScreen(viewModel: LoginScreenViewModel = hiltViewModel(), navController
             Spacer(modifier = Modifier.size(Space16))
 
             StandardTextField(
-                text = viewModel.usernameText.value,
+                text = viewModel.username.value,
                 hint = stringResource(R.string.username),
-                onTextChanged = { viewModel.setUsernameText(it) })
+                onTextChanged = { viewModel.setUsername(it) })
 
             Spacer(modifier = Modifier.size(Space16))
 
             PasswordTextField(
-                text = viewModel.passwordText.value,
+                text = viewModel.password.value,
                 hint = stringResource(R.string.password),
-                onTextChanged = { viewModel.setPasswordText(it) },
+                onTextChanged = { viewModel.setPassword(it) },
                 isPasswordVisible = viewModel.passwordVisibility.value
             ) {
                 viewModel.setPasswordVisibility()
@@ -85,7 +80,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = hiltViewModel(), navController
             Spacer(modifier = Modifier.size(Space16))
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {},
                 modifier = Modifier
                     .align(Alignment.End)
                     .clip(
@@ -99,15 +94,23 @@ fun LoginScreen(viewModel: LoginScreenViewModel = hiltViewModel(), navController
         Row(
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
-            Text(text = stringResource(R.string.no_account), style = MaterialTheme.typography.subtitle1, color = BlackAccent)
+            Text(
+                text = stringResource(R.string.no_account),
+                style = MaterialTheme.typography.subtitle1,
+                color = BlackAccent
+            )
 
             Spacer(modifier = Modifier.size(Space12))
 
-            Text(text = stringResource(R.string.sign_up), style = Typography.subtitle2, color = DarkPurple, modifier = Modifier.clickable {
-                navController.navigate(
-                    Screen.RegisterScreen.route
-                )
-            })
+            Text(
+                text = stringResource(R.string.sign_up),
+                style = Typography.subtitle2,
+                color = DarkPurple,
+                modifier = Modifier.clickable {
+                    navController.navigate(
+                        Screen.RegisterScreen.route
+                    )
+                })
         }
     }
 }

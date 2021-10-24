@@ -53,5 +53,10 @@ val Typography = Typography(
         fontFamily = roboto_mono,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp
+    ),
+    caption = TextStyle(
+        fontFamily = roboto_mono,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp
     )
 )

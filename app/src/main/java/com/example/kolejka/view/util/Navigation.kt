@@ -18,7 +18,7 @@ fun Navigation() {
         composable(
             route = Screen.RegisterScreen.route
         ){
-            RegisterScreen()
+            RegisterScreen(navController = navController)
         }
     }
 }
