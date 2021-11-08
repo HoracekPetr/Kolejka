@@ -80,7 +80,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = hiltViewModel(), navController
             Spacer(modifier = Modifier.size(Space16))
 
             Button(
-                onClick = {},
+                onClick = { navController.navigate(Screen.PostScreen.route) },
                 modifier = Modifier
                     .align(Alignment.End)
                     .clip(
