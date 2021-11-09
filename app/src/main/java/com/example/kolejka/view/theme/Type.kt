@@ -20,11 +20,10 @@ val roboto_mono = FontFamily(
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-    //Delší texty - především popisy příspěvků
     body1 = TextStyle(
         fontFamily = roboto_mono,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontWeight = FontWeight.Medium,
+        fontSize = 22.sp
     ),
     //Nadpisy - medium
     h1 = TextStyle(

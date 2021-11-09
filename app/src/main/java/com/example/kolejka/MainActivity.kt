@@ -3,7 +3,9 @@ package com.example.kolejka
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -67,9 +69,11 @@ class MainActivity : ComponentActivity() {
                                 onItemClick = { navController.navigate(it.route) },
                                 showBottomBar = navBackStackEntry?.destination?.route in screensWithBottomBar
                             )
+                        },
+                    ) { innerPadding ->
+                        Box(modifier = Modifier.padding(innerPadding)){
+                            Navigation(navController)
                         }
-                    ) {
-                        Navigation(navController)
                     }
 
                 }
