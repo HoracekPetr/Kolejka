@@ -19,7 +19,7 @@ fun FloatingAddPostButton(
             text = {
                 Text(text = buttonText, style = MaterialTheme.typography.subtitle2)
             },
-            onClick = { /*TODO*/ },
+            onClick = {},
             icon = {
                 Icon(imageVector = Icons.Filled.PostAdd, contentDescription = iconDescription)
             },
