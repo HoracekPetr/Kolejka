@@ -11,4 +11,9 @@
     <string name="sign_in">Sign in!</string>
     <string name="email">E-Mail</string>
     <string name="add_new_post">Add New Post</string>
+    <string name="event">Event</string>
+    <string name="offer">Offer</string>
+    <string name="posts">Posts</string>
+    <string name="notifications">Notifications</string>
+    <string name="profile">Profile</string>
 </resources>

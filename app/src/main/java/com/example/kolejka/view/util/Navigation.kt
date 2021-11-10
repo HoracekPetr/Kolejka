@@ -1,5 +1,6 @@
 package com.example.kolejka.view.util
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Menu
@@ -18,7 +19,10 @@ import com.example.kolejka.view.ui.screens.main_post_screen.PostScreen
 import com.example.kolejka.view.ui.screens.notification_screen.NotificationScreen
 import com.example.kolejka.view.ui.screens.profile_screen.ProfileScreen
 import com.example.kolejka.view.ui.screens.register_screen.RegisterScreen
+import com.google.accompanist.pager.ExperimentalPagerApi
 
+@ExperimentalPagerApi
+@ExperimentalMaterialApi
 @Composable
 fun Navigation(navController: NavHostController) {
 

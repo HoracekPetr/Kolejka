@@ -25,26 +25,29 @@ import com.example.kolejka.view.ui.components.bottom_navigation.BottomNavItem
 import com.example.kolejka.view.ui.components.bottom_navigation.FloatingAddPostButton
 import com.example.kolejka.view.util.Navigation
 import com.example.kolejka.view.util.Screen
+import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @ExperimentalMaterialApi
+    @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val bottomBarItems = listOf(
             BottomNavItem(
-                name = "Posts",
+                name = getString(R.string.posts),
                 route = Screen.PostScreen.route,
                 Icons.Outlined.Menu
             ),
             BottomNavItem(
-                name = "Notifications",
+                name = getString(R.string.notifications),
                 route = Screen.NotificationScreen.route,
                 Icons.Outlined.Notifications
             ),
             BottomNavItem(
-                name = "Profile",
+                name = getString(R.string.profile),
                 route = Screen.ProfileScreen.route,
                 Icons.Outlined.Person
             )

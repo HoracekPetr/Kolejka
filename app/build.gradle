@@ -106,4 +106,5 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
     implementation 'androidx.room:room-ktx:2.3.0'
 
+    implementation "com.google.accompanist:accompanist-pager:0.18.0"
 }
