@@ -16,3 +16,4 @@ val Space24 = 24.dp
 
 val PostHeight = 225.dp
 val PostProfileSize = 30.dp
+val PostDetailProfileSize = 50.dp

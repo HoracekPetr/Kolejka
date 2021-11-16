@@ -18,67 +18,68 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.example.kolejka.R
+import com.example.kolejka.models.Post
 import com.example.kolejka.view.theme.*
 
 @Composable
 fun PostComposable(
-    post: Post
+        post: Post,
+        onPostClick: () -> Unit
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(PaddingMedium)
-            .clip(RoundedCornerShape(Space12))
-            .clickable { }
+            modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(PaddingMedium)
+                    .clip(RoundedCornerShape(Space12))
+                    .clickable { onPostClick() }
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.LightGray)
-                .padding(PaddingMedium),
-            horizontalAlignment = Alignment.Start
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.LightGray)
+                        .padding(PaddingMedium),
+                horizontalAlignment = Alignment.Start
         ) {
             Image(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(Space8))
-                    .fillMaxWidth()
-                    .height(PostHeight),
-                contentScale = ContentScale.FillBounds,
-                painter = painterResource(id = R.drawable.schick),
-                contentDescription = "Post Image"
+                    modifier = Modifier
+                            .clip(RoundedCornerShape(Space8))
+                            .fillMaxWidth()
+                            .height(PostHeight),
+                    contentScale = ContentScale.FillBounds,
+                    painter = painterResource(id = R.drawable.schick),
+                    contentDescription = "Post Image"
             )
             Spacer(modifier = Modifier.size(Space12))
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    modifier = Modifier.weight(4f),
-                    text = post.title,
-                    style = MaterialTheme.typography.body1,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
+                        modifier = Modifier.weight(4f),
+                        text = post.title,
+                        style = MaterialTheme.typography.body1,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                 )
                 Image(
-                    modifier = Modifier
-                        .size(PostProfileSize)
-                        .weight(1f, fill = false)
-                        .clip(CircleShape),
-                    painter = painterResource(id = R.drawable.petr),
-                    contentDescription = "Profile Image",
+                        modifier = Modifier
+                                .size(PostProfileSize)
+                                .weight(1f, fill = false)
+                                .clip(CircleShape),
+                        painter = painterResource(id = R.drawable.petr),
+                        contentDescription = "Profile Image",
                 )
             }
             Spacer(modifier = Modifier.size(Space8))
             Divider(color = DarkGray)
             Spacer(modifier = Modifier.size(Space8))
             Text(
-                text = post.description,
-                style = MaterialTheme.typography.caption,
-                color = DarkGray,
-                overflow = TextOverflow.Ellipsis
+                    text = post.description,
+                    style = MaterialTheme.typography.caption,
+                    color = DarkGray,
+                    overflow = TextOverflow.Ellipsis
             )
         }
     }

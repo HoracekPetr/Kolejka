@@ -16,4 +16,6 @@
     <string name="posts">Posts</string>
     <string name="notifications">Notifications</string>
     <string name="profile">Profile</string>
+    <string name="available">Available</string>
+    <string name="join">Join</string>
 </resources>

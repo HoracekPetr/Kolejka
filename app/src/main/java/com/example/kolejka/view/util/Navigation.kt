@@ -1,22 +1,15 @@
 package com.example.kolejka.view.util
 
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.kolejka.view.ui.components.BottomNavigationBar
-import com.example.kolejka.view.ui.components.bottom_navigation.BottomNavItem
+import com.example.kolejka.models.Post
 import com.example.kolejka.view.ui.screens.login_screen.LoginScreen
 import com.example.kolejka.view.ui.screens.main_post_screen.PostScreen
 import com.example.kolejka.view.ui.screens.notification_screen.NotificationScreen
+import com.example.kolejka.view.ui.screens.post_detail_screen.PostDetailScreen
 import com.example.kolejka.view.ui.screens.profile_screen.ProfileScreen
 import com.example.kolejka.view.ui.screens.register_screen.RegisterScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -32,27 +25,40 @@ fun Navigation(navController: NavHostController) {
         }
 
         composable(
-            route = Screen.RegisterScreen.route
+                route = Screen.RegisterScreen.route
         ) {
             RegisterScreen(navController = navController)
         }
 
         composable(
-            route = Screen.PostScreen.route
+                route = Screen.PostScreen.route
         ) {
             PostScreen(navController = navController)
         }
 
         composable(
-            route = Screen.NotificationScreen.route
+                route = Screen.NotificationScreen.route
         ) {
             NotificationScreen(navController = navController)
         }
 
         composable(
-            route = Screen.ProfileScreen.route
+                route = Screen.ProfileScreen.route
         ) {
             ProfileScreen(navController = navController)
+        }
+
+        composable(
+                route = Screen.PostDetailScreen.route
+        ) {
+            PostDetailScreen(
+                    navController = navController,
+                    post = Post(
+                            title = "Hamehamehafa",
+                            username = "Petr Horáček",
+                            description = "sadp kasd paspdkapsd aspdaoskdpfhgfhgfhfghfg haksp dkaosdk poka sdpkspa aka fuka fundi luka luka fuka motorku dsheoioj ",
+                            limit = 10)
+            )
         }
     }
 

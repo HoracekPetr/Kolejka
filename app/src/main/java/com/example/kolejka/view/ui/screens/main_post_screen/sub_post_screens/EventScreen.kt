@@ -4,20 +4,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.kolejka.view.ui.components.posts.Post
+import androidx.navigation.NavController
+import com.example.kolejka.models.Post
 import com.example.kolejka.view.ui.components.posts.PostList
 
 val eventList = listOf(
-    Post("Fotbal na Harcově", "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("Gungoslav", "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("Pěkně smradlavá prdel kurva", "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("Shit Party", "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("BEEEERPONKKK", "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD")
+    Post("Fotbal na Harcově", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
+    Post("Gungoslav", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
+    Post("Pěkně smradlavá prdel kurva", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
+    Post("Shit Party", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
+    Post("BEEEERPONKKK", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD")
 )
 
 @Composable
-fun EventScreen() {
+fun EventScreen(navController: NavController) {
     Box(modifier = Modifier.fillMaxSize()) {
-        PostList(eventList)
+        PostList(eventList, navController)
     }
 }

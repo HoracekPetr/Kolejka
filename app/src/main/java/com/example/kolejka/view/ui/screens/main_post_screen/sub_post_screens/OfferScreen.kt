@@ -4,20 +4,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.kolejka.view.ui.components.posts.Post
+import androidx.navigation.NavController
+import com.example.kolejka.models.Post
 import com.example.kolejka.view.ui.components.posts.PostList
 
 val offerList = listOf(
-    Post("Guláš", "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("Salát", "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("Staré židle", "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("Volant od felicie", "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("Humahumahuma", "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD")
+    Post("Guláš", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
+    Post("Salát", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
+    Post("Staré židle", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
+    Post("Volant od felicie", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
+    Post("Humahumahuma", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD")
 )
 
 @Composable
-fun OfferScreen() {
+fun OfferScreen(navController: NavController) {
     Box(modifier = Modifier.fillMaxSize()) {
-        PostList(offerList)
+        PostList(offerList, navController)
     }
 }
