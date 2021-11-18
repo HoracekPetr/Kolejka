@@ -13,8 +13,15 @@ class PostDetailScreenViewModel @Inject constructor(
     private val _availability = mutableStateOf(0)
     val availability: State<Int> = _availability
 
+    private val _commentText = mutableStateOf("")
+    val commentText: State<String> = _commentText
+
     fun incrementAvailability(){
         _availability.value++
+    }
+
+    fun setCommentText(comment: String){
+        _commentText.value = comment
     }
 
 }

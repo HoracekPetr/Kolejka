@@ -18,4 +18,6 @@
     <string name="profile">Profile</string>
     <string name="available">Available</string>
     <string name="join">Join</string>
+    <string name="your_comment">Your comment</string>
+    <string name="send_comment">Send comment</string>
 </resources>
