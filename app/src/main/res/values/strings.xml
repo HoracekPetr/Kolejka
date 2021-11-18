@@ -20,4 +20,8 @@
     <string name="join">Join</string>
     <string name="your_comment">Your comment</string>
     <string name="send_comment">Send comment</string>
+    <string name="joined">joined</string>
+    <string name="wants">wants</string>
+    <string name="your_event">your event</string>
+    <string name="your_offer">your offer</string>
 </resources>

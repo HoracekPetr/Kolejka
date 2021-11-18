@@ -56,11 +56,11 @@ fun Navigation(navController: NavHostController) {
                     post = Post(
                             title = "Hamehamehafa",
                             username = "Petr Horáček",
-                            description = "sadp kasd paspdkapsd aspdaoskdpfhgfhgfhfghfg haksp dkaosdk poka sdpkspa aka fuka fundi luka luka fuka motorku dsheoioj ",
-                            limit = 10)
+                            description = "dopkasd d apfd dsfpokd fpsf apsdofk pasokf asdpofkasd ffpasdof fodkfod fapodkfas dfpsodf apdod fodf apsdofak spokfds apfo podskfoasdkfpokasd fsadp kasd paspdkapsd aspdaoskdpfhgfhgfhfghfg haksp dkaosdk poka sdpkspa aka fuka fundi luka luka fuka motorku dsheoioj ",
+                            limit = 10,
+                            members = listOf("Petr Horáček")
+                    )
             )
         }
     }
-
-
 }

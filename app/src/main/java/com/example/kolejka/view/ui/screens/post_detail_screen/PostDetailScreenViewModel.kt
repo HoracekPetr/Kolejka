@@ -16,12 +16,19 @@ class PostDetailScreenViewModel @Inject constructor(
     private val _commentText = mutableStateOf("")
     val commentText: State<String> = _commentText
 
+    private val _members = mutableStateOf(emptyList<String>())
+    val members: State<List<String>> = _members
+
     fun incrementAvailability(){
         _availability.value++
     }
 
     fun setCommentText(comment: String){
         _commentText.value = comment
+    }
+
+    fun addMembersToPost(member: String){
+        _members.value += member
     }
 
 }

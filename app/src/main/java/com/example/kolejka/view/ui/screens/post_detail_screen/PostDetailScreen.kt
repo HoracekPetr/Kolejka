@@ -100,6 +100,7 @@ fun PostDetailScreen(
                     Log.d("Available", "${post.available}")
                     viewModel.incrementAvailability()
                     post.available = viewModel.availability.value
+                    /*TODO("API CALL přidání člena k postu")*/
                 }
             },
                     enabled = post.available < post.limit,
@@ -113,25 +114,26 @@ fun PostDetailScreen(
         Spacer(modifier = Modifier.size(Space8))
 
         //KOMENTAROVA SEKCE
-
-        Box() {
-            LazyColumn {
-                items(5) {
-                    CommentComposable(
-                            comment = Comment(username = "Petr Horáček", comment = "Myslím, že to je pěkná kokotina dělat takovouhle aplikaci, ale proti gustu žádnej dišputát xD"),
-                            modifier = Modifier.fillMaxWidth()
-                    )
-                }
-                item {
-                    Row(modifier = Modifier.fillMaxWidth().padding(PaddingMedium).align(Alignment.Center), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                        CommentTextField(
-                                modifier = Modifier.weight(7f),
-                                text = viewModel.commentText.value,
-                                hint = stringResource(R.string.your_comment),
-                                onTextChanged = { viewModel.setCommentText(it) }
+        if(post.username in post.members){
+            Box() {
+                LazyColumn {
+                    items(5) {
+                        CommentComposable(
+                                comment = Comment(username = "Petr Horáček", comment = "Myslím, že to je pěkná kokotina dělat takovouhle aplikaci, ale proti gustu žádnej dišputát xD"),
+                                modifier = Modifier.fillMaxWidth()
                         )
-                        IconButton(onClick = { /*TODO*/ }, modifier = Modifier.weight(1f, fill = true)) {
-                            Icon(imageVector = Icons.Default.Send, contentDescription = stringResource(R.string.send_comment), tint = DarkPurple)
+                    }
+                    item {
+                        Row(modifier = Modifier.fillMaxWidth().padding(PaddingMedium).align(Alignment.Center), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                            CommentTextField(
+                                    modifier = Modifier.weight(7f),
+                                    text = viewModel.commentText.value,
+                                    hint = stringResource(R.string.your_comment),
+                                    onTextChanged = { viewModel.setCommentText(it) }
+                            )
+                            IconButton(onClick = { /*TODO*/ }, modifier = Modifier.weight(1f, fill = true)) {
+                                Icon(imageVector = Icons.Default.Send, contentDescription = stringResource(R.string.send_comment), tint = DarkPurple)
+                            }
                         }
                     }
                 }
