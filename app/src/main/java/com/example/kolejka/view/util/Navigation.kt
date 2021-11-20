@@ -2,10 +2,13 @@ package com.example.kolejka.view.util
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ExperimentalGraphicsApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.kolejka.models.Post
+import com.example.kolejka.models.User
+import com.example.kolejka.view.ui.screens.edit_profile_dialog.EditProfileDialog
 import com.example.kolejka.view.ui.screens.login_screen.LoginScreen
 import com.example.kolejka.view.ui.screens.main_post_screen.PostScreen
 import com.example.kolejka.view.ui.screens.notification_screen.NotificationScreen
@@ -14,6 +17,7 @@ import com.example.kolejka.view.ui.screens.profile_screen.ProfileScreen
 import com.example.kolejka.view.ui.screens.register_screen.RegisterScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
+@ExperimentalGraphicsApi
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
@@ -45,7 +49,7 @@ fun Navigation(navController: NavHostController) {
         composable(
                 route = Screen.ProfileScreen.route
         ) {
-            ProfileScreen(navController = navController)
+            ProfileScreen(navController = navController, User(userId = "sfdfad", profilePictureUrl = "", username = "Petr Horáček"))
         }
 
         composable(

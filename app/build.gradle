@@ -107,4 +107,6 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.3.0'
 
     implementation "com.google.accompanist:accompanist-pager:0.18.0"
+
+    implementation 'com.godaddy.android.colorpicker:compose-color-picker:0.2.1'
 }
