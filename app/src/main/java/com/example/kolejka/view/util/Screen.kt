@@ -7,4 +7,5 @@ sealed class Screen(val route: String) {
     object NotificationScreen: Screen("notification_screen")
     object ProfileScreen: Screen("profile_screen")
     object PostDetailScreen: Screen("post_detail_screen")
+    object NewPostScreen: Screen("new_post_screen")
 }

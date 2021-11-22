@@ -12,8 +12,25 @@ class ProfileScreenViewModel @Inject constructor() : ViewModel(){
     private var _showEditProfileDialog = mutableStateOf(false)
     var showEditProfileDialog: State<Boolean> = _showEditProfileDialog
 
+    private var _yourPostsRadioEnabled = mutableStateOf(true)
+    var yourPostsRadioEnabled: State<Boolean> = _yourPostsRadioEnabled
+
+    private var _joinedPostsRadioEnabled = mutableStateOf(false)
+    var joinedPostsRadioEnabled: State<Boolean> = _joinedPostsRadioEnabled
+
+
     fun setEditProfileDialogEnabled(enabled: Boolean){
         _showEditProfileDialog.value = enabled
+    }
+
+    fun setYourPostsRadioEnabled(enabled: Boolean){
+        _yourPostsRadioEnabled.value = enabled
+        _joinedPostsRadioEnabled.value = !enabled
+    }
+
+    fun setJoinedPostsRadioEnabled(enabled: Boolean){
+        _joinedPostsRadioEnabled.value = enabled
+        _yourPostsRadioEnabled.value = !enabled
     }
 
 }

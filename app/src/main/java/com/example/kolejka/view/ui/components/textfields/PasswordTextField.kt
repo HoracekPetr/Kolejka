@@ -17,6 +17,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.kolejka.R
 import com.example.kolejka.view.theme.DarkGray
+import com.example.kolejka.view.theme.ExtraLightGray
+import com.example.kolejka.view.theme.LightGray
 
 @Composable
 fun PasswordTextField(
@@ -35,6 +37,7 @@ fun PasswordTextField(
         },
         singleLine = true,
         maxLines = 1,
+        colors = TextFieldDefaults.textFieldColors(backgroundColor = ExtraLightGray),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         visualTransformation = if(isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {

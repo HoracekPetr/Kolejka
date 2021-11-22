@@ -1,4 +1,4 @@
-package com.example.kolejka.view.ui.screens.edit_profile_dialog
+package com.example.kolejka.view.ui.components.profile.edit_profile_dialog
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

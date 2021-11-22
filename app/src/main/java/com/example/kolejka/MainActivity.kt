@@ -84,8 +84,10 @@ class MainActivity : ComponentActivity() {
                         floatingActionButton = {
                             FloatingAddPostButton(
                                 showButton = navBackStackEntry?.destination?.route in screensWithAddPostButton,
+                                buttonIcon = Icons.Default.PostAdd,
                                 buttonText = stringResource(id = R.string.add_new_post),
-                                iconDescription = stringResource(id = R.string.add_new_post) 
+                                iconDescription = stringResource(id = R.string.add_new_post),
+                                onButtonClick = { navController.navigate(Screen.NewPostScreen.route) }
                             )
                         }
                     ) { innerPadding ->

@@ -8,15 +8,13 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.kolejka.view.theme.DarkGray
-import com.example.kolejka.view.theme.PaddingMedium
-import com.example.kolejka.view.theme.PaddingSmall
-import com.example.kolejka.view.theme.Typography
+import com.example.kolejka.view.theme.*
 
 @Composable
 fun EmailTextField(
@@ -34,6 +32,7 @@ fun EmailTextField(
                 Text(text = hint, style = MaterialTheme.typography.h2, color = DarkGray)
             },
             singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(backgroundColor = ExtraLightGray),
             isError = isIncorrectEmail,
             maxLines = 1,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),

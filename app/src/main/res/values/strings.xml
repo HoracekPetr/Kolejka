@@ -13,6 +13,8 @@
     <string name="add_new_post">Add New Post</string>
     <string name="event">Event</string>
     <string name="offer">Offer</string>
+    <string name="events">Events</string>
+    <string name="offers">Offers</string>
     <string name="posts">Posts</string>
     <string name="notifications">Notifications</string>
     <string name="profile">Profile</string>
@@ -25,4 +27,11 @@
     <string name="your_event">your event</string>
     <string name="your_offer">your offer</string>
     <string name="send">Send</string>
+    <string name="your_posts">Your posts</string>
+    <string name="joined_posts">Joined posts</string>
+    <string name="create_the_post">Create the post!</string>
+    <string name="add_a_new_photo">Add a new photo</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="limit">Limit</string>
 </resources>

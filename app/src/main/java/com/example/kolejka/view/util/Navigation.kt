@@ -11,6 +11,7 @@ import com.example.kolejka.models.User
 import com.example.kolejka.view.ui.screens.edit_profile_dialog.EditProfileDialog
 import com.example.kolejka.view.ui.screens.login_screen.LoginScreen
 import com.example.kolejka.view.ui.screens.main_post_screen.PostScreen
+import com.example.kolejka.view.ui.screens.new_post_screen.NewPostScreen
 import com.example.kolejka.view.ui.screens.notification_screen.NotificationScreen
 import com.example.kolejka.view.ui.screens.post_detail_screen.PostDetailScreen
 import com.example.kolejka.view.ui.screens.profile_screen.ProfileScreen
@@ -65,6 +66,12 @@ fun Navigation(navController: NavHostController) {
                             members = listOf("Petr Horáček")
                     )
             )
+        }
+
+        composable(
+            route = Screen.NewPostScreen.route
+        ){
+            NewPostScreen(navController = navController)
         }
     }
 }

@@ -62,9 +62,14 @@ fun LoginScreen(viewModel: LoginScreenViewModel = hiltViewModel(), navController
             Spacer(modifier = Modifier.size(Space16))
 
             StandardTextField(
+                modifier = Modifier.fillMaxWidth(),
                 text = viewModel.username.value,
                 hint = stringResource(R.string.username),
-                onTextChanged = { viewModel.setUsername(it) })
+                textStyle = MaterialTheme.typography.h2,
+                onTextChanged = { viewModel.setUsername(it) },
+                placeholderTextColor = DarkGray,
+                placeholderTextStyle = MaterialTheme.typography.h2,
+            )
 
             Spacer(modifier = Modifier.size(Space16))
 

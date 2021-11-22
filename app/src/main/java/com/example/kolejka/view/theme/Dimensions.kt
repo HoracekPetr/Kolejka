@@ -19,3 +19,5 @@ val PostHeight = 225.dp
 val PostProfileSize = 30.dp
 val PostDetailProfileSize = 50.dp
 val ProfilePicSize = 80.dp
+
+val PostStripPicSize = 75.dp
