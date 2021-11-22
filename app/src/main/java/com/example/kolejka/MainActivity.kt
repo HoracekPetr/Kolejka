@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
                             BottomNavigationBar(
                                 items = bottomBarItems,
                                 navController = navController,
-                                onItemClick = { navController.navigate(it.route) },
+                                onItemClick = { if(navBackStackEntry?.destination?.route != it.route) navController.navigate(it.route) },
                                 showBottomBar = navBackStackEntry?.destination?.route in screensWithBottomBar
                             )
                         },
