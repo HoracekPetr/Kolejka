@@ -85,7 +85,10 @@ fun LoginScreen(viewModel: LoginScreenViewModel = hiltViewModel(), navController
             Spacer(modifier = Modifier.size(Space16))
 
             Button(
-                onClick = { navController.navigate(Screen.PostScreen.route) },
+                onClick = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.PostScreen.route)
+                },
                 modifier = Modifier
                     .align(Alignment.End)
                     .clip(

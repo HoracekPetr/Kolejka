@@ -30,47 +30,54 @@ fun Navigation(navController: NavHostController) {
         }
 
         composable(
-                route = Screen.RegisterScreen.route
+            route = Screen.RegisterScreen.route
         ) {
             RegisterScreen(navController = navController)
         }
 
         composable(
-                route = Screen.PostScreen.route
+            route = Screen.PostScreen.route
         ) {
             PostScreen(navController = navController)
         }
 
         composable(
-                route = Screen.NotificationScreen.route
+            route = Screen.NotificationScreen.route
         ) {
             NotificationScreen(navController = navController)
         }
 
         composable(
-                route = Screen.ProfileScreen.route
+            route = Screen.ProfileScreen.route
         ) {
-            ProfileScreen(navController = navController, User(userId = "sfdfad", profilePictureUrl = "", username = "Petr Horáček"))
+            ProfileScreen(
+                navController = navController,
+                User(
+                    userId = "sfdfad",
+                    profilePictureUrl = "",
+                    username = "Petr Horáček",
+                )
+            )
         }
 
         composable(
-                route = Screen.PostDetailScreen.route
+            route = Screen.PostDetailScreen.route
         ) {
             PostDetailScreen(
-                    navController = navController,
-                    post = Post(
-                            title = "Hamehamehafa",
-                            username = "Petr Horáček",
-                            description = "dopkasd d apfd dsfpokd fpsf apsdofk pasokf asdpofkasd ffpasdof fodkfod fapodkfas dfpsodf apdod fodf apsdofak spokfds apfo podskfoasdkfpokasd fsadp kasd paspdkapsd aspdaoskdpfhgfhgfhfghfg haksp dkaosdk poka sdpkspa aka fuka fundi luka luka fuka motorku dsheoioj ",
-                            limit = 10,
-                            members = listOf("Petr Horáček")
-                    )
+                navController = navController,
+                post = Post(
+                    title = "Hamehamehafa",
+                    username = "Petr Horáček",
+                    description = "dopkasd d apfd dsfpokd fpsf apsdofk pasokf asdpofkasd ffpasdof fodkfod fapodkfas dfpsodf apdod fodf apsdofak spokfds apfo podskfoasdkfpokasd fsadp kasd paspdkapsd aspdaoskdpfhgfhgfhfghfg haksp dkaosdk poka sdpkspa aka fuka fundi luka luka fuka motorku dsheoioj ",
+                    limit = 10,
+                    members = listOf("Petr Horáček")
+                )
             )
         }
 
         composable(
             route = Screen.NewPostScreen.route
-        ){
+        ) {
             NewPostScreen(navController = navController)
         }
     }
