@@ -24,7 +24,7 @@ fun BottomNavigationBar(
 ) {
     val backStackEntry = navController.currentBackStackEntryAsState()
 
-    if(showBottomBar) {
+    if (showBottomBar) {
         BottomNavigation(
             modifier = modifier,
             backgroundColor = LightGray,
@@ -36,16 +36,40 @@ fun BottomNavigationBar(
                     selected = selected,
                     selectedContentColor = DarkPurple,
                     unselectedContentColor = DarkGray,
-                    onClick = { onItemClick(item) },
+                    onClick = {
+                        onItemClick(item)
+                        item.notificationCount = 0
+                    },
                     icon = {
-                        Column(horizontalAlignment = CenterHorizontally) {
-                            Icon(imageVector = item.icon, contentDescription = item.name)
-                            if (selected) {
+                        if (item.notificationCount != 0) {
+                            BadgedBox(badge = {
                                 Text(
-                                    text = item.name,
-                                    style = Typography.caption,
-                                    color = DarkPurple
+                                    text = item.notificationCount.toString(),
+                                    style = MaterialTheme.typography.caption,
+                                    color = DarkPurple,
                                 )
+                            }) {
+                                Column(horizontalAlignment = CenterHorizontally) {
+                                    Icon(imageVector = item.icon, contentDescription = item.name)
+                                    if (selected) {
+                                        Text(
+                                            text = item.name,
+                                            style = Typography.caption,
+                                            color = DarkPurple
+                                        )
+                                    }
+                                }
+                            }
+                        } else {
+                            Column(horizontalAlignment = CenterHorizontally) {
+                                Icon(imageVector = item.icon, contentDescription = item.name)
+                                if (selected) {
+                                    Text(
+                                        text = item.name,
+                                        style = Typography.caption,
+                                        color = DarkPurple
+                                    )
+                                }
                             }
                         }
                     }
