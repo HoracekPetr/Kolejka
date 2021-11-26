@@ -30,17 +30,19 @@ fun NotificationComposable(
             elevation = Space4
     ) {
         Row(modifier = Modifier
-                .fillMaxSize()
-                .padding(PaddingSmall), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
+            .fillMaxSize()
+            .padding(PaddingSmall), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
         ) {
             val fillerText = when(notification.notificationType){
                 is NotificationAction.JoinedEvent -> stringResource(id = R.string.joined)
                 is NotificationAction.CalledDibs -> stringResource(id = R.string.wants)
+                is NotificationAction.CommentedOn -> stringResource(id = R.string.commented_on)
             }
 
             val notificationText = when(notification.notificationType){
                 is NotificationAction.JoinedEvent -> stringResource(id = R.string.your_event)
                 is NotificationAction.CalledDibs -> stringResource(id = R.string.your_offer)
+                is NotificationAction.CommentedOn -> stringResource(id = R.string.your_post)
             }
 
             Text(text = buildAnnotatedString {
