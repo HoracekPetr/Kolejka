@@ -66,13 +66,31 @@ fun ProfileScreen(
             }
             Spacer(modifier = Modifier.size(Space4))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    RadioButton(selected = viewModel.yourPostsRadioEnabled.value, onClick = { viewModel.setYourPostsRadioEnabled(true) })
-                    Text(text = stringResource(R.string.events), style = MaterialTheme.typography.subtitle2)
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    RadioButton(
+                        selected = viewModel.yourPostsRadioEnabled.value,
+                        colors = RadioButtonDefaults.colors(selectedColor = DarkPurple, unselectedColor = DarkGray),
+                        onClick = { viewModel.setYourPostsRadioEnabled(true) })
+                    Text(
+                        text = stringResource(R.string.events),
+                        style = MaterialTheme.typography.subtitle2
+                    )
                 }
-                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    RadioButton(selected = viewModel.joinedPostsRadioEnabled.value, onClick = { viewModel.setJoinedPostsRadioEnabled(true) })
-                    Text(stringResource(R.string.offers), style = MaterialTheme.typography.subtitle2)
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    RadioButton(
+                        selected = viewModel.joinedPostsRadioEnabled.value,
+                        colors = RadioButtonDefaults.colors(selectedColor = DarkPurple, unselectedColor = DarkGray),
+                        onClick = { viewModel.setJoinedPostsRadioEnabled(true) })
+                    Text(
+                        stringResource(R.string.offers),
+                        style = MaterialTheme.typography.subtitle2
+                    )
                 }
             }
         }
@@ -80,17 +98,22 @@ fun ProfileScreen(
         items(
             when {
                 viewModel.yourPostsRadioEnabled.value -> {
-                    posts.filter{it.isEvent}
+                    posts.filter { it.isEvent }
                 }
                 viewModel.joinedPostsRadioEnabled.value -> {
-                    posts.filter{it.isOffer}
+                    posts.filter { it.isOffer }
                 }
                 else -> {
                     posts
                 }
             }
-        ){ post ->
-            PostStrip(post = post, modifier = Modifier.fillMaxWidth().padding(PaddingExtraLarge).clickable {  })
+        ) { post ->
+            PostStrip(
+                post = post,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(PaddingMedium)
+                    .clickable { })
         }
     }
 }

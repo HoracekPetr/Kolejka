@@ -80,6 +80,7 @@ fun NewPostScreen(
             ) {
                 RadioButton(
                     selected = viewModel.eventRadioEnabled.value,
+                    colors = RadioButtonDefaults.colors(selectedColor = DarkPurple, unselectedColor = DarkGray),
                     onClick = { viewModel.eventRadioEnabled(true) })
                 Text(
                     text = stringResource(R.string.event),
@@ -92,6 +93,7 @@ fun NewPostScreen(
             ) {
                 RadioButton(
                     selected = viewModel.offerRadioEnabled.value,
+                    colors = RadioButtonDefaults.colors(selectedColor = DarkPurple, unselectedColor = DarkGray),
                     onClick = { viewModel.offerRadioEnabled(true) })
                 Text(stringResource(R.string.offer), style = MaterialTheme.typography.subtitle2)
             }
