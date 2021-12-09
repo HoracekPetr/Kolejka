@@ -34,4 +34,6 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="limit">Limit</string>
+    <string name="commented_on">commented on</string>
+    <string name="your_post">your post</string>
 </resources>

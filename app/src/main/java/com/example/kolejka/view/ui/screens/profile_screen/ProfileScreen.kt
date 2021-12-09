@@ -1,6 +1,5 @@
 package com.example.kolejka.view.ui.screens.profile_screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,34 +8,27 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ExperimentalGraphicsApi
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.core.graphics.toColor
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.kolejka.R
 import com.example.kolejka.models.Post
 import com.example.kolejka.models.User
 import com.example.kolejka.view.theme.*
-import com.example.kolejka.view.ui.components.StandardTextField
 import com.example.kolejka.view.ui.components.posts.PostStrip
 import com.example.kolejka.view.ui.components.profile.ProfileBannerComposable
 import com.example.kolejka.view.ui.screens.edit_profile_dialog.EditProfileDialog
-import com.example.kolejka.view.util.Screen
-import com.godaddy.android.colorpicker.ClassicColorPicker
-import com.godaddy.android.colorpicker.HsvColor
+import com.example.kolejka.view.util.PostType
 
 val posts = listOf(
-    Post("Prdel", description = "huehue", isEvent = true),
-    Post("Kozy", description = "huehue", isOffer = true),
-    Post("Piča", description = "huehue", isEvent = true),
-    Post("Kurva", description = "huehue", isEvent = true),
-    Post("Hovno", description = "huehue", isOffer = true),
-    Post("Hajzel", description = "huehue", isEvent = true),
-    Post("Hajzelasdasdasdasd", description = "huehue", isOffer = true),
+    Post("Prdel", description = "huehue", type = PostType.Event.type),
+    Post("Kozy", description = "huehue", type = PostType.Offer.type),
+    Post("Piča", description = "huehue", type = PostType.Offer.type),
+    Post("Kurva", description = "huehue", type = PostType.Event.type),
+    Post("Hovno", description = "huehue", type = PostType.Event.type),
+    Post("Hajzel", description = "huehue", type = PostType.Offer.type),
+    Post("Hajzelasdasdasdasd", description = "huehue", type = PostType.Event.type),
 )
 
 @ExperimentalGraphicsApi
@@ -66,31 +58,54 @@ fun ProfileScreen(
             }
             Spacer(modifier = Modifier.size(Space4))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    RadioButton(selected = viewModel.yourPostsRadioEnabled.value, onClick = { viewModel.setYourPostsRadioEnabled(true) })
-                    Text(text = stringResource(R.string.events), style = MaterialTheme.typography.subtitle2)
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    RadioButton(
+                        colors = RadioButtonDefaults.colors(selectedColor = DarkPurple, unselectedColor = DarkGray),
+                        selected = viewModel.eventsRadioEnabled.value,
+                        onClick = { viewModel.setYourPostsRadioEnabled(true) })
+                    Text(
+                        text = stringResource(R.string.events),
+                        style = MaterialTheme.typography.subtitle2
+                    )
                 }
-                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    RadioButton(selected = viewModel.joinedPostsRadioEnabled.value, onClick = { viewModel.setJoinedPostsRadioEnabled(true) })
-                    Text(stringResource(R.string.offers), style = MaterialTheme.typography.subtitle2)
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    RadioButton(
+                        colors = RadioButtonDefaults.colors(selectedColor = DarkPurple, unselectedColor = DarkGray),
+                        selected = viewModel.offersRadioEnabled.value,
+                        onClick = { viewModel.setJoinedPostsRadioEnabled(true) })
+                    Text(
+                        stringResource(R.string.offers),
+                        style = MaterialTheme.typography.subtitle2
+                    )
                 }
             }
         }
 
         items(
             when {
-                viewModel.yourPostsRadioEnabled.value -> {
-                    posts.filter{it.isEvent}
+                viewModel.eventsRadioEnabled.value -> {
+                    posts.filter { it.type == PostType.Event.type }
                 }
-                viewModel.joinedPostsRadioEnabled.value -> {
-                    posts.filter{it.isOffer}
+                viewModel.offersRadioEnabled.value -> {
+                    posts.filter { it.type == PostType.Offer.type }
                 }
                 else -> {
                     posts
                 }
             }
-        ){ post ->
-            PostStrip(post = post, modifier = Modifier.fillMaxWidth().padding(PaddingExtraLarge).clickable {  })
+        ) { post ->
+            PostStrip(
+                post = post,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(PaddingMedium)
+                    .clickable { })
         }
     }
 }

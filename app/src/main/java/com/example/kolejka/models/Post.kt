@@ -12,6 +12,5 @@ data class Post(
         val members: List<String> = emptyList<String>(),
         var available: Int = 0,
         val limit: Int = 0,
-        val isOffer: Boolean = false,
-        val isEvent: Boolean = false,
+        val type: Int = 0
 )

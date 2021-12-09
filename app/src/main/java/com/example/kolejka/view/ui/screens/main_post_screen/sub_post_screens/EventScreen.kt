@@ -9,7 +9,7 @@ import com.example.kolejka.models.Post
 import com.example.kolejka.view.ui.components.posts.PostList
 
 val eventList = listOf(
-    Post("Fotbal na Harcově", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD", isEvent = true),
+    Post("Fotbal na Harcově", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD", type = 0),
     Post("Gungoslav", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
     Post("Pěkně smradlavá prdel kurva", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
     Post("Shit Party", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),

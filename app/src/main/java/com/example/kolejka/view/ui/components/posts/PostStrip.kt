@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.kolejka.R
 import com.example.kolejka.models.Post
 import com.example.kolejka.view.theme.*
+import com.example.kolejka.view.util.PostType
 
 @Composable
 fun PostStrip(
@@ -28,7 +29,7 @@ fun PostStrip(
         modifier = modifier,
         shape = RoundedCornerShape(Space12),
         elevation = Space8,
-        backgroundColor = if (post.isEvent) DarkPurple else LightPurple
+        backgroundColor = if (post.type == PostType.Event.type) DarkPurple else LightPurple
     ) {
         Row(
             modifier = Modifier
@@ -49,7 +50,7 @@ fun PostStrip(
             Column(modifier = Modifier.weight(4f),horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = post.title, style = MaterialTheme.typography.body1, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(
-                    text = if (post.isEvent) stringResource(id = R.string.event) else stringResource(id = R.string.offer),
+                    text = if (post.type == PostType.Event.type) stringResource(id = R.string.event) else stringResource(id = R.string.offer),
                     style = MaterialTheme.typography.caption
                 )
             }

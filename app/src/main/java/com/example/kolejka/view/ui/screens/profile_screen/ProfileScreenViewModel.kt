@@ -12,11 +12,11 @@ class ProfileScreenViewModel @Inject constructor() : ViewModel(){
     private var _showEditProfileDialog = mutableStateOf(false)
     var showEditProfileDialog: State<Boolean> = _showEditProfileDialog
 
-    private var _yourPostsRadioEnabled = mutableStateOf(true)
-    var yourPostsRadioEnabled: State<Boolean> = _yourPostsRadioEnabled
+    private var _eventsRadioEnabled = mutableStateOf(true)
+    var eventsRadioEnabled: State<Boolean> = _eventsRadioEnabled
 
-    private var _joinedPostsRadioEnabled = mutableStateOf(false)
-    var joinedPostsRadioEnabled: State<Boolean> = _joinedPostsRadioEnabled
+    private var _offersRadioEnabled = mutableStateOf(false)
+    var offersRadioEnabled: State<Boolean> = _offersRadioEnabled
 
 
     fun setEditProfileDialogEnabled(enabled: Boolean){
@@ -24,13 +24,13 @@ class ProfileScreenViewModel @Inject constructor() : ViewModel(){
     }
 
     fun setYourPostsRadioEnabled(enabled: Boolean){
-        _yourPostsRadioEnabled.value = enabled
-        _joinedPostsRadioEnabled.value = !enabled
+        _eventsRadioEnabled.value = enabled
+        _offersRadioEnabled.value = !enabled
     }
 
     fun setJoinedPostsRadioEnabled(enabled: Boolean){
-        _joinedPostsRadioEnabled.value = enabled
-        _yourPostsRadioEnabled.value = !enabled
+        _offersRadioEnabled.value = enabled
+        _eventsRadioEnabled.value = !enabled
     }
 
 }
