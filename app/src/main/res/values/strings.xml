@@ -36,4 +36,5 @@
     <string name="limit">Limit</string>
     <string name="commented_on">commented on</string>
     <string name="your_post">your post</string>
+    <string name="my_posts">My Posts</string>
 </resources>

@@ -67,7 +67,7 @@ fun ProfileScreen(
                         selected = viewModel.eventsRadioEnabled.value,
                         onClick = { viewModel.setYourPostsRadioEnabled(true) })
                     Text(
-                        text = stringResource(R.string.events),
+                        text = stringResource(R.string.my_posts),
                         style = MaterialTheme.typography.subtitle2
                     )
                 }
@@ -80,7 +80,7 @@ fun ProfileScreen(
                         selected = viewModel.offersRadioEnabled.value,
                         onClick = { viewModel.setJoinedPostsRadioEnabled(true) })
                     Text(
-                        stringResource(R.string.offers),
+                        stringResource(R.string.joined_posts),
                         style = MaterialTheme.typography.subtitle2
                     )
                 }
