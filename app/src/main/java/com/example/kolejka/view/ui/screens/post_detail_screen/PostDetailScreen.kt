@@ -33,7 +33,6 @@ import com.example.kolejka.view.ui.components.comment.CommentComposable
 import com.example.kolejka.models.Post
 import com.example.kolejka.view.ui.components.StandardTextField
 import com.example.kolejka.view.ui.components.send_comment.SendCommentComposable
-import com.example.kolejka.view.ui.components.textfields.CommentTextField
 
 @Composable
 fun PostDetailScreen(
@@ -45,13 +44,13 @@ fun PostDetailScreen(
     LazyColumn {
         item {
             Column(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(PaddingMedium)) {
+                .fillMaxSize()
+                .padding(PaddingMedium)) {
                 Image(
                         modifier = Modifier
-                                .clip(RoundedCornerShape(Space8))
-                                .fillMaxWidth()
-                                .height(PostHeight),
+                            .clip(RoundedCornerShape(Space8))
+                            .fillMaxWidth()
+                            .height(PostHeight),
                         contentScale = ContentScale.FillBounds,
                         painter = painterResource(id = R.drawable.schick),
                         contentDescription = "Post Image"
@@ -76,8 +75,8 @@ fun PostDetailScreen(
                     ) {
                         Image(
                                 modifier = Modifier
-                                        .size(PostDetailProfileSize)
-                                        .clip(CircleShape),
+                                    .size(PostDetailProfileSize)
+                                    .clip(CircleShape),
                                 contentScale = ContentScale.Fit,
                                 painter = painterResource(id = R.drawable.petr),
                                 contentDescription = "Profile Image",
@@ -131,17 +130,27 @@ fun PostDetailScreen(
             }
             item {
                 Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(PaddingMedium), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                    CommentTextField(
+                    .fillMaxWidth()
+                    .padding(PaddingMedium), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+/*                    CommentTextField(
                             modifier = Modifier.weight(4f),
                             text = viewModel.commentText.value,
                             hint = stringResource(R.string.your_comment),
                             onTextChanged = { viewModel.setCommentText(it) }
+                    )*/
+                    StandardTextField(
+                        modifier = Modifier.weight(4f).border(1.dp, Color.DarkGray, shape = RoundedCornerShape(10.dp)),
+                        text = viewModel.commentText.value,
+                        hint = stringResource(R.string.your_comment),
+                        onTextChanged = { viewModel.setCommentText(it) },
+                        placeholderTextColor = DarkGray,
+                        textStyle = MaterialTheme.typography.caption,
+                        placeholderTextStyle = MaterialTheme.typography.caption,
+                        textfieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White)
                     )
                     Spacer(Modifier.size(Space4))
                     SendCommentComposable(modifier = Modifier.weight(1f)) {
-
+                        /*TODO*/
                     }
                 }
             }

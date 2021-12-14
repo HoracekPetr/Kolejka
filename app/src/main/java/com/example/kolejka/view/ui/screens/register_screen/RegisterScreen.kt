@@ -4,9 +4,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -14,13 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
-import com.example.kolejka.view.ui.components.EmailTextField
-import com.example.kolejka.view.ui.components.PasswordTextField
 import com.example.kolejka.view.ui.components.StandardTextField
 import com.example.kolejka.view.util.Screen
 
@@ -62,14 +65,21 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.size(Space16))
 
-            EmailTextField(
+            //EMAIL FIELD
+            StandardTextField(
+                modifier = Modifier.fillMaxWidth(),
                 text = viewModel.email.value,
                 hint = stringResource(R.string.email),
                 onTextChanged = { viewModel.setEmail(it) },
-                isIncorrectEmail = viewModel.incorrectEmailCheck.value
+                placeholderTextColor = DarkGray,
+                textStyle = MaterialTheme.typography.h2,
+                placeholderTextStyle = MaterialTheme.typography.h2,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             )
 
             Spacer(modifier = Modifier.size(Space16))
+
+            //USERNAME FIELD
 
             StandardTextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -83,14 +93,28 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.size(Space16))
 
-            PasswordTextField(
+            //PASSWORD FIELD
+
+            StandardTextField(
+                modifier = Modifier.fillMaxWidth(),
                 text = viewModel.password.value,
                 hint = stringResource(R.string.password),
                 onTextChanged = { viewModel.setPassword(it) },
-                isPasswordVisible = viewModel.passwordVisibility.value
-            ) {
-                viewModel.setPasswordVisibility()
-            }
+                placeholderTextColor = DarkGray,
+                textStyle = MaterialTheme.typography.h2,
+                placeholderTextStyle = MaterialTheme.typography.h2,
+                trailingIcon = {
+                    IconButton(onClick = {viewModel.setPasswordVisibility()}) {
+                        Icon(
+                            imageVector = if (viewModel.passwordVisibility.value)
+                                Icons.Filled.Visibility
+                            else Icons.Filled.VisibilityOff,
+                            contentDescription = stringResource(R.string.change_pwd_visibility)
+                        )
+                    }
+                },
+                visualTransformation = if (viewModel.passwordVisibility.value) VisualTransformation.None else PasswordVisualTransformation()
+            )
 
             Spacer(modifier = Modifier.size(Space16))
 
