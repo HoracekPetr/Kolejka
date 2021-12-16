@@ -27,7 +27,7 @@ import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.StandardTextField
 import com.example.kolejka.view.util.Constants
 import com.example.kolejka.view.util.Screen
-import com.example.kolejka.view.util.errors.AuthError
+import com.example.kolejka.view.util.errors.Errors
 
 @Composable
 fun RegisterScreen(
@@ -83,8 +83,8 @@ fun RegisterScreen(
                     )
                 },
                 error = when (emailState.error) {
-                    is AuthError.EmptyField -> stringResource(id = R.string.this_field_cant_be_empty)
-                    is AuthError.InvalidEmail -> stringResource(id = R.string.invalid_email)
+                    is Errors.EmptyField -> stringResource(id = R.string.this_field_cant_be_empty)
+                    is Errors.InvalidEmail -> stringResource(id = R.string.invalid_email)
                     else -> ""
                 },
                 placeholderTextColor = DarkGray,
@@ -108,8 +108,8 @@ fun RegisterScreen(
                     )
                 },
                 error = when (usernameState.error) {
-                    is AuthError.EmptyField -> stringResource(id = R.string.this_field_cant_be_empty)
-                    is AuthError.InputTooShort -> stringResource(id = R.string.username_too_short, Constants.MIN_USERNAME_LENGTH)
+                    is Errors.EmptyField -> stringResource(id = R.string.this_field_cant_be_empty)
+                    is Errors.InputTooShort -> stringResource(id = R.string.username_too_short, Constants.MIN_USERNAME_LENGTH)
                     else -> ""
                 },
                 placeholderTextColor = DarkGray,
@@ -130,9 +130,9 @@ fun RegisterScreen(
                     )
                 },
                 error = when (passwordState.error) {
-                    is AuthError.EmptyField -> stringResource(id = R.string.this_field_cant_be_empty)
-                    is AuthError.InputTooShort -> stringResource(id = R.string.password_too_short, Constants.MIN_PASSWORD_LENGTH)
-                    is AuthError.InvalidPassword -> stringResource(id = R.string.invalid_password)
+                    is Errors.EmptyField -> stringResource(id = R.string.this_field_cant_be_empty)
+                    is Errors.InputTooShort -> stringResource(id = R.string.password_too_short, Constants.MIN_PASSWORD_LENGTH)
+                    is Errors.InvalidPassword -> stringResource(id = R.string.invalid_password)
                     else -> ""
                 },
                 placeholderTextColor = DarkGray,

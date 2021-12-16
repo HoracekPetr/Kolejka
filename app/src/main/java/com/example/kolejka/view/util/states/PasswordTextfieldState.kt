@@ -1,9 +1,9 @@
 package com.example.kolejka.view.util.states
 
-import com.example.kolejka.view.util.errors.AuthError
+import com.example.kolejka.view.util.errors.Errors
 
 data class PasswordTextfieldState(
     val text: String = "",
-    val error: AuthError? = null,
+    val error: Errors? = null,
     val visible: Boolean = false
 )

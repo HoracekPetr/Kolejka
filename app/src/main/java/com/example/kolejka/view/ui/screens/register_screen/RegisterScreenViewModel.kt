@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.kolejka.view.util.Constants.MIN_PASSWORD_LENGTH
 import com.example.kolejka.view.util.Constants.MIN_USERNAME_LENGTH
-import com.example.kolejka.view.util.errors.AuthError
+import com.example.kolejka.view.util.errors.Errors
 import com.example.kolejka.view.util.states.PasswordTextfieldState
 import com.example.kolejka.view.util.states.StandardTextfieldState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -68,14 +68,14 @@ class RegisterScreenViewModel @Inject constructor() : ViewModel() {
         val trimEmail = email.trim()
         if(trimEmail.isBlank()){
             _emailState.value = _emailState.value.copy(
-                error = AuthError.EmptyField
+                error = Errors.EmptyField
             )
             return
         }
 
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             _emailState.value = _emailState.value.copy(
-                error = AuthError.InvalidEmail
+                error = Errors.InvalidEmail
             )
             return
         } else {
@@ -89,14 +89,14 @@ class RegisterScreenViewModel @Inject constructor() : ViewModel() {
         val trimUsername = username.trim()
         if(trimUsername.isBlank()){
             _usernameState.value = _usernameState.value.copy(
-                error = AuthError.EmptyField
+                error = Errors.EmptyField
             )
             return
         }
 
         if(trimUsername.length < MIN_USERNAME_LENGTH){
             _usernameState.value = _usernameState.value.copy(
-                error = AuthError.InputTooShort
+                error = Errors.InputTooShort
             )
             return
         } else {
@@ -111,21 +111,21 @@ class RegisterScreenViewModel @Inject constructor() : ViewModel() {
         val trimPassword = password.trim()
         if(trimPassword.isBlank()){
             _passwordState.value = _passwordState.value.copy(
-                error = AuthError.EmptyField
+                error = Errors.EmptyField
             )
             return
         }
 
         if(trimPassword.length < MIN_PASSWORD_LENGTH){
             _passwordState.value = _passwordState.value.copy(
-                error = AuthError.InputTooShort
+                error = Errors.InputTooShort
             )
             return
         }
 
         if(!trimPassword.contains(Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]+\$"))){
             _passwordState.value = _passwordState.value.copy(
-                error = AuthError.InvalidPassword
+                error = Errors.InvalidPassword
             )
         } else {
             _passwordState.value = _passwordState.value.copy(
