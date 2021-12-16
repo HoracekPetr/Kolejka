@@ -25,7 +25,9 @@ import androidx.navigation.NavController
 import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.StandardTextField
+import com.example.kolejka.view.util.Constants
 import com.example.kolejka.view.util.Screen
+import com.example.kolejka.view.util.errors.AuthError
 
 @Composable
 fun RegisterScreen(
@@ -35,6 +37,10 @@ fun RegisterScreen(
 
     val localFocusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
+
+    val usernameState = viewModel.usernameState.value
+    val emailState = viewModel.emailState.value
+    val passwordState = viewModel.passwordState.value
 
     Box(
         modifier = Modifier
@@ -66,11 +72,21 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.size(Space16))
 
             //EMAIL FIELD
+
             StandardTextField(
                 modifier = Modifier.fillMaxWidth(),
-                text = viewModel.email.value,
+                text = emailState.text,
                 hint = stringResource(R.string.email),
-                onTextChanged = { viewModel.setEmail(it) },
+                onTextChanged = {
+                    viewModel.onEvent(
+                        RegisterEvent.EnteredEmail(it)
+                    )
+                },
+                error = when (emailState.error) {
+                    is AuthError.EmptyField -> stringResource(id = R.string.this_field_cant_be_empty)
+                    is AuthError.InvalidEmail -> stringResource(id = R.string.invalid_email)
+                    else -> ""
+                },
                 placeholderTextColor = DarkGray,
                 textStyle = MaterialTheme.typography.h2,
                 placeholderTextStyle = MaterialTheme.typography.h2,
@@ -83,10 +99,19 @@ fun RegisterScreen(
 
             StandardTextField(
                 modifier = Modifier.fillMaxWidth(),
-                text = viewModel.username.value,
+                text = usernameState.text,
                 hint = stringResource(R.string.username),
                 textStyle = MaterialTheme.typography.h2,
-                onTextChanged = { viewModel.setUsername(it) },
+                onTextChanged = {
+                    viewModel.onEvent(
+                        RegisterEvent.EnteredUsername(it)
+                    )
+                },
+                error = when (usernameState.error) {
+                    is AuthError.EmptyField -> stringResource(id = R.string.this_field_cant_be_empty)
+                    is AuthError.InputTooShort -> stringResource(id = R.string.username_too_short, Constants.MIN_USERNAME_LENGTH)
+                    else -> ""
+                },
                 placeholderTextColor = DarkGray,
                 placeholderTextStyle = MaterialTheme.typography.h2
             )
@@ -97,34 +122,40 @@ fun RegisterScreen(
 
             StandardTextField(
                 modifier = Modifier.fillMaxWidth(),
-                text = viewModel.password.value,
+                text = passwordState.text,
                 hint = stringResource(R.string.password),
-                onTextChanged = { viewModel.setPassword(it) },
+                onTextChanged = {
+                    viewModel.onEvent(
+                        RegisterEvent.EnteredPassword(it)
+                    )
+                },
+                error = when (passwordState.error) {
+                    is AuthError.EmptyField -> stringResource(id = R.string.this_field_cant_be_empty)
+                    is AuthError.InputTooShort -> stringResource(id = R.string.password_too_short, Constants.MIN_PASSWORD_LENGTH)
+                    is AuthError.InvalidPassword -> stringResource(id = R.string.invalid_password)
+                    else -> ""
+                },
                 placeholderTextColor = DarkGray,
                 textStyle = MaterialTheme.typography.h2,
                 placeholderTextStyle = MaterialTheme.typography.h2,
                 trailingIcon = {
-                    IconButton(onClick = {viewModel.setPasswordVisibility()}) {
+                    IconButton(onClick = {viewModel.onEvent(RegisterEvent.ChangePasswordVisibility(!passwordState.visible))}) {
                         Icon(
-                            imageVector = if (viewModel.passwordVisibility.value)
+                            imageVector = if (passwordState.visible)
                                 Icons.Filled.Visibility
                             else Icons.Filled.VisibilityOff,
                             contentDescription = stringResource(R.string.change_pwd_visibility)
                         )
                     }
                 },
-                visualTransformation = if (viewModel.passwordVisibility.value) VisualTransformation.None else PasswordVisualTransformation()
+                visualTransformation = if (passwordState.visible) VisualTransformation.None else PasswordVisualTransformation()
             )
 
             Spacer(modifier = Modifier.size(Space16))
 
             Button(
                 onClick = {
-                    if (viewModel.checkEmailValidity()) {
-                        viewModel.setEmailCheck(false)
-                    } else {
-                        viewModel.setEmailCheck(true)
-                    }
+                    viewModel.onEvent(RegisterEvent.Register)
                 },
                 modifier = Modifier
                     .align(Alignment.End)

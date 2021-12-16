@@ -1,6 +1,7 @@
 package com.example.kolejka.view.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -31,7 +32,7 @@ fun StandardTextField(
     textfieldColors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = ExtraLightGray),
     maxLines: Int = 1,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-    onError: Boolean = false,
+    error: String = "",
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -42,7 +43,7 @@ fun StandardTextField(
         value = text,
         textStyle = textStyle,
         onValueChange = onTextChanged,
-        isError = onError,
+        isError = error != "",
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         placeholder = {
@@ -59,4 +60,13 @@ fun StandardTextField(
         keyboardOptions = keyboardOptions,
         visualTransformation = visualTransformation
     )
+
+    if(error != ""){
+        Text(
+            text = error,
+            color = MaterialTheme.colors.error,
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier.padding(start = 16.dp)
+        )
+    }
 }

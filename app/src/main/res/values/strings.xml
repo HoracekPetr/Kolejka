@@ -37,4 +37,9 @@
     <string name="commented_on">commented on</string>
     <string name="your_post">your post</string>
     <string name="my_posts">My Posts</string>
+    <string name="this_field_cant_be_empty">This field can\'t be empty.</string>
+    <string name="invalid_email">Invalid email.</string>
+    <string name="username_too_short">Username needs to be at least %1$s characters.</string>
+    <string name="password_too_short">Password needs to be at least %1$s characters.</string>
+    <string name="invalid_password">Password needs to contain at least 1 capital letter and 1 number.</string>
 </resources>
