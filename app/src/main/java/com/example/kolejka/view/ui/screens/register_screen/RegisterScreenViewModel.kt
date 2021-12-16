@@ -132,6 +132,5 @@ class RegisterScreenViewModel @Inject constructor() : ViewModel() {
                 error = null
             )
         }
-
     }
 }
