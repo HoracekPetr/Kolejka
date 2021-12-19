@@ -42,4 +42,8 @@
     <string name="username_too_short">Username needs to be at least %1$s characters.</string>
     <string name="password_too_short">Password needs to be at least %1$s characters.</string>
     <string name="invalid_password">Password needs to contain at least 1 capital letter and 1 number.</string>
+    <string name="an_unknown_error_occured">An unknown error occured.</string>
+    <string name="cant_reach_server">Can\'t reach the server. Please check your connection.</string>
+    <string name="something_went_wrong">Sorry, something went wrong. Please try again.</string>
+    <string name="successful_registration">Registration was successful.</string>
 </resources>

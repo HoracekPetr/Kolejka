@@ -1,19 +1,30 @@
 package com.example.kolejka.view.ui.screens.register_screen
 
 import android.util.Patterns
+import androidx.annotation.StringRes
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.kolejka.R
+import com.example.kolejka.data.util.Resource
+import com.example.kolejka.use_cases.RegisterUseCase
 import com.example.kolejka.view.util.Constants.MIN_PASSWORD_LENGTH
 import com.example.kolejka.view.util.Constants.MIN_USERNAME_LENGTH
 import com.example.kolejka.view.util.errors.Errors
 import com.example.kolejka.view.util.states.PasswordTextfieldState
 import com.example.kolejka.view.util.states.StandardTextfieldState
+import com.example.kolejka.view.util.uitext.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterScreenViewModel @Inject constructor() : ViewModel() {
+class RegisterScreenViewModel @Inject constructor(
+    private val registerUseCase: RegisterUseCase
+) : ViewModel() {
 
     private val _emailState = mutableStateOf(StandardTextfieldState())
     val emailState: State<StandardTextfieldState> = _emailState
@@ -23,6 +34,12 @@ class RegisterScreenViewModel @Inject constructor() : ViewModel() {
 
     private val _passwordState = mutableStateOf(PasswordTextfieldState())
     val passwordState: State<PasswordTextfieldState> = _passwordState
+
+    private val _registerState = mutableStateOf(RegisterState())
+    val registerState: State<RegisterState> = _registerState
+
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
 
     fun onEvent(event: RegisterEvent) {
         when(event){
@@ -60,6 +77,44 @@ class RegisterScreenViewModel @Inject constructor() : ViewModel() {
                 validatePassword(
                     passwordState.value.text
                 )
+                register()
+            }
+        }
+    }
+
+    private fun register(){
+
+        if(usernameState.value.error != null || emailState.value.error != null || passwordState.value.error != null){
+            return
+        }
+
+        viewModelScope.launch {
+            _registerState.value = RegisterState(
+                isLoading = true
+            )
+            val result = registerUseCase(
+                email = emailState.value.text,
+                username = usernameState.value.text,
+                password = passwordState.value.text
+            )
+            when(result){
+                is Resource.Success -> {
+                    _registerState.value = RegisterState(
+                        isLoading = false
+                    )
+
+                    _eventFlow.emit(
+                        UiEvent.SnackbarEvent(UiText.StringResource(R.string.successful_registration))
+                    )
+                }
+                is Resource.Error -> {
+                    _registerState.value = RegisterState(
+                        isLoading = false
+                    )
+                    _eventFlow.emit(
+                        UiEvent.SnackbarEvent(result.uiText ?: UiText.unknownError())
+                    )
+                }
             }
         }
     }
@@ -133,4 +188,8 @@ class RegisterScreenViewModel @Inject constructor() : ViewModel() {
             )
         }
     }
+}
+
+sealed class UiEvent{
+    data class SnackbarEvent(val uiText: UiText): UiEvent()
 }
