@@ -1,7 +1,6 @@
 package com.example.kolejka.view.ui.screens.register_screen
 
 import android.util.Patterns
-import androidx.annotation.StringRes
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -67,8 +66,8 @@ class RegisterScreenViewModel @Inject constructor(
                     visible = event.visibility
                 )
             }
-            RegisterEvent.Register -> {
-                validateUsername(
+            is RegisterEvent.Register -> {
+/*                validateUsername(
                     usernameState.value.text
                 )
                 validateEmail(
@@ -76,7 +75,7 @@ class RegisterScreenViewModel @Inject constructor(
                 )
                 validatePassword(
                     passwordState.value.text
-                )
+                )*/
                 register()
             }
         }
@@ -84,42 +83,78 @@ class RegisterScreenViewModel @Inject constructor(
 
     private fun register(){
 
-        if(usernameState.value.error != null || emailState.value.error != null || passwordState.value.error != null){
+/*        if(usernameState.value.error != null || emailState.value.error != null || passwordState.value.error != null){
             return
-        }
+        }*/
 
         viewModelScope.launch {
+
+            _emailState.value = _emailState.value.copy(
+                error = null
+            )
+            _usernameState.value = _usernameState.value.copy(
+                error = null
+            )
+            _passwordState.value = _passwordState.value.copy(
+                error = null
+            )
+
             _registerState.value = RegisterState(
                 isLoading = true
             )
-            val result = registerUseCase(
+
+            val registerResult = registerUseCase(
                 email = emailState.value.text,
                 username = usernameState.value.text,
                 password = passwordState.value.text
             )
-            when(result){
-                is Resource.Success -> {
-                    _registerState.value = RegisterState(
-                        isLoading = false
-                    )
 
+            if(registerResult.emailError != null){
+                _emailState.value = _emailState.value.copy(
+                    error = registerResult.emailError
+                )
+            }
+            if(registerResult.usernameError != null){
+                _usernameState.value = _usernameState.value.copy(
+                    error = registerResult.usernameError
+                )
+            }
+            if(registerResult.passwordError != null){
+                _passwordState.value = _passwordState.value.copy(
+                    error = registerResult.passwordError
+                )
+            }
+
+            when(registerResult.result){
+                is Resource.Success -> {
                     _eventFlow.emit(
                         UiEvent.SnackbarEvent(UiText.StringResource(R.string.successful_registration))
                     )
+                    _registerState.value = RegisterState(
+                        isLoading = false
+                    )
+                    _emailState.value = StandardTextfieldState()
+                    _usernameState.value = StandardTextfieldState()
+                    _passwordState.value = PasswordTextfieldState()
                 }
                 is Resource.Error -> {
                     _registerState.value = RegisterState(
                         isLoading = false
                     )
                     _eventFlow.emit(
-                        UiEvent.SnackbarEvent(result.uiText ?: UiText.unknownError())
+                        UiEvent.SnackbarEvent(registerResult.result.uiText ?: UiText.unknownError())
+                    )
+                }
+                null -> {
+                    _registerState.value = RegisterState(
+                        isLoading = false
                     )
                 }
             }
         }
     }
 
-    private fun validateEmail(email: String){
+/*    private fun validateEmail(email: String){
         val trimEmail = email.trim()
         if(trimEmail.isBlank()){
             _emailState.value = _emailState.value.copy(
@@ -187,7 +222,7 @@ class RegisterScreenViewModel @Inject constructor(
                 error = null
             )
         }
-    }
+    }*/
 }
 
 sealed class UiEvent{

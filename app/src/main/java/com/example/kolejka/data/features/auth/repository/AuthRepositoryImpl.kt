@@ -20,21 +20,21 @@ class AuthRepositoryImpl(
 
         val request = RegisterAccountRequest(email, username, password)
 
-        return try {
+        try {
             val response = authApi.registerUser(request)
             if (response.successful) {
-                Resource.Success(Unit)
+                return Resource.Success(Unit)
             } else {
                 response.message?.let { msg ->
-                    Resource.Error(uiText = UiText.StringDynamic(msg))
-                }
-                    ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
+                    return Resource.Error(uiText = UiText.StringDynamic(msg))
+                } ?: return Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
             }
 
+
         } catch (e: IOException) {
-            Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
+            return Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
         } catch (e: HttpException) {
-            Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
+            return Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
         }
     }
 }
