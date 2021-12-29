@@ -1,9 +1,11 @@
 package com.example.kolejka.di
 
+import android.content.SharedPreferences
 import com.example.kolejka.data.features.auth.AuthApi
 import com.example.kolejka.data.features.auth.repository.AuthRepository
 import com.example.kolejka.data.features.auth.repository.AuthRepositoryImpl
 import com.example.kolejka.data.util.Constants.BASE_URL
+import com.example.kolejka.use_cases.LoginUseCase
 import com.example.kolejka.use_cases.RegisterUseCase
 import dagger.Module
 import dagger.Provides
@@ -32,8 +34,8 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(authApi: AuthApi): AuthRepository{
-        return AuthRepositoryImpl(authApi)
+    fun provideAuthRepository(authApi: AuthApi, sharedPreferences: SharedPreferences): AuthRepository{
+        return AuthRepositoryImpl(authApi, sharedPreferences)
     }
 
     @Provides
@@ -42,4 +44,9 @@ object AuthModule {
         return RegisterUseCase(repository)
     }
 
+    @Provides
+    @Singleton
+    fun provideLoginUseCase(repository: AuthRepository): LoginUseCase{
+        return LoginUseCase(repository)
+    }
 }

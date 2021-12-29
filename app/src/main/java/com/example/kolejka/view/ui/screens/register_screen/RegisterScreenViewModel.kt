@@ -67,25 +67,12 @@ class RegisterScreenViewModel @Inject constructor(
                 )
             }
             is RegisterEvent.Register -> {
-/*                validateUsername(
-                    usernameState.value.text
-                )
-                validateEmail(
-                    emailState.value.text
-                )
-                validatePassword(
-                    passwordState.value.text
-                )*/
                 register()
             }
         }
     }
 
     private fun register(){
-
-/*        if(usernameState.value.error != null || emailState.value.error != null || passwordState.value.error != null){
-            return
-        }*/
 
         viewModelScope.launch {
 
@@ -99,9 +86,6 @@ class RegisterScreenViewModel @Inject constructor(
                 error = null
             )
 
-            _registerState.value = RegisterState(
-                isLoading = true
-            )
 
             val registerResult = registerUseCase(
                 email = emailState.value.text,
@@ -124,6 +108,10 @@ class RegisterScreenViewModel @Inject constructor(
                     error = registerResult.passwordError
                 )
             }
+
+            _registerState.value = RegisterState(
+                isLoading = true
+            )
 
             when(registerResult.result){
                 is Resource.Success -> {
@@ -153,76 +141,6 @@ class RegisterScreenViewModel @Inject constructor(
             }
         }
     }
-
-/*    private fun validateEmail(email: String){
-        val trimEmail = email.trim()
-        if(trimEmail.isBlank()){
-            _emailState.value = _emailState.value.copy(
-                error = Errors.EmptyField
-            )
-            return
-        }
-
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            _emailState.value = _emailState.value.copy(
-                error = Errors.InvalidEmail
-            )
-            return
-        } else {
-            _emailState.value = _emailState.value.copy(
-                error = null
-            )
-        }
-    }
-
-    private fun validateUsername(username: String){
-        val trimUsername = username.trim()
-        if(trimUsername.isBlank()){
-            _usernameState.value = _usernameState.value.copy(
-                error = Errors.EmptyField
-            )
-            return
-        }
-
-        if(trimUsername.length < MIN_USERNAME_LENGTH){
-            _usernameState.value = _usernameState.value.copy(
-                error = Errors.InputTooShort
-            )
-            return
-        } else {
-            _usernameState.value = _usernameState.value.copy(
-                error = null
-            )
-        }
-    }
-
-
-    private fun validatePassword(password: String){
-        val trimPassword = password.trim()
-        if(trimPassword.isBlank()){
-            _passwordState.value = _passwordState.value.copy(
-                error = Errors.EmptyField
-            )
-            return
-        }
-
-        if(trimPassword.length < MIN_PASSWORD_LENGTH){
-            _passwordState.value = _passwordState.value.copy(
-                error = Errors.InputTooShort
-            )
-            return
-        }
-
-        if(!trimPassword.contains(Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]+\$"))){
-            _passwordState.value = _passwordState.value.copy(
-                error = Errors.InvalidPassword
-            )
-        } else {
-            _passwordState.value = _passwordState.value.copy(
-                error = null
-            )
-        }
-    }*/
 }
 
 sealed class UiEvent{

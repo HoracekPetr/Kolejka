@@ -1,9 +1,8 @@
 package com.example.kolejka.use_cases
 
 import android.util.Patterns
-import com.example.kolejka.data.features.auth.RegisterResult
+import com.example.kolejka.data.features.auth.models.RegisterResult
 import com.example.kolejka.data.features.auth.repository.AuthRepository
-import com.example.kolejka.data.util.SimpleResource
 import com.example.kolejka.view.util.Constants
 import com.example.kolejka.view.util.errors.Errors
 
