@@ -6,6 +6,7 @@ import com.example.kolejka.data.features.auth.AuthApi
 import com.example.kolejka.data.features.auth.dto.request.LoginAccountRequest
 import com.example.kolejka.data.features.auth.dto.request.RegisterAccountRequest
 import com.example.kolejka.data.util.Constants.JWT_TOKEN
+import com.example.kolejka.data.util.Constants.UNAUTHORIZED_CODE
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.data.util.SimpleResource
 import com.example.kolejka.view.util.uitext.UiText
@@ -31,7 +32,8 @@ class AuthRepositoryImpl(
             } else {
                 response.message?.let { msg ->
                     Resource.Error(uiText = UiText.StringDynamic(msg))
-                } ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
+                }
+                    ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
             }
 
 
@@ -50,16 +52,29 @@ class AuthRepositoryImpl(
             if (response.successful) {
                 //ULOŽENÍ JWT TOKENU DO SHARED PREFERENCÍ
                 sharedPreferences.edit()
-                    .putString(JWT_TOKEN,response.data?.token)
+                    .putString(JWT_TOKEN, response.data?.token)
                     .apply()
                 Resource.Success(Unit)
             } else {
                 response.message?.let { msg ->
                     Resource.Error(uiText = UiText.StringDynamic(msg))
-                } ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
+                }
+                    ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
             }
 
 
+        } catch (e: IOException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
+        } catch (e: HttpException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
+        }
+    }
+
+    override suspend fun authenticate(): SimpleResource {
+
+        return try {
+            authApi.authenticate()
+            Resource.Success(Unit)
         } catch (e: IOException) {
             Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
         } catch (e: HttpException) {

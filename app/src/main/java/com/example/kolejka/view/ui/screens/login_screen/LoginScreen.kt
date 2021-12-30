@@ -28,9 +28,9 @@ import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.theme.Space12
 import com.example.kolejka.view.ui.components.StandardTextField
-import com.example.kolejka.view.ui.screens.register_screen.UiEvent
 import com.example.kolejka.view.util.Constants
 import com.example.kolejka.view.util.Screen
+import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.errors.Errors
 import com.example.kolejka.view.util.uitext.asString
 import kotlinx.coroutines.flow.collectLatest
@@ -51,13 +51,13 @@ fun LoginScreen(viewModel: LoginScreenViewModel = hiltViewModel(), navController
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is LoginScreenViewModel.UiEvent.SnackbarEvent -> {
+                is UiEvent.SnackbarEvent -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.uiText.asString(localContext),
                         duration = SnackbarDuration.Long
                     )
                 }
-                is LoginScreenViewModel.UiEvent.Navigate -> {
+                is UiEvent.Navigate -> {
                     navController.popBackStack()
                     navController.navigate(event.route)
                 }

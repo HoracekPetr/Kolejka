@@ -10,6 +10,7 @@ import com.example.kolejka.data.util.Resource
 import com.example.kolejka.use_cases.RegisterUseCase
 import com.example.kolejka.view.util.Constants.MIN_PASSWORD_LENGTH
 import com.example.kolejka.view.util.Constants.MIN_USERNAME_LENGTH
+import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.errors.Errors
 import com.example.kolejka.view.util.states.PasswordTextfieldState
 import com.example.kolejka.view.util.states.StandardTextfieldState
@@ -141,8 +142,4 @@ class RegisterScreenViewModel @Inject constructor(
             }
         }
     }
-}
-
-sealed class UiEvent{
-    data class SnackbarEvent(val uiText: UiText): UiEvent()
 }

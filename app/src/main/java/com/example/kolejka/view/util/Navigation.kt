@@ -16,6 +16,7 @@ import com.example.kolejka.view.ui.screens.notification_screen.NotificationScree
 import com.example.kolejka.view.ui.screens.post_detail_screen.PostDetailScreen
 import com.example.kolejka.view.ui.screens.profile_screen.ProfileScreen
 import com.example.kolejka.view.ui.screens.register_screen.RegisterScreen
+import com.example.kolejka.view.ui.screens.splash_screen.SplashScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 @ExperimentalGraphicsApi
@@ -24,7 +25,12 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 @Composable
 fun Navigation(navController: NavHostController) {
 
-    NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.SplashScreen.route) {
+
+        composable(route = Screen.SplashScreen.route){
+            SplashScreen(navController = navController)
+        }
+
         composable(route = Screen.LoginScreen.route) {
             LoginScreen(navController = navController)
         }

@@ -4,12 +4,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kolejka.R
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.use_cases.LoginUseCase
-import com.example.kolejka.view.ui.screens.register_screen.RegisterState
-import com.example.kolejka.view.ui.screens.register_screen.UiEvent
 import com.example.kolejka.view.util.Screen
+import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.states.PasswordTextfieldState
 import com.example.kolejka.view.util.states.StandardTextfieldState
 import com.example.kolejka.view.util.uitext.UiText
@@ -110,11 +108,6 @@ class LoginScreenViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    sealed class UiEvent {
-        data class SnackbarEvent(val uiText: UiText) : UiEvent()
-        data class Navigate(val route: String): UiEvent()
     }
 }
 

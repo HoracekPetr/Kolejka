@@ -30,6 +30,7 @@ import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.StandardTextField
 import com.example.kolejka.view.util.Constants
 import com.example.kolejka.view.util.Screen
+import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.errors.Errors
 import com.example.kolejka.view.util.uitext.asString
 import kotlinx.coroutines.flow.collectLatest
