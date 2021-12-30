@@ -73,7 +73,7 @@ class AuthRepositoryImpl(
     override suspend fun authenticate(): SimpleResource {
 
         return try {
-            authApi.authenticate()
+            authApi.authenticate() //pokud autentikace neselže, vrátíme succes, pokud ne, error
             Resource.Success(Unit)
         } catch (e: IOException) {
             Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
