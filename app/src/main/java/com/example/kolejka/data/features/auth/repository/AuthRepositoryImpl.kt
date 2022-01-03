@@ -6,7 +6,6 @@ import com.example.kolejka.data.features.auth.AuthApi
 import com.example.kolejka.data.features.auth.dto.request.LoginAccountRequest
 import com.example.kolejka.data.features.auth.dto.request.RegisterAccountRequest
 import com.example.kolejka.data.util.Constants.JWT_TOKEN
-import com.example.kolejka.data.util.Constants.UNAUTHORIZED_CODE
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.data.util.SimpleResource
 import com.example.kolejka.view.util.uitext.UiText
@@ -26,7 +25,7 @@ class AuthRepositoryImpl(
         val request = RegisterAccountRequest(email, username, password)
 
         return try {
-            val response = authApi.registerUser(request)
+            val response = authApi.registerAccount(request)
             if (response.successful) {
                 Resource.Success(Unit)
             } else {
@@ -48,7 +47,7 @@ class AuthRepositoryImpl(
         val request = LoginAccountRequest(email, password)
 
         return try {
-            val response = authApi.loginUser(request)
+            val response = authApi.loginAccount(request)
             if (response.successful) {
                 //ULOŽENÍ JWT TOKENU DO SHARED PREFERENCÍ
                 sharedPreferences.edit()

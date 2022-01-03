@@ -69,6 +69,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-beta01"
     implementation "androidx.navigation:navigation-compose:2.4.0-alpha09"
     implementation "com.google.accompanist:accompanist-flowlayout:0.17.0"
+    implementation "androidx.paging:paging-compose:1.0.0-alpha14"
+
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
