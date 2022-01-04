@@ -1,4 +1,4 @@
-package com.example.kolejka.use_cases
+package com.example.kolejka.use_cases.post
 
 import androidx.paging.PagingData
 import com.example.kolejka.data.features.post.repository.PostRepository

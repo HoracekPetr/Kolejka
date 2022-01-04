@@ -1,7 +1,8 @@
 package com.example.kolejka.view.ui.screens.new_post_screen
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,6 +40,17 @@ fun NewPostScreen(
     val localFocusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
 
+    val eventRadio = viewModel.eventRadioState
+    val offerRadio = viewModel.offerRadioState
+
+    val title = viewModel.titleState
+    val description = viewModel.descriptionState
+    val limit = viewModel.limitState
+    
+    val getImageFromGallery = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){
+        viewModel.onEvent(NewPostEvent.PickedImage(it))
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,7 +74,7 @@ fun NewPostScreen(
                 .border(2.dp, BlackAccent)
                 .background(Color.White)
                 .clickable {
-
+                    getImageFromGallery.launch("image/*")
                 }
         ) {
             Icon(
@@ -79,9 +91,9 @@ fun NewPostScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 RadioButton(
-                    selected = viewModel.eventRadioEnabled.value,
+                    selected = eventRadio.value.eventEnabled,
                     colors = RadioButtonDefaults.colors(selectedColor = DarkPurple, unselectedColor = DarkGray),
-                    onClick = { viewModel.eventRadioEnabled(true) })
+                    onClick = {viewModel.onEvent(NewPostEvent.EventPicked)})
                 Text(
                     text = stringResource(R.string.event),
                     style = MaterialTheme.typography.subtitle2
@@ -92,19 +104,19 @@ fun NewPostScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 RadioButton(
-                    selected = viewModel.offerRadioEnabled.value,
+                    selected = offerRadio.value.offerEnabled,
                     colors = RadioButtonDefaults.colors(selectedColor = DarkPurple, unselectedColor = DarkGray),
-                    onClick = { viewModel.offerRadioEnabled(true) })
+                    onClick = { viewModel.onEvent(NewPostEvent.OfferPicked) })
                 Text(stringResource(R.string.offer), style = MaterialTheme.typography.subtitle2)
             }
         }
         Spacer(modifier = Modifier.size(Space12))
         StandardTextField(
             modifier = Modifier.fillMaxWidth(),
-            text = viewModel.titleText.value,
+            text = title.value.text,
             hint = stringResource(R.string.title),
             textStyle = MaterialTheme.typography.body1,
-            onTextChanged = { viewModel.setTitleText(it) },
+            onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredTitle(it)) },
             placeholderTextColor = DarkGray,
             placeholderTextStyle = MaterialTheme.typography.body1,
         )
@@ -113,9 +125,9 @@ fun NewPostScreen(
             modifier = Modifier
                 .fillMaxHeight(0.4f)
                 .fillMaxWidth(),
-            text = viewModel.descriptionText.value,
+            text = description.value.text,
             hint = stringResource(id = R.string.description),
-            onTextChanged = { viewModel.setDescriptionText(it) },
+            onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredDescription(it))},
             placeholderTextColor = DarkGray,
             textStyle = MaterialTheme.typography.h3,
             placeholderTextStyle = MaterialTheme.typography.h3,
@@ -125,9 +137,9 @@ fun NewPostScreen(
         Spacer(modifier = Modifier.size(Space8))
         StandardTextField(
             modifier = Modifier.fillMaxWidth(0.25f),
-            text = viewModel.limitText.value,
+            text = limit.value.text,
             hint = stringResource(id = R.string.limit),
-            onTextChanged = { viewModel.setLimitText(it) },
+            onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredLimit(it)) },
             placeholderTextColor = DarkGray,
             textStyle = TextStyle(
                 fontFamily = roboto_mono,
@@ -144,6 +156,8 @@ fun NewPostScreen(
             showButton = true, buttonIcon = Icons.Default.Create, buttonText = stringResource(
                 id = R.string.create_the_post
             ), iconDescription = ""
-        )
+        ){
+            viewModel.onEvent(NewPostEvent.CreatePost)
+        }
     }
 }

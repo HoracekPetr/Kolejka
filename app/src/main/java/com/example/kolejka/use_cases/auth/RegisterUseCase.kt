@@ -1,4 +1,4 @@
-package com.example.kolejka.use_cases
+package com.example.kolejka.use_cases.auth
 
 import android.util.Patterns
 import com.example.kolejka.data.features.auth.models.RegisterResult

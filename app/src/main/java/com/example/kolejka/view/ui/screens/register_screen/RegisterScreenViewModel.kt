@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kolejka.R
 import com.example.kolejka.data.util.Resource
-import com.example.kolejka.use_cases.RegisterUseCase
+import com.example.kolejka.use_cases.auth.RegisterUseCase
 import com.example.kolejka.view.util.Constants.MIN_PASSWORD_LENGTH
 import com.example.kolejka.view.util.Constants.MIN_USERNAME_LENGTH
 import com.example.kolejka.view.util.UiEvent

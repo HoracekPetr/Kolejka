@@ -3,7 +3,7 @@ package com.example.kolejka.view.ui.screens.splash_screen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kolejka.data.util.Resource
-import com.example.kolejka.use_cases.AuthenticateUseCase
+import com.example.kolejka.use_cases.auth.AuthenticateUseCase
 import com.example.kolejka.view.util.Screen
 import com.example.kolejka.view.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel

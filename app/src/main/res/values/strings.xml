@@ -46,4 +46,5 @@
     <string name="cant_reach_server">Can\'t reach the server. Please check your connection.</string>
     <string name="something_went_wrong">Sorry, something went wrong. Please try again.</string>
     <string name="successful_registration">Registration was successful.</string>
+    <string name="file_not_found">The file couldn\'t be found.</string>
 </resources>

@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kolejka.data.util.Resource
-import com.example.kolejka.use_cases.LoginUseCase
+import com.example.kolejka.use_cases.auth.LoginUseCase
 import com.example.kolejka.view.util.Screen
 import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.states.PasswordTextfieldState

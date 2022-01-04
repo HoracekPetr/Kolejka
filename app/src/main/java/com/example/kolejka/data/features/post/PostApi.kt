@@ -1,8 +1,11 @@
 package com.example.kolejka.data.features.post
 
+import com.example.data.requests.CreatePostRequest
+import com.example.data.responses.BasicApiResponse
 import com.example.kolejka.models.Post
-import retrofit2.http.GET
-import retrofit2.http.Query
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.http.*
 
 interface PostApi {
 
@@ -11,4 +14,11 @@ interface PostApi {
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int
     ): List<Post>
+
+    @Multipart
+    @POST("/api/post/create")
+    suspend fun createPost(
+        @Part createPostData: MultipartBody.Part,
+        @Part createPostImage: MultipartBody.Part
+    ): BasicApiResponse<Unit>
 }

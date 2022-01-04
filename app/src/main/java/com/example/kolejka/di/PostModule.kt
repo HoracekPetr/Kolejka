@@ -1,18 +1,17 @@
 package com.example.kolejka.di
 
-import android.content.SharedPreferences
-import com.example.kolejka.data.features.auth.AuthApi
-import com.example.kolejka.data.features.auth.repository.AuthRepository
-import com.example.kolejka.data.features.auth.repository.AuthRepositoryImpl
+import android.content.Context
 import com.example.kolejka.data.features.post.PostApi
 import com.example.kolejka.data.features.post.repository.PostRepository
 import com.example.kolejka.data.features.post.repository.PostRepositoryImpl
 import com.example.kolejka.data.util.Constants
-import com.example.kolejka.use_cases.GetAllPostsUseCase
-import com.example.kolejka.use_cases.RegisterUseCase
+import com.example.kolejka.use_cases.post.CreatePostUseCase
+import com.example.kolejka.use_cases.post.GetAllPostsUseCase
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -37,13 +36,19 @@ object PostModule {
 
     @Provides
     @Singleton
-    fun providePostRepository(postApi: PostApi): PostRepository {
-        return PostRepositoryImpl(postApi)
+    fun providePostRepository(postApi: PostApi, gson: Gson, @ApplicationContext appContext: Context): PostRepository {
+        return PostRepositoryImpl(postApi, gson, appContext)
     }
 
     @Provides
     @Singleton
     fun provideGetAllPostsUseCase(repository: PostRepository): GetAllPostsUseCase {
         return GetAllPostsUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCreatePostsUseCase(repository: PostRepository): CreatePostUseCase {
+        return CreatePostUseCase(repository)
     }
 }

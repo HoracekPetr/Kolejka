@@ -1,10 +1,12 @@
 package com.example.kolejka.di
 
 import android.app.Application
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.example.kolejka.data.util.Constants.JWT_TOKEN
 import com.example.kolejka.data.util.Constants.SHARED_PREFERENCES_NAME
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,5 +41,11 @@ object AppModule {
                 it.proceed(modifiedRequest)
             }
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideGson(): Gson{
+        return Gson()
     }
 }

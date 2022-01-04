@@ -5,9 +5,9 @@ import com.example.kolejka.data.features.auth.AuthApi
 import com.example.kolejka.data.features.auth.repository.AuthRepository
 import com.example.kolejka.data.features.auth.repository.AuthRepositoryImpl
 import com.example.kolejka.data.util.Constants.BASE_URL
-import com.example.kolejka.use_cases.AuthenticateUseCase
-import com.example.kolejka.use_cases.LoginUseCase
-import com.example.kolejka.use_cases.RegisterUseCase
+import com.example.kolejka.use_cases.auth.AuthenticateUseCase
+import com.example.kolejka.use_cases.auth.LoginUseCase
+import com.example.kolejka.use_cases.auth.RegisterUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,8 +15,6 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
@@ -49,13 +47,13 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun provideLoginUseCase(repository: AuthRepository): LoginUseCase{
+    fun provideLoginUseCase(repository: AuthRepository): LoginUseCase {
         return LoginUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideAuthenticateUseCase(repository: AuthRepository): AuthenticateUseCase{
+    fun provideAuthenticateUseCase(repository: AuthRepository): AuthenticateUseCase {
         return AuthenticateUseCase(repository)
     }
 }
