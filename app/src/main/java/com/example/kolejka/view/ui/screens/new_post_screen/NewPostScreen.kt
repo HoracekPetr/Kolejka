@@ -31,6 +31,7 @@ import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.StandardTextField
 import com.example.kolejka.view.ui.components.bottom_navigation.FloatingAddPostButton
+import com.example.kolejka.view.util.Screen
 
 @Composable
 fun NewPostScreen(
@@ -158,6 +159,8 @@ fun NewPostScreen(
             ), iconDescription = ""
         ){
             viewModel.onEvent(NewPostEvent.CreatePost)
+            navController.popBackStack()
+            navController.navigate(Screen.PostScreen.route)
         }
     }
 }

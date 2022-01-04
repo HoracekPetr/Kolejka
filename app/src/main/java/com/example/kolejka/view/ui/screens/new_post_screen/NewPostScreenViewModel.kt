@@ -61,9 +61,17 @@ class NewPostScreenViewModel @Inject constructor(
                     eventEnabled = true,
                     offerEnabled = false
                 )
+                _offerRadioState.value = _offerRadioState.value.copy(
+                    eventEnabled = true,
+                    offerEnabled = false
+                )
             }
             is NewPostEvent.OfferPicked -> {
                 _offerRadioState.value = _offerRadioState.value.copy(
+                    eventEnabled = false,
+                    offerEnabled = true
+                )
+                _eventRadioState.value = _eventRadioState.value.copy(
                     eventEnabled = false,
                     offerEnabled = true
                 )
