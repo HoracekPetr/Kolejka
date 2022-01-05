@@ -5,7 +5,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kolejka.use_cases.post.CreatePostUseCase
 import com.example.kolejka.view.util.states.NewPostRadioState
 import com.example.kolejka.view.util.states.StandardTextfieldState
@@ -30,11 +29,8 @@ class NewPostScreenViewModel @Inject constructor(
     private var _limitState = mutableStateOf(StandardTextfieldState())
     var limitState: State<StandardTextfieldState> = _limitState
 
-    private var _eventRadioState = mutableStateOf(NewPostRadioState())
-    var eventRadioState: State<NewPostRadioState> = _eventRadioState
-
-    private var _offerRadioState = mutableStateOf(NewPostRadioState())
-    var offerRadioState: State<NewPostRadioState> = _offerRadioState
+    private var _optionRadioState = mutableStateOf(NewPostRadioState())
+    var optionRadioState: State<NewPostRadioState> = _optionRadioState
 
 
     fun onEvent(event: NewPostEvent) {
@@ -57,21 +53,14 @@ class NewPostScreenViewModel @Inject constructor(
             }
 
             is NewPostEvent.EventPicked -> {
-                _eventRadioState.value = _eventRadioState.value.copy(
+                _optionRadioState.value = _optionRadioState.value.copy(
                     eventEnabled = true,
                     offerEnabled = false
                 )
-                _offerRadioState.value = _offerRadioState.value.copy(
-                    eventEnabled = true,
-                    offerEnabled = false
-                )
+
             }
             is NewPostEvent.OfferPicked -> {
-                _offerRadioState.value = _offerRadioState.value.copy(
-                    eventEnabled = false,
-                    offerEnabled = true
-                )
-                _eventRadioState.value = _eventRadioState.value.copy(
+                _optionRadioState.value = _optionRadioState.value.copy(
                     eventEnabled = false,
                     offerEnabled = true
                 )
@@ -90,8 +79,8 @@ class NewPostScreenViewModel @Inject constructor(
                         createPostUseCase(
                             title = titleState.value.text,
                             description = descriptionState.value.text,
-                            limit = limitState.value.text.toInt(),
-                            type = when (eventRadioState.value.eventEnabled) {
+                            limit = limitState.value.text.toIntOrNull(),
+                            type = when (optionRadioState.value.eventEnabled) {
                                 true -> 0
                                 else -> 1
                             },

@@ -9,6 +9,7 @@ import com.example.kolejka.data.util.Constants.JWT_TOKEN
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.data.util.SimpleResource
 import com.example.kolejka.view.util.uitext.UiText
+import kotlinx.coroutines.delay
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -53,7 +54,9 @@ class AuthRepositoryImpl(
                 sharedPreferences.edit()
                     .putString(JWT_TOKEN, response.data?.token)
                     .apply()
+                println("The token: ${response.data?.token}")
                 Resource.Success(Unit)
+
             } else {
                 response.message?.let { msg ->
                     Resource.Error(uiText = UiText.StringDynamic(msg))
@@ -72,7 +75,7 @@ class AuthRepositoryImpl(
     override suspend fun authenticate(): SimpleResource {
 
         return try {
-            authApi.authenticate() //pokud autentikace neselže, vrátíme succes, pokud ne, error
+            authApi.authenticate() //pokud autentikace neselže, vrátíme success, pokud ne, error
             Resource.Success(Unit)
         } catch (e: IOException) {
             Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))

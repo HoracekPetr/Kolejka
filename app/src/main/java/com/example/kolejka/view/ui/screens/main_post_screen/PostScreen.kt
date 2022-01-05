@@ -3,6 +3,7 @@ package com.example.kolejka.view.ui.screens.main_post_screen
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.kolejka.view.ui.components.tab_navigation.TabItem
 import com.example.kolejka.view.ui.components.tab_navigation.Tabs

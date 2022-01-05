@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kolejka.data.util.Resource
+import com.example.kolejka.use_cases.auth.AuthenticateUseCase
 import com.example.kolejka.use_cases.auth.LoginUseCase
 import com.example.kolejka.view.util.Screen
 import com.example.kolejka.view.util.UiEvent
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginScreenViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val authenticateUseCase: AuthenticateUseCase
 ) : ViewModel() {
 
     private val _emailState = mutableStateOf(StandardTextfieldState())

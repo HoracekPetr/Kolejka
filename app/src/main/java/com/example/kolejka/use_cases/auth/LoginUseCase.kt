@@ -4,6 +4,8 @@ import android.util.Patterns
 import com.example.kolejka.data.features.auth.models.LoginResult
 import com.example.kolejka.data.features.auth.models.RegisterResult
 import com.example.kolejka.data.features.auth.repository.AuthRepository
+import com.example.kolejka.data.util.Resource
+import com.example.kolejka.data.util.SimpleResource
 import com.example.kolejka.view.util.errors.Errors
 
 class LoginUseCase(
@@ -12,11 +14,11 @@ class LoginUseCase(
     suspend operator fun invoke(
         email: String,
         password: String
-    ): LoginResult{
+    ): LoginResult {
         val emailError = validateEmail(email)
         val passwordError = validatePassword(password)
 
-        if(emailError != null || passwordError != null){
+        if (emailError != null || passwordError != null) {
             return LoginResult(
                 emailError = emailError,
                 passwordError = passwordError
@@ -45,7 +47,7 @@ private fun validateEmail(email: String): Errors? {
 private fun validatePassword(password: String): Errors? {
     val trimPassword = password.trim()
 
-    if(trimPassword.isBlank()){
+    if (trimPassword.isBlank()) {
         return Errors.EmptyField
     }
 

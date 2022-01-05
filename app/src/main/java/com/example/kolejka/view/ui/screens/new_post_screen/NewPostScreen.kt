@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -27,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.StandardTextField
@@ -41,13 +45,14 @@ fun NewPostScreen(
     val localFocusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
 
-    val eventRadio = viewModel.eventRadioState
-    val offerRadio = viewModel.offerRadioState
+    val optionRadio = viewModel.optionRadioState
 
     val title = viewModel.titleState
     val description = viewModel.descriptionState
     val limit = viewModel.limitState
-    
+
+
+    val imageUri = viewModel.pickedImageUri.value
     val getImageFromGallery = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){
         viewModel.onEvent(NewPostEvent.PickedImage(it))
     }
@@ -83,6 +88,15 @@ fun NewPostScreen(
                 imageVector = Icons.Default.AddAPhoto,
                 contentDescription = stringResource(R.string.add_a_new_photo)
             )
+
+            imageUri?.let{ uri ->
+                Image(
+                    modifier = Modifier.matchParentSize(),
+                    painter = rememberImagePainter(uri),
+                    contentDescription = "Picked post image",
+                    contentScale = ContentScale.FillBounds
+                )
+            }
         }
         //Choose Post type
         Spacer(modifier = Modifier.size(Space4))
@@ -92,7 +106,7 @@ fun NewPostScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 RadioButton(
-                    selected = eventRadio.value.eventEnabled,
+                    selected = optionRadio.value.eventEnabled,
                     colors = RadioButtonDefaults.colors(selectedColor = DarkPurple, unselectedColor = DarkGray),
                     onClick = {viewModel.onEvent(NewPostEvent.EventPicked)})
                 Text(
@@ -105,7 +119,7 @@ fun NewPostScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 RadioButton(
-                    selected = offerRadio.value.offerEnabled,
+                    selected = optionRadio.value.offerEnabled,
                     colors = RadioButtonDefaults.colors(selectedColor = DarkPurple, unselectedColor = DarkGray),
                     onClick = { viewModel.onEvent(NewPostEvent.OfferPicked) })
                 Text(stringResource(R.string.offer), style = MaterialTheme.typography.subtitle2)
