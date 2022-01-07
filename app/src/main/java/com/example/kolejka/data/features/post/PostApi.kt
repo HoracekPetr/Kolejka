@@ -1,10 +1,8 @@
 package com.example.kolejka.data.features.post
 
-import com.example.data.requests.CreatePostRequest
-import com.example.data.responses.BasicApiResponse
+import com.example.kolejka.data.response.BasicApiResponse
 import com.example.kolejka.models.Post
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface PostApi {

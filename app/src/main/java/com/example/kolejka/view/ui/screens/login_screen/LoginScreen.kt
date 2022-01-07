@@ -28,7 +28,6 @@ import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.theme.Space12
 import com.example.kolejka.view.ui.components.StandardTextField
-import com.example.kolejka.view.util.Constants
 import com.example.kolejka.view.util.Screen
 import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.errors.Errors
@@ -51,10 +50,10 @@ fun LoginScreen(viewModel: LoginScreenViewModel = hiltViewModel(), navController
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is UiEvent.SnackbarEvent -> {
+                is UiEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.uiText.asString(localContext),
-                        duration = SnackbarDuration.Long
+                        duration = SnackbarDuration.Short
                     )
                 }
                 is UiEvent.Navigate -> {

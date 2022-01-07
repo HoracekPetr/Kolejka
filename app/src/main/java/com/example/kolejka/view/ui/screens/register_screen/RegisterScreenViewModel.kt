@@ -1,6 +1,5 @@
 package com.example.kolejka.view.ui.screens.register_screen
 
-import android.util.Patterns
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -8,10 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.kolejka.R
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.use_cases.auth.RegisterUseCase
-import com.example.kolejka.view.util.Constants.MIN_PASSWORD_LENGTH
-import com.example.kolejka.view.util.Constants.MIN_USERNAME_LENGTH
 import com.example.kolejka.view.util.UiEvent
-import com.example.kolejka.view.util.errors.Errors
 import com.example.kolejka.view.util.states.PasswordTextfieldState
 import com.example.kolejka.view.util.states.StandardTextfieldState
 import com.example.kolejka.view.util.uitext.UiText
@@ -117,7 +113,7 @@ class RegisterScreenViewModel @Inject constructor(
             when(registerResult.result){
                 is Resource.Success -> {
                     _eventFlow.emit(
-                        UiEvent.SnackbarEvent(UiText.StringResource(R.string.successful_registration))
+                        UiEvent.ShowSnackbar(UiText.StringResource(R.string.successful_registration))
                     )
                     _registerState.value = RegisterState(
                         isLoading = false
@@ -131,7 +127,7 @@ class RegisterScreenViewModel @Inject constructor(
                         isLoading = false
                     )
                     _eventFlow.emit(
-                        UiEvent.SnackbarEvent(registerResult.result.uiText ?: UiText.unknownError())
+                        UiEvent.ShowSnackbar(registerResult.result.uiText ?: UiText.unknownError())
                     )
                 }
                 null -> {

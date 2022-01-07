@@ -28,7 +28,7 @@ val Typography = Typography(
         body2 = TextStyle(
                 fontFamily = roboto_mono,
                 fontWeight = FontWeight.Normal,
-                fontSize = 22.sp
+                fontSize = 16.sp
         ),
         //Nadpisy - medium
         h1 = TextStyle(
