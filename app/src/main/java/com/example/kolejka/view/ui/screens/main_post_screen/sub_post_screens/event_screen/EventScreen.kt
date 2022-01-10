@@ -25,13 +25,6 @@ import com.example.kolejka.view.util.PostType
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
-/*val eventList = listOf(
-    Post("Fotbal na Harcově", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD", type = 0),
-    Post("Gungoslav", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("Pěkně smradlavá prdel kurva", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("Shit Party", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("BEEEERPONKKK", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD")
-)*/
 
 @Composable
 fun EventScreen(navController: NavController, viewModel: EventScreenViewModel = hiltViewModel()) {

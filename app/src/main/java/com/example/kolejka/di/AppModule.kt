@@ -35,7 +35,9 @@ object AppModule {
     fun provideOkHttpClient(sharedPreferences: SharedPreferences): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor {
-                val token = sharedPreferences.getString(JWT_TOKEN,"")
+
+                val token = sharedPreferences.getString(JWT_TOKEN, "") ?: ""
+
                 val modifiedRequest = it.request().newBuilder()
                     .addHeader("Authorization", "Bearer $token")
                     .build()

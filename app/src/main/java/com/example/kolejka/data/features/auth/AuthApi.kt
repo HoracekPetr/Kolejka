@@ -1,10 +1,9 @@
 package com.example.kolejka.data.features.auth
 
-import com.example.data.responses.BasicApiResponse
+import com.example.kolejka.data.response.BasicApiResponse
 import com.example.kolejka.data.features.auth.dto.request.LoginAccountRequest
 import com.example.kolejka.data.features.auth.dto.request.RegisterAccountRequest
 import com.example.kolejka.data.features.auth.dto.response.AuthResponse
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

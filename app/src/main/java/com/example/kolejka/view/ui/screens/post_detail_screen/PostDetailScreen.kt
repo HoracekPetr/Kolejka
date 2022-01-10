@@ -103,14 +103,14 @@ fun PostDetailScreen(
                         Text(text = "${viewModel.availability.value} / ${post.limit}", style = MaterialTheme.typography.body2)
                     }
                     Button(onClick = {
-                        if (post.available < post.limit) {
+                        if (post.available < post.limit ?: 1) {
                             Log.d("Available", "${post.available}")
                             viewModel.incrementAvailability()
                             post.available = viewModel.availability.value
                             /*TODO("API CALL přidání člena k postu")*/
                         }
                     },
-                            enabled = post.available < post.limit,
+                            enabled = post.available < post.limit ?: 1,
                             modifier = Modifier.clip(RoundedCornerShape(10.dp)))
                     {
                         Text(stringResource(R.string.join), style = MaterialTheme.typography.h3)

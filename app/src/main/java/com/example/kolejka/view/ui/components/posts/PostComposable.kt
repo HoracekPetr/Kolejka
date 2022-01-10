@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import coil.compose.rememberImagePainter
 import com.example.kolejka.R
 import com.example.kolejka.models.Post
 import com.example.kolejka.view.theme.*
@@ -29,10 +30,10 @@ fun PostComposable(
 ) {
     Card(
             modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(PaddingMedium)
-                    .clip(RoundedCornerShape(Space12))
-                    .clickable { onPostClick() }
+                .fillMaxWidth()
+                .padding(PaddingMedium)
+                .clip(RoundedCornerShape(Space12))
+                .clickable { onPostClick() }
     ) {
         Column(
                 modifier = Modifier
@@ -47,7 +48,7 @@ fun PostComposable(
                             .fillMaxWidth()
                             .height(PostHeight),
                     contentScale = ContentScale.FillBounds,
-                    painter = painterResource(id = R.drawable.schick),
+                    painter = rememberImagePainter(data = post.postPictureUrl),
                     contentDescription = "Post Image"
             )
             Spacer(modifier = Modifier.size(Space12))

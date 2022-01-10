@@ -1,4 +1,4 @@
-package com.example.data.responses
+package com.example.kolejka.data.response
 
 data class BasicApiResponse<T>(
     val message: String? = null,
