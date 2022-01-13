@@ -13,6 +13,18 @@ interface PostApi {
         @Query("pageSize") pageSize: Int
     ): List<Post>
 
+    @GET("/api/post/getPostsByCreator")
+    suspend fun getPostsByCreator(
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int
+    ): List<Post>
+
+    @GET("/api/post/getPostsWhereMember")
+    suspend fun getPostsWhereUserIsMember(
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int
+    ): List<Post>
+
     @Multipart
     @POST("/api/post/create")
     suspend fun createPost(

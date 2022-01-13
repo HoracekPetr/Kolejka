@@ -6,6 +6,7 @@ import com.example.kolejka.data.features.auth.AuthApi
 import com.example.kolejka.data.features.auth.dto.request.LoginAccountRequest
 import com.example.kolejka.data.features.auth.dto.request.RegisterAccountRequest
 import com.example.kolejka.data.util.Constants.JWT_TOKEN
+import com.example.kolejka.data.util.Constants.USER_ID
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.data.util.SimpleResource
 import com.example.kolejka.view.util.uitext.UiText

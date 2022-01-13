@@ -1,17 +1,16 @@
 package com.example.kolejka.data.features.post.repository
 
-import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import androidx.core.net.toFile
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.data.requests.CreatePostRequest
 import com.example.kolejka.R
-import com.example.kolejka.data.features.auth.dto.request.RegisterAccountRequest
 import com.example.kolejka.data.features.post.PostApi
-import com.example.kolejka.data.features.post.paging.PostSource
+import com.example.kolejka.data.features.post.paging.AllPostsSource
+import com.example.kolejka.data.features.post.paging.CreatorPostsSource
+import com.example.kolejka.data.features.post.paging.MemberPostsSource
 import com.example.kolejka.data.util.Constants
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.data.util.SimpleResource
@@ -19,12 +18,10 @@ import com.example.kolejka.data.util.getFileName
 import com.example.kolejka.models.Post
 import com.example.kolejka.view.util.uitext.UiText
 import com.google.gson.Gson
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
 import java.io.File
@@ -40,7 +37,17 @@ class PostRepositoryImpl(
 
     override val posts: Flow<PagingData<Post>>
         get() = Pager(PagingConfig(pageSize = Constants.POSTS_PAGE_SIZE)) {
-            PostSource(postApi)
+            AllPostsSource(postApi)
+        }.flow
+
+    override val postsByCreator: Flow<PagingData<Post>>
+        get() = Pager(PagingConfig(pageSize = Constants.POSTS_PAGE_SIZE)){
+            CreatorPostsSource(postApi)
+        }.flow
+
+    override val postsWhereMember: Flow<PagingData<Post>>
+        get() = Pager(PagingConfig(pageSize = Constants.POSTS_PAGE_SIZE)){
+            MemberPostsSource(postApi)
         }.flow
 
     override suspend fun createPost(

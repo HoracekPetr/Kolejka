@@ -9,6 +9,5 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostScreenViewModel @Inject constructor(
-    private val authenticateUseCase: AuthenticateUseCase
 ): ViewModel() {
 }

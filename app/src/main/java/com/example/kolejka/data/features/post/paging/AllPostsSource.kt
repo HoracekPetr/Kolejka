@@ -8,7 +8,7 @@ import com.example.kolejka.models.Post
 import retrofit2.HttpException
 import java.io.IOException
 
-class PostSource(
+class AllPostsSource(
     private val api: PostApi
 ): PagingSource<Int, Post>() {
 

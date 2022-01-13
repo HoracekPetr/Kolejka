@@ -1,10 +1,10 @@
 package com.example.kolejka.models
 
 data class User(
-        val userId: String = "",
+        val userId: String? = "",
         var username: String,
         val profilePictureUrl: String = "",
-        var bannerColorR: Float = 125f,
-        var bannerColorG: Float = 100f,
-        var bannerColorB: Float = 125f,
+        var bannerR: Float = 255f,
+        var bannerG: Float = 255f,
+        var bannerB: Float = 255f,
 )

@@ -38,7 +38,7 @@ fun ProfileBannerComposable(
         modifier = Modifier.padding(PaddingMedium),
         shape = RoundedCornerShape(Space12),
         border = BorderStroke(2.dp, BlackAccent),
-        backgroundColor = Color(user.bannerColorR/255, user.bannerColorG/255, user.bannerColorB/255)
+        backgroundColor = Color(user.bannerR/255, user.bannerG/255, user.bannerB/255)
     ) {
         Column(
             modifier = Modifier

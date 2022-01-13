@@ -33,11 +33,11 @@ fun EditProfileDialog(
     onProfilePictureClick: () -> Unit = {},
     viewModel: EditProfileDialogViewModel = hiltViewModel()
 ) {
-    val userColor = Color(user.bannerColorR/255, user.bannerColorG/255, user.bannerColorB/255)
+    val userColor = Color(user.bannerR/255, user.bannerG/255, user.bannerB/255)
     Log.d("userColor", userColor.toString())
-    viewModel.setR(user.bannerColorR)
-    viewModel.setG(user.bannerColorG)
-    viewModel.setB(user.bannerColorB)
+    viewModel.setR(user.bannerR)
+    viewModel.setG(user.bannerG)
+    viewModel.setB(user.bannerB)
 
     Dialog(onDismissRequest = { onDismissRequestClick() }, content = {
         Card(
@@ -62,10 +62,6 @@ fun EditProfileDialog(
                     contentDescription = null
                 )
                 Spacer(modifier = Modifier.size(Space8))
-/*                EditUsernameTextField(
-                    text = viewModel.username.value,
-                    hint = user.username,
-                    onTextChanged = { viewModel.setUsername(it) })*/
 
                 StandardTextField(
                     modifier = Modifier.border(1.dp, Color.DarkGray, shape = RoundedCornerShape(10.dp)),
@@ -86,7 +82,7 @@ fun EditProfileDialog(
                     onValueChange = { viewModel.setR(it)},
                     valueRange = 0f..255f,
                     onValueChangeFinished = {
-                        user.bannerColorR = viewModel.r.value
+                        user.bannerR = viewModel.r.value
                     }
                 )
 
@@ -97,7 +93,7 @@ fun EditProfileDialog(
                     onValueChange = { viewModel.setG(it)},
                     valueRange = 0f..255f,
                     onValueChangeFinished = {
-                        user.bannerColorG = viewModel.g.value
+                        user.bannerG = viewModel.g.value
                     }
                 )
 
@@ -108,7 +104,7 @@ fun EditProfileDialog(
                     onValueChange = { viewModel.setB(it)},
                     valueRange = 0f..255f,
                     onValueChangeFinished = {
-                        user.bannerColorB = viewModel.b.value
+                        user.bannerB = viewModel.b.value
                     }
                 )
 
@@ -119,9 +115,9 @@ fun EditProfileDialog(
                     )
                     drawCircle(
                         color = Color(
-                            user.bannerColorR/255,
-                            user.bannerColorG/255,
-                            user.bannerColorB/255
+                            user.bannerR/255,
+                            user.bannerG/255,
+                            user.bannerB/255
                         )
                     )
                 })
@@ -141,9 +137,9 @@ fun EditProfileDialog(
 
                     Button(onClick = {
                         onDismissRequestClick()
-                        user.bannerColorR = userColor.red*255
-                        user.bannerColorG = userColor.green*255
-                        user.bannerColorB = userColor.blue*255
+                        user.bannerR = userColor.red*255
+                        user.bannerG = userColor.green*255
+                        user.bannerB = userColor.blue*255
                     }) {
                         Icon(imageVector = Icons.Default.Cancel, contentDescription = null)
                     }
