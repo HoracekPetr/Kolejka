@@ -51,4 +51,8 @@
     <string name="limit_cant_be_string">The limit can\'t be empty or must be a number!</string>
     <string name="description_too_long">The description is too long, 1000 characters limit.</string>
     <string name="pick_an_image">Post picture can\'t be empty.</string>
+    <string name="username_too_short2">Username must be at least 3 characters long!</string>
+    <string name="username_cant_be_empty">Username cannot be empty!</string>
+    <string name="user_updated">User was successfully updated.</string>
+    <string name="user_update_error">There was an error updating the user.</string>
 </resources>

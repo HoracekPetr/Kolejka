@@ -4,13 +4,9 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ExperimentalGraphicsApi
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.example.kolejka.models.Post
-import com.example.kolejka.models.User
-import com.example.kolejka.view.ui.screens.edit_profile_dialog.EditProfileDialog
 import com.example.kolejka.view.ui.screens.login_screen.LoginScreen
 import com.example.kolejka.view.ui.screens.main_post_screen.PostScreen
 import com.example.kolejka.view.ui.screens.new_post_screen.NewPostScreen

@@ -1,13 +1,17 @@
 package com.example.kolejka.di
 
+import android.content.Context
 import com.example.kolejka.data.features.user.UserApi
 import com.example.kolejka.data.features.user.repository.UserRepository
 import com.example.kolejka.data.features.user.repository.UserRepositoryImpl
 import com.example.kolejka.data.util.Constants
 import com.example.kolejka.use_cases.user.GetUserProfileUseCase
+import com.example.kolejka.use_cases.user.UpdateProfileUseCase
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -31,13 +35,19 @@ object UserModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(userApi: UserApi): UserRepository {
-        return UserRepositoryImpl(userApi)
+    fun provideUserRepository(userApi: UserApi, gson: Gson, @ApplicationContext appContext: Context): UserRepository {
+        return UserRepositoryImpl(userApi, gson, appContext)
     }
 
     @Provides
     @Singleton
     fun provideGetUserProfileUseCase(repository: UserRepository): GetUserProfileUseCase {
         return GetUserProfileUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpdateProfileUseCase(repository: UserRepository): UpdateProfileUseCase {
+        return UpdateProfileUseCase(repository)
     }
 }

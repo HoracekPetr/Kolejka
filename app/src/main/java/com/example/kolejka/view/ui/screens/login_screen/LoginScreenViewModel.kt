@@ -20,8 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginScreenViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase,
-    private val authenticateUseCase: AuthenticateUseCase
+    private val loginUseCase: LoginUseCase
 ) : ViewModel() {
 
     private val _emailState = mutableStateOf(StandardTextfieldState())

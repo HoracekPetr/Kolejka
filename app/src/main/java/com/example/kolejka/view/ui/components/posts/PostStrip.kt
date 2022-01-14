@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import com.example.kolejka.R
 import com.example.kolejka.models.Post
 import com.example.kolejka.view.theme.*
@@ -43,7 +44,7 @@ fun PostStrip(
                     .clip(RoundedCornerShape(Space8))
                     .size(PostStripPicSize)
                     .weight(2f),
-                painter = painterResource(id = R.drawable.petr),
+                painter = rememberImagePainter(data = post.profilePictureUrl),
                 contentDescription = null
             )
             Spacer(modifier = Modifier.size(Space4))

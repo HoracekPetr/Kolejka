@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.colorspace.ColorSpaces
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColor
+import coil.compose.rememberImagePainter
 import com.example.kolejka.R
 import com.example.kolejka.models.User
 import com.example.kolejka.view.theme.*
@@ -51,7 +52,9 @@ fun ProfileBannerComposable(
                 modifier = Modifier
                     .size(ProfilePicSize)
                     .clip(RoundedCornerShape(Space36)),
-                painter = painterResource(id = R.drawable.petr),
+                painter = rememberImagePainter(data = user.profilePictureUrl, builder = {
+                    crossfade(true)
+                }),
                 contentDescription = null
             )
             Spacer(modifier = Modifier.size(Space4))

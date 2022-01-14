@@ -21,12 +21,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.rememberImagePainter
 import com.example.kolejka.R
 import com.example.kolejka.models.Post
+import com.example.kolejka.models.User
 import com.example.kolejka.view.theme.*
 
 @Composable
 fun PostComposable(
-        post: Post,
-        onPostClick: () -> Unit
+    post: Post,
+    onPostClick: () -> Unit
 ) {
     Card(
             modifier = Modifier
@@ -37,16 +38,16 @@ fun PostComposable(
     ) {
         Column(
                 modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.LightGray)
-                        .padding(PaddingMedium),
+                    .fillMaxWidth()
+                    .background(Color.LightGray)
+                    .padding(PaddingMedium),
                 horizontalAlignment = Alignment.Start
         ) {
             Image(
                     modifier = Modifier
-                            .clip(RoundedCornerShape(Space8))
-                            .fillMaxWidth()
-                            .height(PostHeight),
+                        .clip(RoundedCornerShape(Space8))
+                        .fillMaxWidth()
+                        .height(PostHeight),
                     contentScale = ContentScale.FillBounds,
                     painter = rememberImagePainter(data = post.postPictureUrl),
                     contentDescription = "Post Image"
@@ -66,10 +67,10 @@ fun PostComposable(
                 )
                 Image(
                         modifier = Modifier
-                                .size(PostProfileSize)
-                                .weight(1f, fill = false)
-                                .clip(CircleShape),
-                        painter = painterResource(id = R.drawable.petr),
+                            .size(PostProfileSize)
+                            .weight(1f, fill = false)
+                            .clip(CircleShape),
+                        painter = rememberImagePainter(data = post.profilePictureUrl),
                         contentDescription = "Profile Image",
                 )
             }

@@ -12,5 +12,6 @@ data class Post(
         val members: List<String> = mutableListOf(),
         var available: Int = 0,
         val limit: Int? = 0,
-        val type: Int = 0
+        val type: Int = 0,
+        val profilePictureUrl: String? = ""
 )

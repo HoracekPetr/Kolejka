@@ -18,7 +18,7 @@ import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.posts.PostStrip
 import com.example.kolejka.view.ui.components.profile.ProfileBannerComposable
-import com.example.kolejka.view.ui.screens.edit_profile_dialog.EditProfileDialog
+import com.example.kolejka.view.ui.components.profile.edit_profile_dialog.EditProfileDialog
 
 @ExperimentalGraphicsApi
 @Composable
@@ -47,7 +47,6 @@ fun ProfileScreen(
 
                 if (viewModel.showEditProfileDialog.value) {
                     EditProfileDialog(
-                        user = user,
                         onDismissRequestClick = { viewModel.setEditProfileDialogEnabled(false) },
                         onConfirmRequestClick = { viewModel.setEditProfileDialogEnabled(false) })
                 }
