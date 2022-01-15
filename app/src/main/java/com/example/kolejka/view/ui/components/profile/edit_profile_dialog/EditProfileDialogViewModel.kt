@@ -32,33 +32,6 @@ class EditProfileDialogViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-/*    private val _username = mutableStateOf("")
-    val username: State<String> = _username
-
-    fun setUsername(username:String){
-        _username.value = username
-    }
-
-    private val _r = mutableStateOf(0f)
-    val r: State<Float> = _r
-
-    private val _g = mutableStateOf(0f)
-    val g: State<Float> = _g
-
-    private val _b = mutableStateOf(0f)
-    val b: State<Float> = _b
-
-    fun setR(r: Float){
-        _r.value = r
-    }
-
-    fun setG(g: Float){
-        _g.value = g
-    }
-
-    fun setB(b: Float){
-        _b.value = b
-    }*/
 
     init {
         getProfile()
@@ -89,6 +62,11 @@ class EditProfileDialogViewModel @Inject constructor(
             is EditProfileEvent.PickedImage -> {
                 _profileImageUri.value = event.uri
             }
+
+            is EditProfileEvent.CropImage -> {
+                _profileImageUri.value = event.uri
+            }
+
             is EditProfileEvent.UpdateProfile -> {
                 updateProfile()
             }
@@ -100,7 +78,7 @@ class EditProfileDialogViewModel @Inject constructor(
             val result = updateProfileUseCase(
                 username = _state.value.username,
                 bannerR = _state.value.bannerR,
-                bannerG = _state.value.bannerB,
+                bannerG = _state.value.bannerG,
                 bannerB = _state.value.bannerB,
                 profileImageUri = _profileImageUri.value
             )
@@ -130,7 +108,7 @@ class EditProfileDialogViewModel @Inject constructor(
                     _state.value = _state.value.copy(
                         isLoading = false,
                         username = userResult.data?.username ?: "",
-                        profileImageUrl = userResult.data?.profilePictureUrl ?: "",
+                        profileImageUrl = userResult.data?.profilePictureUrl,
                         bannerR = userResult.data?.bannerR ?: 0f,
                         bannerG = userResult.data?.bannerG ?: 0f,
                         bannerB = userResult.data?.bannerB ?: 0f

@@ -2,6 +2,7 @@ package com.example.kolejka.data.features.post.repository
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toFile
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -31,8 +32,7 @@ import java.io.IOException
 
 class PostRepositoryImpl(
     private val postApi: PostApi,
-    private val gson: Gson,
-    private val appContext: Context
+    private val gson: Gson
 ) : PostRepository {
 
     override val posts: Flow<PagingData<Post>>
@@ -59,20 +59,7 @@ class PostRepositoryImpl(
     ): SimpleResource {
 
         val request = CreatePostRequest(title, description, limit ?: 0, type)
-
-        val imageFile = withContext(Dispatchers.IO) {
-            appContext.contentResolver.openFileDescriptor(imageUri, "r")?.let{ fd ->
-                val inputStream = FileInputStream(fd.fileDescriptor)
-                val file = File(
-                    appContext.cacheDir,
-                    appContext.contentResolver.getFileName(imageUri)
-                )
-                val outputStream = FileOutputStream(file)
-                inputStream.copyTo(outputStream)
-                file
-            }
-
-        } ?: return Resource.Error(uiText = UiText.StringResource(R.string.file_not_found))
+        val imageFile = imageUri.toFile()
 
         return try {
 

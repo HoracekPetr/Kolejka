@@ -19,6 +19,8 @@ import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.posts.PostStrip
 import com.example.kolejka.view.ui.components.profile.ProfileBannerComposable
 import com.example.kolejka.view.ui.components.profile.edit_profile_dialog.EditProfileDialog
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @ExperimentalGraphicsApi
 @Composable
@@ -28,123 +30,131 @@ fun ProfileScreen(
 ) {
 
     val state = viewModel.state.value
+
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+
     val postsByCreator = viewModel.postsByCreator.collectAsLazyPagingItems()
     val postsWhereMember = viewModel.postsWhereMember.collectAsLazyPagingItems()
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        contentPadding = PaddingValues(PaddingMedium)
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+        onRefresh = { viewModel.refreshScreen() }
     ) {
-        item {
-            state.profile?.let { user ->
-                ProfileBannerComposable(
-                    user = user,
-                    onEditIconClick = {
-                        viewModel.setEditProfileDialogEnabled(true)
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            contentPadding = PaddingValues(PaddingMedium)
+        ) {
+            item {
+                state.profile?.let { user ->
+                    ProfileBannerComposable(
+                        user = user,
+                        onEditIconClick = {
+                            viewModel.setEditProfileDialogEnabled(true)
+                        }
+                    )
+
+                    if (viewModel.showEditProfileDialog.value) {
+                        EditProfileDialog(
+                            onDismissRequestClick = { viewModel.setEditProfileDialogEnabled(false) },
+                            onConfirmRequestClick = { viewModel.setEditProfileDialogEnabled(false) })
                     }
-                )
-
-                if (viewModel.showEditProfileDialog.value) {
-                    EditProfileDialog(
-                        onDismissRequestClick = { viewModel.setEditProfileDialogEnabled(false) },
-                        onConfirmRequestClick = { viewModel.setEditProfileDialogEnabled(false) })
                 }
-            }
-            Spacer(modifier = Modifier.size(Space4))
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    RadioButton(
-                        colors = RadioButtonDefaults.colors(
-                            selectedColor = DarkPurple,
-                            unselectedColor = DarkGray
-                        ),
-                        selected = viewModel.eventsRadioEnabled.value,
-                        onClick = { viewModel.setYourPostsRadioEnabled(true) })
-                    Text(
-                        text = stringResource(R.string.my_posts),
-                        style = MaterialTheme.typography.subtitle2
-                    )
-                }
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    RadioButton(
-                        colors = RadioButtonDefaults.colors(
-                            selectedColor = DarkPurple,
-                            unselectedColor = DarkGray
-                        ),
-                        selected = viewModel.offersRadioEnabled.value,
-                        onClick = { viewModel.setJoinedPostsRadioEnabled(true) })
-                    Text(
-                        stringResource(R.string.joined_posts),
-                        style = MaterialTheme.typography.subtitle2
-                    )
-                }
-            }
-        }
-
-        if(viewModel.eventsRadioEnabled.value){
-            items(postsByCreator) { post ->
-
-                post?.let {
-                    PostStrip(
-                        post = it,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(PaddingMedium)
-                            .clickable { }
-                    )
-                }
-
-                postsByCreator.apply {
-                    when {
-                        loadState.refresh is LoadState.Loading -> {
-                            CircularProgressIndicator(
-                                color = DarkPurple
-                            )
-                        }
-                        loadState.append is LoadState.Loading -> {
-                            CircularProgressIndicator(
-                                color = DarkPurple
-                            )
-                        }
-                        loadState.append is LoadState.Error -> {}
+                Spacer(modifier = Modifier.size(Space4))
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        RadioButton(
+                            colors = RadioButtonDefaults.colors(
+                                selectedColor = DarkPurple,
+                                unselectedColor = DarkGray
+                            ),
+                            selected = viewModel.eventsRadioEnabled.value,
+                            onClick = { viewModel.setYourPostsRadioEnabled(true) })
+                        Text(
+                            text = stringResource(R.string.my_posts),
+                            style = MaterialTheme.typography.subtitle2
+                        )
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        RadioButton(
+                            colors = RadioButtonDefaults.colors(
+                                selectedColor = DarkPurple,
+                                unselectedColor = DarkGray
+                            ),
+                            selected = viewModel.offersRadioEnabled.value,
+                            onClick = { viewModel.setJoinedPostsRadioEnabled(true) })
+                        Text(
+                            stringResource(R.string.joined_posts),
+                            style = MaterialTheme.typography.subtitle2
+                        )
                     }
                 }
             }
-        }
 
-        if(viewModel.offersRadioEnabled.value){
-            items(postsWhereMember) { post ->
+            if(viewModel.eventsRadioEnabled.value){
+                items(postsByCreator) { post ->
 
-                post?.let {
-                    PostStrip(
-                        post = it,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(PaddingMedium)
-                            .clickable { }
-                    )
+                    post?.let {
+                        PostStrip(
+                            post = it,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(PaddingMedium)
+                                .clickable { }
+                        )
+                    }
+
+                    postsByCreator.apply {
+                        when {
+                            loadState.refresh is LoadState.Loading -> {
+                                CircularProgressIndicator(
+                                    color = DarkPurple
+                                )
+                            }
+                            loadState.append is LoadState.Loading -> {
+                                CircularProgressIndicator(
+                                    color = DarkPurple
+                                )
+                            }
+                            loadState.append is LoadState.Error -> {}
+                        }
+                    }
                 }
+            }
 
-                postsByCreator.apply {
-                    when {
-                        loadState.refresh is LoadState.Loading -> {
-                            CircularProgressIndicator(
-                                color = DarkPurple
-                            )
+            if(viewModel.offersRadioEnabled.value){
+                items(postsWhereMember) { post ->
+
+                    post?.let {
+                        PostStrip(
+                            post = it,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(PaddingMedium)
+                                .clickable { }
+                        )
+                    }
+
+                    postsByCreator.apply {
+                        when {
+                            loadState.refresh is LoadState.Loading -> {
+                                CircularProgressIndicator(
+                                    color = DarkPurple
+                                )
+                            }
+                            loadState.append is LoadState.Loading -> {
+                                CircularProgressIndicator(
+                                    color = DarkPurple
+                                )
+                            }
+                            loadState.append is LoadState.Error -> {}
                         }
-                        loadState.append is LoadState.Loading -> {
-                            CircularProgressIndicator(
-                                color = DarkPurple
-                            )
-                        }
-                        loadState.append is LoadState.Error -> {}
                     }
                 }
             }

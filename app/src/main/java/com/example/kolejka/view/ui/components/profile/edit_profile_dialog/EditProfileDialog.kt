@@ -4,6 +4,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -15,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
@@ -23,12 +25,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.StandardTextField
 import com.example.kolejka.view.ui.screens.new_post_screen.NewPostEvent
 import com.example.kolejka.view.util.UiEvent
+import com.example.kolejka.view.util.crop.CropActivityResultContract
 import com.example.kolejka.view.util.uitext.asString
+import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -43,9 +48,15 @@ fun EditProfileDialog(
     val scaffoldState = rememberScaffoldState()
     val localContext = LocalContext.current
 
+    val cropActivityLauncher = rememberLauncherForActivityResult(
+        contract = CropActivityResultContract(aspectX = 1f, aspectY = 1f)
+    ) {
+        viewModel.onEvent(EditProfileEvent.CropImage(it))
+    }
+
     val getImageFromGallery =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
-            viewModel.onEvent(EditProfileEvent.PickedImage(it))
+            cropActivityLauncher.launch(it)
         }
 
     LaunchedEffect(key1 = true) {
@@ -83,15 +94,20 @@ fun EditProfileDialog(
                 Image(
                     modifier = Modifier
                         .size(ProfilePicSize)
-                        .clip(RoundedCornerShape(Space36))
+
                         .clickable {
                             getImageFromGallery.launch("image/*")
-                        },
-                    painter = if (viewModel.profileImageUri.value == null) {
-                        rememberImagePainter(data = editProfileState.profileImageUrl)
-                    } else {
-                        rememberImagePainter(data = viewModel.profileImageUri)
-                    },
+                        }
+                        .shadow(
+                            elevation = Space8,
+                            shape = CircleShape,
+                            clip = true
+                        ),
+                    painter = rememberImagePainter(
+                        request = ImageRequest.Builder(LocalContext.current)
+                            .data(editProfileState.profileImageUrl)
+                            .build()
+                    ),
                     contentDescription = null
                 )
                 Spacer(modifier = Modifier.size(Space8))
@@ -118,7 +134,9 @@ fun EditProfileDialog(
                     value = editProfileState.bannerR,
                     onValueChange = { viewModel.onEvent(EditProfileEvent.ChangedR(it)) },
                     valueRange = 0f..255f,
-                    onValueChangeFinished = {}
+                    onValueChangeFinished = {
+
+                    }
                 )
 
                 Spacer(modifier = Modifier.size(Space4))

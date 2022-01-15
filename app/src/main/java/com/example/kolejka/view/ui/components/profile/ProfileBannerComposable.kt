@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -18,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.colorspace.ColorSpaces
 import androidx.compose.ui.res.painterResource
@@ -51,7 +53,11 @@ fun ProfileBannerComposable(
             Image(
                 modifier = Modifier
                     .size(ProfilePicSize)
-                    .clip(RoundedCornerShape(Space36)),
+                    .shadow(
+                        elevation = Space12,
+                        shape = CircleShape,
+                        clip = true
+                    ),
                 painter = rememberImagePainter(data = user.profilePictureUrl, builder = {
                     crossfade(true)
                 }),

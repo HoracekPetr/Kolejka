@@ -68,20 +68,6 @@ class UserRepositoryImpl(
         )
         val profileImage = profileImageUri?.toFile()
 
-/*        val profileImage = withContext(Dispatchers.IO) {
-            appContext.contentResolver.openFileDescriptor(profileImageUri ?: Uri.EMPTY, "r")?.let{ fd ->
-                val inputStream = FileInputStream(fd.fileDescriptor)
-                val file = File(
-                    appContext.cacheDir,
-                    appContext.contentResolver.getFileName(profileImageUri ?: Uri.EMPTY)
-                )
-                val outputStream = FileOutputStream(file)
-                inputStream.copyTo(outputStream)
-                file
-            }*/
-
-        //} ?: return Resource.Error(uiText = UiText.StringResource(R.string.file_not_found))
-
         return try {
             val response = userApi.updateUserProfile(
                 updateProfileData = MultipartBody.Part.createFormData(

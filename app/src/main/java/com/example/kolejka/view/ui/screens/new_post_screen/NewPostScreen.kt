@@ -31,12 +31,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.StandardTextField
 import com.example.kolejka.view.ui.components.bottom_navigation.FloatingAddPostButton
 import com.example.kolejka.view.util.Screen
 import com.example.kolejka.view.util.UiEvent
+import com.example.kolejka.view.util.crop.CropActivityResultContract
 import com.example.kolejka.view.util.uitext.asString
 import kotlinx.coroutines.flow.collectLatest
 
@@ -58,14 +60,21 @@ fun NewPostScreen(
     val description = viewModel.descriptionState
     val limit = viewModel.limitState
 
+
+    val cropActivityLauncher = rememberLauncherForActivityResult(
+        contract = CropActivityResultContract(aspectX = 16f, aspectY = 9f)
+    ) {
+        viewModel.onEvent(NewPostEvent.CropImage(it))
+    }
+
     val getImageFromGallery =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
-            viewModel.onEvent(NewPostEvent.PickedImage(it))
+            cropActivityLauncher.launch(it)
         }
 
-    LaunchedEffect(key1 = true){
+    LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
-            when(event){
+            when (event) {
                 is UiEvent.Navigate -> {
                     navController.popBackStack()
                     navController.navigate(event.route)
@@ -75,7 +84,7 @@ fun NewPostScreen(
                         message = event.uiText.asString(localContext),
                         duration = SnackbarDuration.Short,
 
-                    )
+                        )
                 }
             }
         }
@@ -119,8 +128,11 @@ fun NewPostScreen(
                 imageUri.value?.let { uri ->
                     Image(
                         modifier = Modifier.matchParentSize(),
-                        painter = rememberImagePainter(uri),
-                        contentScale = ContentScale.FillBounds,
+                        painter = rememberImagePainter(
+                            request = ImageRequest.Builder(LocalContext.current)
+                                .data(uri)
+                                .build()
+                        ),
                         contentDescription = "Picked image for the post"
                     )
                 }

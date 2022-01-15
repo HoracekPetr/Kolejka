@@ -53,6 +53,10 @@ class NewPostScreenViewModel @Inject constructor(
                 _pickedImageUri.value = event.uri
             }
 
+            is NewPostEvent.CropImage -> {
+                _pickedImageUri.value = event.uri
+            }
+
             is NewPostEvent.EnteredTitle -> {
                 _titleText.value = _titleText.value.copy(
                     text = event.title

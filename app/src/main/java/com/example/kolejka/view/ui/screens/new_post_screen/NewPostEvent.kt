@@ -7,6 +7,7 @@ sealed class NewPostEvent{
     data class EnteredDescription(val description: String): NewPostEvent()
     data class EnteredLimit(val limit: String): NewPostEvent()
     data class PickedImage(val uri: Uri?): NewPostEvent()
+    data class CropImage(val uri: Uri?): NewPostEvent()
     object EventPicked : NewPostEvent()
     object OfferPicked: NewPostEvent()
     object CreatePost: NewPostEvent()

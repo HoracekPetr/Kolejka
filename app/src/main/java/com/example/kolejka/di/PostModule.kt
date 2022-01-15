@@ -38,8 +38,8 @@ object PostModule {
 
     @Provides
     @Singleton
-    fun providePostRepository(postApi: PostApi, gson: Gson, @ApplicationContext appContext: Context): PostRepository {
-        return PostRepositoryImpl(postApi, gson, appContext)
+    fun providePostRepository(postApi: PostApi, gson: Gson): PostRepository {
+        return PostRepositoryImpl(postApi, gson)
     }
 
     @Provides
