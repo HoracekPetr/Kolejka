@@ -50,6 +50,29 @@ class PostRepositoryImpl(
             MemberPostsSource(postApi)
         }.flow
 
+    override suspend fun getPostById(postId: String): Resource<Post> {
+        return try {
+
+            val response = postApi.getPostById(postId)
+            println(response)
+
+            if (response.successful) {
+                Resource.Success(response.data)
+            } else {
+                response.message?.let { msg ->
+                    Resource.Error(uiText = UiText.StringDynamic(msg))
+                }
+                    ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
+            }
+
+
+        } catch (e: IOException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
+        } catch (e: HttpException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
+        }
+    }
+
     override suspend fun createPost(
         title: String,
         description: String,

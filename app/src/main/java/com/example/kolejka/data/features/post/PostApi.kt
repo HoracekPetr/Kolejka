@@ -7,6 +7,11 @@ import retrofit2.http.*
 
 interface PostApi {
 
+    @GET("/api/post/get")
+    suspend fun getPostById(
+        @Query("postId") postId: String
+    ): BasicApiResponse<Post>
+
     @GET("/api/post/getPostsByAll")
     suspend fun getPostsByAll(
         @Query("page") page: Int,

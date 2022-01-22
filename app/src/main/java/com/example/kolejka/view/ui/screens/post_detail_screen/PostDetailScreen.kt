@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.models.Comment
@@ -36,82 +37,98 @@ import com.example.kolejka.view.ui.components.send_comment.SendCommentComposable
 
 @Composable
 fun PostDetailScreen(
-        navController: NavController,
-        viewModel: PostDetailScreenViewModel = hiltViewModel(),
-        post: Post
+    navController: NavController,
+    viewModel: PostDetailScreenViewModel = hiltViewModel(),
+    postId: String? = null
 ) {
+
+    val post = viewModel.state.value.post
 
     LazyColumn {
         item {
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .padding(PaddingMedium)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(PaddingMedium)
+            ) {
                 Image(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(Space8))
-                            .fillMaxWidth()
-                            .height(PostHeight),
-                        contentScale = ContentScale.FillBounds,
-                        painter = painterResource(id = R.drawable.schick),
-                        contentDescription = "Post Image"
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(Space8))
+                        .fillMaxWidth()
+                        .height(PostHeight),
+                    contentScale = ContentScale.FillBounds,
+                    painter = rememberImagePainter(data = post?.postPictureUrl),
+                    contentDescription = "Post Image"
                 )
                 Spacer(modifier = Modifier.size(Space12))
                 Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                            modifier = Modifier.weight(4f),
-                            text = post.title,
-                            style = MaterialTheme.typography.body1,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1
+                        modifier = Modifier.weight(4f),
+                        text = post?.title ?: "",
+                        style = MaterialTheme.typography.body1,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
                     Column(
-                            modifier = Modifier.weight(2f, false),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.SpaceEvenly
+                        modifier = Modifier.weight(2f, false),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Image(
-                                modifier = Modifier
-                                    .size(PostDetailProfileSize)
-                                    .clip(CircleShape),
-                                contentScale = ContentScale.Fit,
-                                painter = painterResource(id = R.drawable.petr),
-                                contentDescription = "Profile Image",
+                            modifier = Modifier
+                                .size(PostDetailProfileSize)
+                                .clip(CircleShape),
+                            contentScale = ContentScale.Fit,
+                            painter = painterResource(id = R.drawable.petr),
+                            contentDescription = "Profile Image",
                         )
-                        Text(text = post.username, style = Typography.h5, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text(
+                            text = post?.username ?: "",
+                            style = Typography.h5,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
                 }
                 Spacer(modifier = Modifier.size(Space8))
                 Divider(color = DarkGray)
                 Spacer(modifier = Modifier.size(Space8))
                 Text(
-                        text = post.description,
-                        style = MaterialTheme.typography.caption,
-                        color = DarkGray
+                    text = post?.description ?: "",
+                    style = MaterialTheme.typography.caption,
+                    color = DarkGray
                 )
                 Spacer(modifier = Modifier.size(Space8))
                 Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(horizontalArrangement = Arrangement.SpaceEvenly) {
-                        Text(text = stringResource(R.string.available) + ": ", style = MaterialTheme.typography.body1)
-                        Text(text = "${viewModel.availability.value} / ${post.limit}", style = MaterialTheme.typography.body2)
+                    Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = stringResource(R.string.available) + ": ",
+                            style = MaterialTheme.typography.body1
+                        )
+                        Text(
+                            text = "${post?.available} / ${post?.limit}",
+                            style = MaterialTheme.typography.body2
+                        )
                     }
-                    Button(onClick = {
-                        if (post.available < post.limit ?: 1) {
-                            Log.d("Available", "${post.available}")
-                            viewModel.incrementAvailability()
-                            post.available = viewModel.availability.value
-                            /*TODO("API CALL přidání člena k postu")*/
-                        }
-                    },
-                            enabled = post.available < post.limit ?: 1,
-                            modifier = Modifier.clip(RoundedCornerShape(10.dp)))
+                    Button(
+                        onClick = {
+                            if (post?.available ?: 1 < post?.limit ?: 1) {
+                                viewModel.incrementAvailability()
+                                post?.available = viewModel.availability.value
+                                /*TODO("API CALL přidání člena k postu")*/
+                            }
+                        },
+                        enabled = post?.available ?: 1 < post?.limit ?: 1,
+                        modifier = Modifier.clip(RoundedCornerShape(10.dp))
+                    )
                     {
                         Text(stringResource(R.string.join), style = MaterialTheme.typography.h3)
                     }
@@ -121,17 +138,24 @@ fun PostDetailScreen(
                 Spacer(modifier = Modifier.size(Space8))
             }
         }
-        if (post.username in post.members) {
+        if (post?.username ?: "" in post?.members ?: emptyList()) {
             items(5) {
                 CommentComposable(
-                        comment = Comment(username = "Petr Horáček", comment = "Myslím, že to je pěkná kokotina dělat takovouhle aplikaci, ale proti gustu žádnej dišputát xD"),
-                        modifier = Modifier.fillMaxWidth()
+                    comment = Comment(
+                        username = "Petr Horáček",
+                        comment = "Myslím, že to je pěkná kokotina dělat takovouhle aplikaci, ale proti gustu žádnej dišputát xD"
+                    ),
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
             item {
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(PaddingMedium), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(PaddingMedium),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 /*                    CommentTextField(
                             modifier = Modifier.weight(4f),
                             text = viewModel.commentText.value,
@@ -139,7 +163,9 @@ fun PostDetailScreen(
                             onTextChanged = { viewModel.setCommentText(it) }
                     )*/
                     StandardTextField(
-                        modifier = Modifier.weight(4f).border(1.dp, Color.DarkGray, shape = RoundedCornerShape(10.dp)),
+                        modifier = Modifier
+                            .weight(4f)
+                            .border(1.dp, Color.DarkGray, shape = RoundedCornerShape(10.dp)),
                         text = viewModel.commentText.value,
                         hint = stringResource(R.string.your_comment),
                         onTextChanged = { viewModel.setCommentText(it) },

@@ -1,0 +1,8 @@
+package com.example.kolejka.view.ui.screens.post_detail_screen
+
+import com.example.kolejka.models.Post
+
+data class PostDetailState(
+    val isLoading: Boolean = false,
+    val post: Post? = null
+)

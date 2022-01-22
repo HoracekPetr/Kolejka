@@ -18,7 +18,7 @@ fun PostList(posts: LazyPagingItems<Post>, navController: NavController, screenT
                 items(posts) { post ->
                     if (post != null && post.type == PostType.Event.type ) {
                         PostComposable(post = post) {
-                            navController.navigate(Screen.PostDetailScreen.route)
+                            navController.navigate(Screen.PostDetailScreen.route + "?postId=${post.id}")
                         }
                     }
                 }
@@ -27,7 +27,7 @@ fun PostList(posts: LazyPagingItems<Post>, navController: NavController, screenT
                 items(posts) { post ->
                     if (post != null && post.type == PostType.Offer.type ) {
                         PostComposable(post = post) {
-                            navController.navigate(Screen.PostDetailScreen.route)
+                            navController.navigate(Screen.PostDetailScreen.route + "?postId=${post.id}")
                         }
                     }
                 }

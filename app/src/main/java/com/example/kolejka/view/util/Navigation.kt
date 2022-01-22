@@ -4,8 +4,10 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ExperimentalGraphicsApi
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.kolejka.models.Post
 import com.example.kolejka.view.ui.screens.login_screen.LoginScreen
 import com.example.kolejka.view.ui.screens.main_post_screen.PostScreen
@@ -58,17 +60,20 @@ fun Navigation(navController: NavHostController) {
         }
 
         composable(
-            route = Screen.PostDetailScreen.route
+            route = Screen.PostDetailScreen.route + "?postId={postId}",
+            arguments = listOf(
+                navArgument(name = "postId"){
+                    nullable = true
+                    defaultValue = null
+                    type = NavType.StringType
+                }
+            )
         ) {
+            val postId = it.arguments?.getString("postId")
+            println("POST ID: $postId")
             PostDetailScreen(
                 navController = navController,
-                post = Post(
-                    title = "Hamehamehafa",
-                    username = "Petr Horáček",
-                    description = "dopkasd d apfd dsfpokd fpsf apsdofk pasokf asdpofkasd ffpasdof fodkfod fapodkfas dfpsodf apdod fodf apsdofak spokfds apfo podskfoasdkfpokasd fsadp kasd paspdkapsd aspdaoskdpfhgfhgfhfghfg haksp dkaosdk poka sdpkspa aka fuka fundi luka luka fuka motorku dsheoioj ",
-                    limit = 10,
-                    members = listOf("Petr Horáček")
-                )
+                postId = postId
             )
         }
 

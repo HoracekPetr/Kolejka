@@ -5,10 +5,7 @@ import com.example.kolejka.data.features.post.PostApi
 import com.example.kolejka.data.features.post.repository.PostRepository
 import com.example.kolejka.data.features.post.repository.PostRepositoryImpl
 import com.example.kolejka.data.util.Constants
-import com.example.kolejka.use_cases.post.CreatePostUseCase
-import com.example.kolejka.use_cases.post.GetAllPostsUseCase
-import com.example.kolejka.use_cases.post.GetPostsByCreatorUseCase
-import com.example.kolejka.use_cases.post.GetPostsWhereMemberUseCase
+import com.example.kolejka.use_cases.post.*
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -40,6 +37,12 @@ object PostModule {
     @Singleton
     fun providePostRepository(postApi: PostApi, gson: Gson): PostRepository {
         return PostRepositoryImpl(postApi, gson)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetPostByIdUseCase(repository: PostRepository): GetPostByIdUseCase {
+        return GetPostByIdUseCase(repository)
     }
 
     @Provides
