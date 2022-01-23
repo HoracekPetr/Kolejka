@@ -19,6 +19,7 @@ import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.posts.PostStrip
 import com.example.kolejka.view.ui.components.profile.ProfileBannerComposable
 import com.example.kolejka.view.ui.components.profile.edit_profile_dialog.EditProfileDialog
+import com.example.kolejka.view.util.Screen
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
@@ -106,7 +107,9 @@ fun ProfileScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(PaddingMedium)
-                                .clickable { }
+                                .clickable {
+                                    navController.navigate(Screen.PostDetailScreen.route + "?postId=${it.id}")
+                                }
                         )
                     }
 
@@ -137,7 +140,9 @@ fun ProfileScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(PaddingMedium)
-                                .clickable { }
+                                .clickable {
+                                    navController.navigate(Screen.PostDetailScreen.route + "?postId=${it.id}")
+                                }
                         )
                     }
 

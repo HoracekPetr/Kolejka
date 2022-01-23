@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -43,6 +44,7 @@ fun PostDetailScreen(
 ) {
 
     val post = viewModel.state.value.post
+    val comments = viewModel.state.value.comments
 
     LazyColumn {
         item {
@@ -108,7 +110,10 @@ fun PostDetailScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(
                             text = stringResource(R.string.available) + ": ",
                             style = MaterialTheme.typography.body1
@@ -138,48 +143,41 @@ fun PostDetailScreen(
                 Spacer(modifier = Modifier.size(Space8))
             }
         }
-        if (post?.username ?: "" in post?.members ?: emptyList()) {
-            items(5) {
+        //if (post?.username ?: "" in post?.members ?: emptyList()) {
+        comments?.let { comments ->
+            items(comments) { comment ->
                 CommentComposable(
-                    comment = Comment(
-                        username = "Petr Horáček",
-                        comment = "Myslím, že to je pěkná kokotina dělat takovouhle aplikaci, ale proti gustu žádnej dišputát xD"
-                    ),
+                    comment = comment,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            item {
-                Row(
+        }
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(PaddingMedium),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                StandardTextField(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(PaddingMedium),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-/*                    CommentTextField(
-                            modifier = Modifier.weight(4f),
-                            text = viewModel.commentText.value,
-                            hint = stringResource(R.string.your_comment),
-                            onTextChanged = { viewModel.setCommentText(it) }
-                    )*/
-                    StandardTextField(
-                        modifier = Modifier
-                            .weight(4f)
-                            .border(1.dp, Color.DarkGray, shape = RoundedCornerShape(10.dp)),
-                        text = viewModel.commentText.value,
-                        hint = stringResource(R.string.your_comment),
-                        onTextChanged = { viewModel.setCommentText(it) },
-                        placeholderTextColor = DarkGray,
-                        textStyle = MaterialTheme.typography.caption,
-                        placeholderTextStyle = MaterialTheme.typography.caption,
-                        textfieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White)
-                    )
-                    Spacer(Modifier.size(Space4))
-                    SendCommentComposable(modifier = Modifier.weight(1f)) {
-                        /*TODO*/
-                    }
+                        .weight(4f)
+                        .border(1.dp, Color.DarkGray, shape = RoundedCornerShape(10.dp)),
+                    text = viewModel.commentText.value,
+                    hint = stringResource(R.string.your_comment),
+                    onTextChanged = { viewModel.setCommentText(it) },
+                    placeholderTextColor = DarkGray,
+                    textStyle = MaterialTheme.typography.caption,
+                    placeholderTextStyle = MaterialTheme.typography.caption,
+                    textfieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White)
+                )
+                Spacer(Modifier.size(Space4))
+                SendCommentComposable(modifier = Modifier.weight(1f)) {
+                    /*TODO*/
                 }
             }
         }
     }
+    //}
 }

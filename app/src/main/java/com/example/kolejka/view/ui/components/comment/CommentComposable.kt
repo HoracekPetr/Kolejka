@@ -7,44 +7,53 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import com.example.kolejka.R
 import androidx.compose.ui.res.painterResource
+import coil.compose.rememberImagePainter
 import com.example.kolejka.models.Comment
 import com.example.kolejka.view.theme.*
 
 @Composable
 fun CommentComposable(
-        modifier: Modifier = Modifier,
-        comment: Comment = Comment()
+    modifier: Modifier = Modifier,
+    comment: Comment = Comment()
 ) {
     Card(
-            modifier = modifier
-                    .clip(RoundedCornerShape(Space8))
-                    .padding(PaddingMedium),
-            elevation = Space4,
-            shape = RoundedCornerShape(Space8),
-            backgroundColor = Color.White
+        modifier = modifier
+            .clip(RoundedCornerShape(Space8))
+            .padding(PaddingMedium),
+        elevation = Space4,
+        shape = RoundedCornerShape(Space8),
+        backgroundColor = Color.White
     ) {
         Column(
-                modifier = Modifier.fillMaxSize().padding(PaddingMedium)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(PaddingMedium)
         ) {
             Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                        modifier = Modifier
-                                .size(PostProfileSize)
-                                .weight(1f, fill = false)
-                                .clip(CircleShape),
-                        painter = painterResource(id = R.drawable.petr),
-                        contentDescription = null
+                    modifier = Modifier
+                        .size(PostProfileSize)
+                        .weight(1f, fill = false)
+                        .clip(CircleShape),
+                    painter = rememberImagePainter(data = comment.profilePictureUrl),
+                    contentDescription = null
                 )
                 Spacer(modifier = Modifier.width(Space8))
-                Text(text = comment.username, style = Typography.subtitle2, color = DarkBackgroundGray)
+                Text(
+                    text = comment.username,
+                    style = Typography.subtitle2,
+                    color = BlackAccent
+                )
             }
             Spacer(modifier = Modifier.size(Space8))
             Text(text = comment.comment, style = Typography.caption, color = DarkGray)

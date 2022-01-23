@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kolejka.data.util.Resource
+import com.example.kolejka.use_cases.comment.GetCommentsForPostUseCase
 import com.example.kolejka.use_cases.post.GetPostByIdUseCase
 import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.uitext.UiText
@@ -18,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PostDetailScreenViewModel @Inject constructor(
     private val getPostByIdUseCase: GetPostByIdUseCase,
+    private val getCommentsForPostUseCase: GetCommentsForPostUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
@@ -39,6 +41,7 @@ class PostDetailScreenViewModel @Inject constructor(
     init {
         savedStateHandle.get<String>("postId")?.let{ postId ->
             getPostById(postId)
+            getCommentsForPost(postId)
         }
     }
 
@@ -50,11 +53,7 @@ class PostDetailScreenViewModel @Inject constructor(
         _commentText.value = comment
     }
 
-    fun addMembersToPost(member: String){
-        _members.value += member
-    }
-
-    fun getPostById(postId: String){
+    private fun getPostById(postId: String){
         viewModelScope.launch {
             _state.value = _state.value.copy(
                 isLoading = true
@@ -77,6 +76,34 @@ class PostDetailScreenViewModel @Inject constructor(
                     _state.value = _state.value.copy(
                         isLoading = false,
                         post = postResult.data
+                    )
+                }
+            }
+        }
+    }
+
+    private fun getCommentsForPost(postId: String){
+        viewModelScope.launch {
+            _state.value = _state.value.copy(
+                isLoading = true
+            )
+
+            when(val commentsResult = getCommentsForPostUseCase(postId)){
+                is Resource.Error -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false
+                    )
+
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            uiText = commentsResult.uiText ?: UiText.unknownError()
+                        )
+                    )
+                }
+                is Resource.Success -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false,
+                        comments = commentsResult.data
                     )
                 }
             }
