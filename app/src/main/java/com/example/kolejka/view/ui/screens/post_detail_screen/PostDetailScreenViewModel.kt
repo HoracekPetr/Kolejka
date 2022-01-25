@@ -6,13 +6,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kolejka.data.util.Resource
+import com.example.kolejka.use_cases.comment.CreateCommentUseCase
 import com.example.kolejka.use_cases.comment.GetCommentsForPostUseCase
 import com.example.kolejka.use_cases.post.GetPostByIdUseCase
 import com.example.kolejka.view.util.UiEvent
+import com.example.kolejka.view.util.states.StandardTextfieldState
 import com.example.kolejka.view.util.uitext.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,14 +21,15 @@ import javax.inject.Inject
 class PostDetailScreenViewModel @Inject constructor(
     private val getPostByIdUseCase: GetPostByIdUseCase,
     private val getCommentsForPostUseCase: GetCommentsForPostUseCase,
+    private val createCommentUseCase: CreateCommentUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     private val _availability = mutableStateOf(0)
     val availability: State<Int> = _availability
 
-    private val _commentText = mutableStateOf("")
-    val commentText: State<String> = _commentText
+    private val _commentState = mutableStateOf(StandardTextfieldState())
+    val commentState: State<StandardTextfieldState> = _commentState
 
     private val _members = mutableStateOf(emptyList<String>())
     val members: State<List<String>> = _members
@@ -38,10 +40,15 @@ class PostDetailScreenViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean>
+        get() = _isRefreshing.asStateFlow()
+
     init {
         savedStateHandle.get<String>("postId")?.let{ postId ->
             getPostById(postId)
             getCommentsForPost(postId)
+            refreshScreen(postId)
         }
     }
 
@@ -50,7 +57,9 @@ class PostDetailScreenViewModel @Inject constructor(
     }
 
     fun setCommentText(comment: String){
-        _commentText.value = comment
+        _commentState.value = _commentState.value.copy(
+            text = comment
+        )
     }
 
     private fun getPostById(postId: String){
@@ -82,7 +91,7 @@ class PostDetailScreenViewModel @Inject constructor(
         }
     }
 
-    private fun getCommentsForPost(postId: String){
+    fun getCommentsForPost(postId: String){
         viewModelScope.launch {
             _state.value = _state.value.copy(
                 isLoading = true
@@ -107,6 +116,42 @@ class PostDetailScreenViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    fun createComment(postId: String){
+        viewModelScope.launch {
+            _state.value = _state.value.copy(
+                isLoading = true
+            )
+
+            when(val createCommentResult = createCommentUseCase(comment = _commentState.value.text, postId)){
+                is Resource.Error -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false
+                    )
+
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            uiText = createCommentResult.uiText ?: UiText.unknownError()
+                        )
+                    )
+                }
+                is Resource.Success -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false,
+                    )
+                }
+            }
+        }
+    }
+
+    fun refreshScreen(postId: String){
+        viewModelScope.launch{
+            _isRefreshing.emit(true)
+            getPostById(postId)
+            getCommentsForPost(postId)
+            _isRefreshing.emit(false)
         }
     }
 
