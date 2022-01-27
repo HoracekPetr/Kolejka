@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.use_cases.comment.CreateCommentUseCase
 import com.example.kolejka.use_cases.comment.GetCommentsForPostUseCase
+import com.example.kolejka.use_cases.post.AddPostMemberUseCase
 import com.example.kolejka.use_cases.post.GetPostByIdUseCase
 import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.states.StandardTextfieldState
@@ -22,11 +23,12 @@ class PostDetailScreenViewModel @Inject constructor(
     private val getPostByIdUseCase: GetPostByIdUseCase,
     private val getCommentsForPostUseCase: GetCommentsForPostUseCase,
     private val createCommentUseCase: CreateCommentUseCase,
+    private val addPostMemberUseCase: AddPostMemberUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
-    private val _availability = mutableStateOf(0)
-    val availability: State<Int> = _availability
+    private var _availability = mutableStateOf(0)
+    var availability: State<Int> = _availability
 
     private val _commentState = mutableStateOf(StandardTextfieldState())
     val commentState: State<StandardTextfieldState> = _commentState
@@ -50,10 +52,6 @@ class PostDetailScreenViewModel @Inject constructor(
             getCommentsForPost(postId)
             refreshScreen(postId)
         }
-    }
-
-    fun incrementAvailability(){
-        _availability.value++
     }
 
     fun setCommentText(comment: String){
@@ -84,7 +82,8 @@ class PostDetailScreenViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        post = postResult.data
+                        post = postResult.data?.post,
+                        requesterId = postResult.data?.requesterId
                     )
                 }
             }
@@ -140,6 +139,33 @@ class PostDetailScreenViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
+                    )
+                }
+            }
+        }
+    }
+
+    fun addPostMember(postId: String){
+        viewModelScope.launch {
+            _state.value = _state.value.copy(
+                isLoading = true
+            )
+
+            when(val addPostMemberResult = addPostMemberUseCase(postId)){
+                is Resource.Error -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false
+                    )
+
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            uiText = addPostMemberResult.uiText ?: UiText.unknownError()
+                        )
+                    )
+                }
+                is Resource.Success -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false
                     )
                 }
             }

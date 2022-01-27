@@ -107,7 +107,8 @@ fun NewPostScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.35f)
+                    .aspectRatio(16f/9f)
+                    //.fillMaxHeight(0.35f)
                     .clip(
                         RoundedCornerShape(
                             Space4
@@ -127,7 +128,7 @@ fun NewPostScreen(
 
                 imageUri.value?.let { uri ->
                     Image(
-                        modifier = Modifier.matchParentSize(),
+                        modifier = Modifier.matchParentSize().aspectRatio(16f/9f),
                         painter = rememberImagePainter(
                             request = ImageRequest.Builder(LocalContext.current)
                                 .data(uri)

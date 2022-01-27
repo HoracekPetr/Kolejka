@@ -9,6 +9,8 @@ import androidx.paging.PagingData
 import com.example.data.requests.CreatePostRequest
 import com.example.kolejka.R
 import com.example.kolejka.data.features.post.PostApi
+import com.example.kolejka.data.features.post.dto.request.AddMemberRequest
+import com.example.kolejka.data.features.post.dto.response.PostDetailResponse
 import com.example.kolejka.data.features.post.paging.AllPostsSource
 import com.example.kolejka.data.features.post.paging.CreatorPostsSource
 import com.example.kolejka.data.features.post.paging.MemberPostsSource
@@ -50,7 +52,7 @@ class PostRepositoryImpl(
             MemberPostsSource(postApi)
         }.flow
 
-    override suspend fun getPostById(postId: String): Resource<Post> {
+    override suspend fun getPostById(postId: String): Resource<PostDetailResponse> {
         return try {
 
             val response = postApi.getPostById(postId)
@@ -97,6 +99,29 @@ class PostRepositoryImpl(
                     )
             )
 
+            if (response.successful) {
+                Resource.Success(Unit)
+            } else {
+                response.message?.let { msg ->
+                    Resource.Error(uiText = UiText.StringDynamic(msg))
+                }
+                    ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
+            }
+
+
+        } catch (e: IOException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
+        } catch (e: HttpException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
+        }
+    }
+
+    override suspend fun addPostMember(postId: String): SimpleResource {
+
+        val request = AddMemberRequest(postId)
+
+        return try {
+            val response = postApi.addPostMember(request)
             if (response.successful) {
                 Resource.Success(Unit)
             } else {

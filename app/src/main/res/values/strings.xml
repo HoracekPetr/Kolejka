@@ -55,4 +55,5 @@
     <string name="username_cant_be_empty">Username cannot be empty!</string>
     <string name="user_updated">User was successfully updated.</string>
     <string name="user_update_error">There was an error updating the user.</string>
+    <string name="leave">Leave</string>
 </resources>

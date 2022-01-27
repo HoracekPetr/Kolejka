@@ -1,5 +1,7 @@
 package com.example.kolejka.data.features.post
 
+import com.example.kolejka.data.features.post.dto.request.AddMemberRequest
+import com.example.kolejka.data.features.post.dto.response.PostDetailResponse
 import com.example.kolejka.data.response.BasicApiResponse
 import com.example.kolejka.models.Post
 import okhttp3.MultipartBody
@@ -10,7 +12,7 @@ interface PostApi {
     @GET("/api/post/get")
     suspend fun getPostById(
         @Query("postId") postId: String
-    ): BasicApiResponse<Post>
+    ): BasicApiResponse<PostDetailResponse>
 
     @GET("/api/post/getPostsByAll")
     suspend fun getPostsByAll(
@@ -35,5 +37,10 @@ interface PostApi {
     suspend fun createPost(
         @Part createPostData: MultipartBody.Part,
         @Part createPostImage: MultipartBody.Part
+    ): BasicApiResponse<Unit>
+
+    @POST("/api/post/addPostMember")
+    suspend fun addPostMember(
+        @Body request: AddMemberRequest
     ): BasicApiResponse<Unit>
 }

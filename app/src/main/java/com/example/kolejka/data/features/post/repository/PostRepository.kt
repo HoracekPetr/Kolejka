@@ -2,6 +2,7 @@ package com.example.kolejka.data.features.post.repository
 
 import android.net.Uri
 import androidx.paging.PagingData
+import com.example.kolejka.data.features.post.dto.response.PostDetailResponse
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.data.util.SimpleResource
 import com.example.kolejka.models.Post
@@ -15,7 +16,9 @@ interface PostRepository {
 
     val postsWhereMember: Flow<PagingData<Post>>
 
-    suspend fun getPostById(postId: String): Resource<Post>
+    suspend fun getPostById(postId: String): Resource<PostDetailResponse>
+
+    suspend fun addPostMember(postId: String): SimpleResource
 
     suspend fun createPost(
         title: String,

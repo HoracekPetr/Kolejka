@@ -5,6 +5,7 @@ import com.example.kolejka.models.Post
 
 data class PostDetailState(
     val isLoading: Boolean = false,
+    val requesterId: String? = "",
     val post: Post? = null,
     val comments: List<Comment>? = null,
 )

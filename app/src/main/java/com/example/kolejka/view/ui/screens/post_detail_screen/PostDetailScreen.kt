@@ -36,6 +36,7 @@ fun PostDetailScreen(
 ) {
 
     val post = viewModel.state.value.post
+    val requesterId = viewModel.state.value.requesterId
     val comments = viewModel.state.value.comments
 
     val isRefreshing by viewModel.isRefreshing.collectAsState()
@@ -43,7 +44,7 @@ fun PostDetailScreen(
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
         onRefresh = { viewModel.refreshScreen(postId ?: "") }
-    ){
+    ) {
         Column(modifier = Modifier.fillMaxSize())
         {
             LazyColumn(modifier = Modifier.weight(1f)) {
@@ -104,7 +105,7 @@ fun PostDetailScreen(
                             style = MaterialTheme.typography.caption,
                             color = DarkGray
                         )
-                        Spacer(modifier = Modifier.size(Space8))
+                        Spacer(modifier = Modifier.size(Space12))
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -119,23 +120,26 @@ fun PostDetailScreen(
                                     style = MaterialTheme.typography.body1
                                 )
                                 Text(
-                                    text = "${post?.available} / ${post?.limit}",
-                                    style = MaterialTheme.typography.body2
+                                    text = "${(post?.limit ?: 0) - (post?.members?.size ?: 0)   + 1} / ${post?.limit}",
+                                    style = MaterialTheme.typography.body1
                                 )
                             }
-                            Button(
-                                onClick = {
-                                    if (post?.available ?: 1 < post?.limit ?: 1) {
-                                        viewModel.incrementAvailability()
-                                        post?.available = viewModel.availability.value
-                                        /*TODO("API CALL přidání člena k postu")*/
-                                    }
-                                },
-                                enabled = post?.available != 0,
-                                modifier = Modifier.clip(RoundedCornerShape(10.dp))
-                            )
-                            {
-                                Text(stringResource(R.string.join), style = MaterialTheme.typography.h3)
+                            if (requesterId != post?.userId) {
+                                Button(
+                                    onClick = {
+                                        if (post?.available ?: 0 > 0) {
+                                            viewModel.addPostMember(postId = postId ?: "")
+                                        }
+                                    },
+                                    enabled = post?.available != 0,
+                                    modifier = Modifier.clip(RoundedCornerShape(10.dp))
+                                )
+                                {
+                                    Text(
+                                        text = if((requesterId ?: "") in post?.members ?: emptyList()) stringResource(R.string.leave) else stringResource(R.string.join),
+                                        style = MaterialTheme.typography.h3
+                                    )
+                                }
                             }
                         }
                         Spacer(modifier = Modifier.size(Space4))
@@ -143,42 +147,45 @@ fun PostDetailScreen(
                         Spacer(modifier = Modifier.size(Space8))
                     }
                 }
-                //if (post?.username ?: "" in post?.members ?: emptyList()) {
-                comments?.let { comments ->
-                    items(comments) { comment ->
-                        CommentComposable(
-                            comment = comment,
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                if (requesterId == post?.userId || requesterId ?: "" in post?.members ?: emptyList()) {
+                    comments?.let { comments ->
+                        items(comments) { comment ->
+                            CommentComposable(
+                                comment = comment,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
                     }
                 }
             }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                StandardTextField(
+            if(requesterId == post?.userId || requesterId ?: "" in post?.members ?: emptyList()){
+                Row(
                     modifier = Modifier
-                        .weight(4f)
-                        .border(1.dp, Color.DarkGray, shape = RoundedCornerShape(10.dp)),
-                    text = viewModel.commentState.value.text,
-                    hint = stringResource(R.string.your_comment),
-                    onTextChanged = { viewModel.setCommentText(it) },
-                    placeholderTextColor = DarkGray,
-                    textStyle = MaterialTheme.typography.caption,
-                    placeholderTextStyle = MaterialTheme.typography.caption,
-                    textfieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White)
-                )
-                Spacer(Modifier.size(Space4))
-                SendCommentComposable(modifier = Modifier.weight(1f)) {
-                    postId?.let{ postId ->
-                        viewModel.createComment(postId)
-                        viewModel.getCommentsForPost(postId)
-                        viewModel.setCommentText("")
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    StandardTextField(
+                        modifier = Modifier
+                            .weight(4f)
+                            .border(1.dp, Color.DarkGray, shape = RoundedCornerShape(10.dp)),
+                        text = viewModel.commentState.value.text,
+                        hint = stringResource(R.string.your_comment),
+                        onTextChanged = { viewModel.setCommentText(it) },
+                        placeholderTextColor = DarkGray,
+                        textStyle = MaterialTheme.typography.caption,
+                        placeholderTextStyle = MaterialTheme.typography.caption,
+                        textfieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White)
+                    )
+                    Spacer(Modifier.size(Space4))
+                    SendCommentComposable(modifier = Modifier.weight(1f)) {
+                        postId?.let { postId ->
+                            viewModel.createComment(postId)
+                            viewModel.getCommentsForPost(postId)
+                            viewModel.setCommentText("")
+                        }
                     }
                 }
             }
