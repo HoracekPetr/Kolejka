@@ -23,7 +23,7 @@ class CreatorPostsSource(
             val nextPage = params.key ?: currentPage
             val posts = api.getPostsByCreator(page = nextPage, pageSize = Constants.POSTS_PAGE_SIZE)
             LoadResult.Page(
-                data = posts,
+                data = posts.reversed(),
                 prevKey = if (nextPage == 0) null else nextPage - 1,
                 nextKey = if (posts.isEmpty()) null else currentPage + 1
             ).also {

@@ -140,6 +140,7 @@ class PostDetailScreenViewModel @Inject constructor(
                     _state.value = _state.value.copy(
                         isLoading = false,
                     )
+                    getCommentsForPost(postId)
                 }
             }
         }
@@ -167,6 +168,7 @@ class PostDetailScreenViewModel @Inject constructor(
                     _state.value = _state.value.copy(
                         isLoading = false
                     )
+                    getPostById(postId)
                 }
             }
         }

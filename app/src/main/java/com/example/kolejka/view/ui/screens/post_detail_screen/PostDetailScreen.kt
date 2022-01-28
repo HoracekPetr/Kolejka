@@ -183,7 +183,6 @@ fun PostDetailScreen(
                     SendCommentComposable(modifier = Modifier.weight(1f)) {
                         postId?.let { postId ->
                             viewModel.createComment(postId)
-                            viewModel.getCommentsForPost(postId)
                             viewModel.setCommentText("")
                         }
                     }
