@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import com.example.kolejka.models.notification.Notification
 import com.example.kolejka.models.notification.NotificationAction
 import com.example.kolejka.view.theme.PaddingMedium
@@ -16,22 +18,32 @@ import kotlin.random.Random
 
 @Composable
 fun NotificationScreen(
-        viewModel: NotificationScreenViewModel = hiltViewModel(),
-        navController: NavController) {
-    LazyColumn(modifier = Modifier
+    viewModel: NotificationScreenViewModel = hiltViewModel(),
+    navController: NavController
+) {
+    val notifications = viewModel.notifications.collectAsLazyPagingItems()
+
+    LazyColumn(
+        modifier = Modifier
             .fillMaxSize()
-            .padding(PaddingMedium)){
-        items(20){
-            NotificationComposable(notification = Notification(
+            .padding(PaddingMedium)
+    ) {
+/*        items(notifications) {
+            NotificationComposable(
+                notification = Notification(
                     username = "Petr Horáček",
-                    notificationType = if(Random.nextInt(2) == 0){
+                    notificationType = if (Random.nextInt(2) == 0) {
                         NotificationAction.JoinedEvent
                     } else NotificationAction.CalledDibs,
                     formattedTime = viewModel.timestampToFormattedString(
-                            timestamp = System.currentTimeMillis(),
-                            pattern = "MMM dd, HH:mm "
+                        timestamp = System.currentTimeMillis(),
+                        pattern = "MMM dd, HH:mm "
                     )
-            ))
+                )
+            )
+        }*/
+        items(notifications){ notification ->
+            NotificationComposable(notification = notification?.toNotification())
         }
     }
 }

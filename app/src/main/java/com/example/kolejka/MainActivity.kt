@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                 name = getString(R.string.notifications),
                 route = Screen.NotificationScreen.route,
                 Icons.Outlined.Notifications,
-                10
+                notificationCount = 10
             ),
             BottomNavItem(
                 name = getString(R.string.profile),

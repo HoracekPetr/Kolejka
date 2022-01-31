@@ -1,6 +1,5 @@
 package com.example.kolejka.data.features.post.repository
 
-import android.content.Context
 import android.net.Uri
 import androidx.core.net.toFile
 import androidx.paging.Pager
@@ -17,19 +16,13 @@ import com.example.kolejka.data.features.post.paging.MemberPostsSource
 import com.example.kolejka.data.util.Constants
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.data.util.SimpleResource
-import com.example.kolejka.data.util.getFileName
 import com.example.kolejka.models.Post
 import com.example.kolejka.view.util.uitext.UiText
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.IOException
 
 class PostRepositoryImpl(
@@ -38,17 +31,17 @@ class PostRepositoryImpl(
 ) : PostRepository {
 
     override val posts: Flow<PagingData<Post>>
-        get() = Pager(PagingConfig(pageSize = Constants.POSTS_PAGE_SIZE)) {
+        get() = Pager(PagingConfig(pageSize = Constants.DEFAULT_PAGE_SIZE)) {
             AllPostsSource(postApi)
         }.flow
 
     override val postsByCreator: Flow<PagingData<Post>>
-        get() = Pager(PagingConfig(pageSize = Constants.POSTS_PAGE_SIZE)){
+        get() = Pager(PagingConfig(pageSize = Constants.DEFAULT_PAGE_SIZE)){
             CreatorPostsSource(postApi)
         }.flow
 
     override val postsWhereMember: Flow<PagingData<Post>>
-        get() = Pager(PagingConfig(pageSize = Constants.POSTS_PAGE_SIZE)){
+        get() = Pager(PagingConfig(pageSize = Constants.DEFAULT_PAGE_SIZE)){
             MemberPostsSource(postApi)
         }.flow
 

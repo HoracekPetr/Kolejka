@@ -21,7 +21,7 @@ class CreatorPostsSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Post> {
         return try {
             val nextPage = params.key ?: currentPage
-            val posts = api.getPostsByCreator(page = nextPage, pageSize = Constants.POSTS_PAGE_SIZE)
+            val posts = api.getPostsByCreator(page = nextPage, pageSize = Constants.DEFAULT_PAGE_SIZE)
             LoadResult.Page(
                 data = posts.reversed(),
                 prevKey = if (nextPage == 0) null else nextPage - 1,

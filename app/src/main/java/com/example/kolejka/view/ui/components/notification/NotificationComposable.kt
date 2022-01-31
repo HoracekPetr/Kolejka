@@ -17,11 +17,12 @@ import androidx.compose.ui.unit.sp
 import com.example.kolejka.R
 import com.example.kolejka.models.notification.Notification
 import com.example.kolejka.models.notification.NotificationAction
+import com.example.kolejka.models.notification.NotificationType
 import com.example.kolejka.view.theme.*
 
 @Composable
 fun NotificationComposable(
-        notification: Notification,
+        notification: Notification?,
         modifier: Modifier = Modifier,
 ) {
     Card(
@@ -33,22 +34,24 @@ fun NotificationComposable(
             .fillMaxSize()
             .padding(PaddingSmall), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
         ) {
-            val fillerText = when(notification.notificationType){
-                is NotificationAction.JoinedEvent -> stringResource(id = R.string.joined)
-                is NotificationAction.CalledDibs -> stringResource(id = R.string.wants)
-                is NotificationAction.CommentedOn -> stringResource(id = R.string.commented_on)
+            val fillerText = when(notification?.notificationType){
+                is NotificationType.JoinedEvent -> stringResource(id = R.string.joined)
+                is NotificationType.CalledDibs -> stringResource(id = R.string.wants)
+                is NotificationType.CommentedOn -> stringResource(id = R.string.commented_on)
+                else -> ""
             }
 
-            val notificationText = when(notification.notificationType){
-                is NotificationAction.JoinedEvent -> stringResource(id = R.string.your_event)
-                is NotificationAction.CalledDibs -> stringResource(id = R.string.your_offer)
-                is NotificationAction.CommentedOn -> stringResource(id = R.string.your_post)
+            val notificationText = when(notification?.notificationType){
+                is NotificationType.JoinedEvent -> stringResource(id = R.string.your_event)
+                is NotificationType.CalledDibs -> stringResource(id = R.string.your_offer)
+                is NotificationType.CommentedOn -> stringResource(id = R.string.your_post)
+                else -> ""
             }
 
             Text(text = buildAnnotatedString {
-                val boldStyle = SpanStyle(fontWeight = FontWeight.Bold, color = DarkPurple)
+                val boldStyle = SpanStyle(fontWeight = FontWeight.Bold, color = BlackAccent)
                 withStyle(boldStyle){
-                    append(notification.username)
+                    append(notification?.username ?: "")
                 }
                 append(" $fillerText ")
                 withStyle(boldStyle){
@@ -56,7 +59,7 @@ fun NotificationComposable(
                 }
             }, fontSize = 10.sp)
             
-            Text(text = notification.formattedTime, textAlign = TextAlign.Right, fontSize = 10.sp)
+            Text(text = notification?.formattedTime ?: "", textAlign = TextAlign.Right, fontSize = 10.sp)
 
         }
 

@@ -3,7 +3,7 @@ package com.example.kolejka.data.features.post.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.kolejka.data.features.post.PostApi
-import com.example.kolejka.data.util.Constants.POSTS_PAGE_SIZE
+import com.example.kolejka.data.util.Constants.DEFAULT_PAGE_SIZE
 import com.example.kolejka.models.Post
 import retrofit2.HttpException
 import java.io.IOException
@@ -21,7 +21,7 @@ class AllPostsSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Post> {
         return try {
             val nextPage = params.key ?: currentPage
-            val posts = api.getPostsByAll(page = nextPage, pageSize = POSTS_PAGE_SIZE)
+            val posts = api.getPostsByAll(page = nextPage, pageSize = DEFAULT_PAGE_SIZE)
             LoadResult.Page(
                 data = posts.reversed(),
                 prevKey = if (nextPage == 0) null else nextPage - 1,
