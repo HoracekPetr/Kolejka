@@ -43,7 +43,7 @@ fun NotificationScreen(
             )
         }*/
         items(notifications){ notification ->
-            NotificationComposable(notification = notification?.toNotification())
+            NotificationComposable(notification = notification?.toNotification(), navController)
         }
     }
 }
