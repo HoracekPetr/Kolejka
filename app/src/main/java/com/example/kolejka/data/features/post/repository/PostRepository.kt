@@ -28,4 +28,6 @@ interface PostRepository {
         imageUri: Uri
     ): SimpleResource
 
+    suspend fun deletePost(postId: String): SimpleResource
+
 }

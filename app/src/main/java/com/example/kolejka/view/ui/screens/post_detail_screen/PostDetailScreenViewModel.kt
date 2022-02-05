@@ -9,6 +9,7 @@ import com.example.kolejka.data.util.Resource
 import com.example.kolejka.use_cases.comment.CreateCommentUseCase
 import com.example.kolejka.use_cases.comment.GetCommentsForPostUseCase
 import com.example.kolejka.use_cases.post.AddPostMemberUseCase
+import com.example.kolejka.use_cases.post.DeletePostUseCase
 import com.example.kolejka.use_cases.post.GetPostByIdUseCase
 import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.states.StandardTextfieldState
@@ -24,6 +25,7 @@ class PostDetailScreenViewModel @Inject constructor(
     private val getCommentsForPostUseCase: GetCommentsForPostUseCase,
     private val createCommentUseCase: CreateCommentUseCase,
     private val addPostMemberUseCase: AddPostMemberUseCase,
+    private val deletePostUseCase: DeletePostUseCase,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
@@ -61,6 +63,22 @@ class PostDetailScreenViewModel @Inject constructor(
             }
             PostDetailEvent.AddMember -> savedStateHandle.get<String>("postId")?.let{ postId ->
                 addPostMember(postId)
+            }
+            PostDetailEvent.DeletePost -> {
+                _state.value = _state.value.copy(
+                    showDeletePostDialog = true
+                )
+            }
+            PostDetailEvent.ConfirmDelete -> savedStateHandle.get<String>("postId")?.let{ postId ->
+                deletePost(postId)
+                _state.value = _state.value.copy(
+                    showDeletePostDialog = false
+                )
+            }
+            PostDetailEvent.DismissDelete -> {
+                _state.value = _state.value.copy(
+                    showDeletePostDialog = false
+                )
             }
         }
     }
@@ -129,7 +147,7 @@ class PostDetailScreenViewModel @Inject constructor(
         }
     }
 
-    fun createComment(postId: String){
+    private fun createComment(postId: String){
         viewModelScope.launch {
             _state.value = _state.value.copy(
                 isLoading = true
@@ -157,7 +175,7 @@ class PostDetailScreenViewModel @Inject constructor(
         }
     }
 
-    fun addPostMember(postId: String){
+    private fun addPostMember(postId: String){
         viewModelScope.launch {
             _state.value = _state.value.copy(
                 isLoading = true
@@ -180,6 +198,33 @@ class PostDetailScreenViewModel @Inject constructor(
                         isLoading = false
                     )
                     getPostById(postId)
+                }
+            }
+        }
+    }
+
+    private fun deletePost(postId: String){
+        viewModelScope.launch {
+            _state.value = _state.value.copy(
+                isLoading = true
+            )
+
+            when(val deletePostResult = deletePostUseCase(postId)){
+                is Resource.Error -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false
+                    )
+
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            uiText = deletePostResult.uiText ?: UiText.unknownError()
+                        )
+                    )
+                }
+                is Resource.Success -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false
+                    )
                 }
             }
         }

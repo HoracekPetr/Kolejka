@@ -43,4 +43,9 @@ interface PostApi {
     suspend fun addPostMember(
         @Body request: AddMemberRequest
     ): BasicApiResponse<Unit>
+
+    @DELETE("/api/post/delete")
+    suspend fun deletePost(
+        @Query("postId") postId: String
+    ): BasicApiResponse<Unit>
 }

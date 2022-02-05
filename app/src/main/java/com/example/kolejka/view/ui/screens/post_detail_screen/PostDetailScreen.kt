@@ -2,12 +2,16 @@ package com.example.kolejka.view.ui.screens.post_detail_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +29,7 @@ import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.comment.CommentComposable
 import com.example.kolejka.view.ui.components.StandardTextField
 import com.example.kolejka.view.ui.components.send_comment.SendCommentComposable
+import com.example.kolejka.view.util.Screen
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
@@ -38,6 +43,7 @@ fun PostDetailScreen(
     val post = viewModel.state.value.post
     val requesterId = viewModel.state.value.requesterId
     val comments = viewModel.state.value.comments
+    val showDeleteDialog = viewModel.state.value.showDeletePostDialog
 
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
@@ -117,7 +123,8 @@ fun PostDetailScreen(
                             ) {
                                 Text(
                                     text = stringResource(R.string.available) + ": ",
-                                    style = MaterialTheme.typography.body1
+                                    style = MaterialTheme.typography.body1,
+                                    color = DarkPurple
                                 )
                                 Text(
                                     text = "${(post?.limit ?: 0) - (post?.members?.size ?: 0)   + 1} / ${post?.limit}",
@@ -141,11 +148,29 @@ fun PostDetailScreen(
                                         style = MaterialTheme.typography.h3
                                     )
                                 }
+                            } else {
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    IconButton(onClick = {viewModel.onEvent(PostDetailEvent.DeletePost)}) {
+                                        Icon(
+                                            modifier = Modifier.size(50.dp),
+                                            tint = DarkPurple,
+                                            imageVector = Icons.Default.DeleteOutline,
+                                            contentDescription = "Delete post"
+                                        )
+                                    }
+                                }
                             }
                         }
                         Spacer(modifier = Modifier.size(Space4))
                         Divider(color = DarkGray)
                         Spacer(modifier = Modifier.size(Space8))
+                    }
+                    if(showDeleteDialog){
+                        DeletePostDialog(onDismissRequestClick = { viewModel.onEvent(PostDetailEvent.DismissDelete) }) {
+                            viewModel.onEvent(PostDetailEvent.ConfirmDelete)
+                            navController.popBackStack()
+                            navController.navigate(Screen.PostScreen.route)
+                        }
                     }
                 }
                 if (requesterId == post?.userId || requesterId ?: "" in post?.members ?: emptyList()) {

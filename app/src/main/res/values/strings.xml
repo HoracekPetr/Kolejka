@@ -56,4 +56,6 @@
     <string name="user_updated">User was successfully updated.</string>
     <string name="user_update_error">There was an error updating the user.</string>
     <string name="leave">Leave</string>
+    <string name="delete_post">Delete post</string>
+    <string name="delete_post_really">Do you really want to delete this post?</string>
 </resources>

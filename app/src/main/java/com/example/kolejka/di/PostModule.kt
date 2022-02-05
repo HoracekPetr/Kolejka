@@ -75,4 +75,10 @@ object PostModule {
         return AddPostMemberUseCase(repository)
     }
 
+    @Provides
+    @Singleton
+    fun deletePostUseCase(repository: PostRepository): DeletePostUseCase {
+        return DeletePostUseCase(repository)
+    }
+
 }
