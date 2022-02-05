@@ -58,4 +58,6 @@
     <string name="leave">Leave</string>
     <string name="delete_post">Delete post</string>
     <string name="delete_post_really">Do you really want to delete this post?</string>
+    <string name="delete_comment">Delete comment</string>
+    <string name="delete_comment_really">Do you really want to delete this comment?</string>
 </resources>

@@ -4,6 +4,9 @@ sealed class PostDetailEvent{
     object Comment: PostDetailEvent()
     object AddMember: PostDetailEvent()
     object DeletePost: PostDetailEvent()
-    object ConfirmDelete: PostDetailEvent()
-    object DismissDelete: PostDetailEvent()
+    object ConfirmPostDelete: PostDetailEvent()
+    object DismissPostDelete: PostDetailEvent()
+    object DeleteComment: PostDetailEvent()
+    data class ConfirmCommentDelete(val commentId: String?): PostDetailEvent()
+    object DismissCommentDelete: PostDetailEvent()
 }

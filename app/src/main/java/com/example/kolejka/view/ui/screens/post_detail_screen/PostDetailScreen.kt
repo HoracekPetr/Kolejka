@@ -2,7 +2,6 @@ package com.example.kolejka.view.ui.screens.post_detail_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,7 +9,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,6 +26,8 @@ import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.comment.CommentComposable
 import com.example.kolejka.view.ui.components.StandardTextField
+import com.example.kolejka.view.ui.components.post_detail.DeleteCommentDialog
+import com.example.kolejka.view.ui.components.post_detail.DeletePostDialog
 import com.example.kolejka.view.ui.components.send_comment.SendCommentComposable
 import com.example.kolejka.view.util.Screen
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -43,7 +43,8 @@ fun PostDetailScreen(
     val post = viewModel.state.value.post
     val requesterId = viewModel.state.value.requesterId
     val comments = viewModel.state.value.comments
-    val showDeleteDialog = viewModel.state.value.showDeletePostDialog
+    val showDeletePostDialog = viewModel.state.value.showDeletePostDialog
+    val showDeleteCommentDialog = viewModel.state.value.showDeleteCommentDialog
 
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
@@ -127,7 +128,7 @@ fun PostDetailScreen(
                                     color = DarkPurple
                                 )
                                 Text(
-                                    text = "${(post?.limit ?: 0) - (post?.members?.size ?: 0)   + 1} / ${post?.limit}",
+                                    text = "${(post?.limit ?: 0) - (post?.members?.size ?: 0) + 1} / ${post?.limit}",
                                     style = MaterialTheme.typography.body1
                                 )
                             }
@@ -135,7 +136,6 @@ fun PostDetailScreen(
                                 Button(
                                     onClick = {
                                         if (post?.available ?: 0 > 0) {
-                                            //viewModel.addPostMember(postId = postId ?: "")
                                             viewModel.onEvent(PostDetailEvent.AddMember)
                                         }
                                     },
@@ -144,13 +144,15 @@ fun PostDetailScreen(
                                 )
                                 {
                                     Text(
-                                        text = if((requesterId ?: "") in post?.members ?: emptyList()) stringResource(R.string.leave) else stringResource(R.string.join),
+                                        text = if ((requesterId
+                                                ?: "") in post?.members ?: emptyList()
+                                        ) stringResource(R.string.leave) else stringResource(R.string.join),
                                         style = MaterialTheme.typography.h3
                                     )
                                 }
                             } else {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    IconButton(onClick = {viewModel.onEvent(PostDetailEvent.DeletePost)}) {
+                                    IconButton(onClick = { viewModel.onEvent(PostDetailEvent.DeletePost) }) {
                                         Icon(
                                             modifier = Modifier.size(50.dp),
                                             tint = DarkPurple,
@@ -165,9 +167,9 @@ fun PostDetailScreen(
                         Divider(color = DarkGray)
                         Spacer(modifier = Modifier.size(Space8))
                     }
-                    if(showDeleteDialog){
-                        DeletePostDialog(onDismissRequestClick = { viewModel.onEvent(PostDetailEvent.DismissDelete) }) {
-                            viewModel.onEvent(PostDetailEvent.ConfirmDelete)
+                    if (showDeletePostDialog) {
+                        DeletePostDialog(onDismissRequestClick = { viewModel.onEvent(PostDetailEvent.DismissPostDelete) }) {
+                            viewModel.onEvent(PostDetailEvent.ConfirmPostDelete)
                             navController.popBackStack()
                             navController.navigate(Screen.PostScreen.route)
                         }
@@ -178,14 +180,16 @@ fun PostDetailScreen(
                         items(comments) { comment ->
                             CommentComposable(
                                 comment = comment,
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                commentOwnerId = requesterId ?: "",
+                                onDeleteCommentClick = {viewModel.onEvent(PostDetailEvent.ConfirmCommentDelete(comment.id))}
                             )
                         }
                     }
                 }
             }
 
-            if(requesterId == post?.userId || requesterId ?: "" in post?.members ?: emptyList()){
+            if (requesterId == post?.userId || requesterId ?: "" in post?.members ?: emptyList()) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

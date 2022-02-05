@@ -57,4 +57,24 @@ class CommentRepositoryImpl(
             Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
         }
     }
+
+    override suspend fun deleteComment(commentId: String): SimpleResource {
+        return try {
+            val response = commentApi.deleteComment(commentId)
+            if (response.successful) {
+                Resource.Success(Unit)
+            } else {
+                response.message?.let { msg ->
+                    Resource.Error(uiText = UiText.StringDynamic(msg))
+                }
+                    ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
+            }
+
+
+        } catch (e: IOException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
+        } catch (e: HttpException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
+        }
+    }
 }

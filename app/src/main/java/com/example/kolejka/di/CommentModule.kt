@@ -6,6 +6,7 @@ import com.example.kolejka.data.features.comment.repository.CommentRepositoryImp
 import com.example.kolejka.data.features.post.PostApi
 import com.example.kolejka.data.util.Constants
 import com.example.kolejka.use_cases.comment.CreateCommentUseCase
+import com.example.kolejka.use_cases.comment.DeleteCommentUseCase
 import com.example.kolejka.use_cases.comment.GetCommentsForPostUseCase
 import dagger.Module
 import dagger.Provides
@@ -47,5 +48,11 @@ object CommentModule {
     @Singleton
     fun provideCreateCommentUseCase(repository: CommentRepository): CreateCommentUseCase{
         return CreateCommentUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteCommentUseCase(repository: CommentRepository): DeleteCommentUseCase {
+        return DeleteCommentUseCase(repository)
     }
 }

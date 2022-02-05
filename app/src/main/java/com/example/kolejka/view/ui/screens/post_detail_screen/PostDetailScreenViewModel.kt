@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.use_cases.comment.CreateCommentUseCase
+import com.example.kolejka.use_cases.comment.DeleteCommentUseCase
 import com.example.kolejka.use_cases.comment.GetCommentsForPostUseCase
 import com.example.kolejka.use_cases.post.AddPostMemberUseCase
 import com.example.kolejka.use_cases.post.DeletePostUseCase
@@ -26,6 +27,7 @@ class PostDetailScreenViewModel @Inject constructor(
     private val createCommentUseCase: CreateCommentUseCase,
     private val addPostMemberUseCase: AddPostMemberUseCase,
     private val deletePostUseCase: DeletePostUseCase,
+    private val deleteCommentUseCase: DeleteCommentUseCase,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
@@ -58,26 +60,46 @@ class PostDetailScreenViewModel @Inject constructor(
 
     fun onEvent(event: PostDetailEvent){
         when(event){
-            PostDetailEvent.Comment -> savedStateHandle.get<String>("postId")?.let{ postId ->
+            is PostDetailEvent.Comment -> savedStateHandle.get<String>("postId")?.let{ postId ->
                 createComment(postId)
             }
-            PostDetailEvent.AddMember -> savedStateHandle.get<String>("postId")?.let{ postId ->
+            is PostDetailEvent.AddMember -> savedStateHandle.get<String>("postId")?.let{ postId ->
                 addPostMember(postId)
             }
-            PostDetailEvent.DeletePost -> {
+            is PostDetailEvent.DeletePost -> {
                 _state.value = _state.value.copy(
                     showDeletePostDialog = true
                 )
             }
-            PostDetailEvent.ConfirmDelete -> savedStateHandle.get<String>("postId")?.let{ postId ->
+            is PostDetailEvent.ConfirmPostDelete -> savedStateHandle.get<String>("postId")?.let{ postId ->
                 deletePost(postId)
                 _state.value = _state.value.copy(
                     showDeletePostDialog = false
                 )
             }
-            PostDetailEvent.DismissDelete -> {
+            is PostDetailEvent.DismissPostDelete -> {
                 _state.value = _state.value.copy(
                     showDeletePostDialog = false
+                )
+            }
+            is PostDetailEvent.DeleteComment -> {
+                _state.value = _state.value.copy(
+                    showDeleteCommentDialog = true
+                )
+            }
+            is PostDetailEvent.ConfirmCommentDelete -> {
+                val postId = savedStateHandle.get<String>("postId")
+                event.commentId?.let { commentId ->
+                    deleteComment(commentId, postId ?: "") //TADY MOŽNÁ POUPRAVIT, ABY NEMOHLO DOJÍT K TOMU, ŽE SE PO SMAZÁNÍ KOMENTU NENAČTE POST / error
+                }
+                _state.value = _state.value.copy(
+                    showDeleteCommentDialog = false
+                )
+
+            }
+            is PostDetailEvent.DismissCommentDelete -> {
+                _state.value = _state.value.copy(
+                    showDeleteCommentDialog = false
                 )
             }
         }
@@ -225,6 +247,34 @@ class PostDetailScreenViewModel @Inject constructor(
                     _state.value = _state.value.copy(
                         isLoading = false
                     )
+                }
+            }
+        }
+    }
+
+    private fun deleteComment(commentId: String, postId: String){
+        viewModelScope.launch {
+            _state.value = _state.value.copy(
+                isLoading = true
+            )
+
+            when(val deleteCommentResult = deleteCommentUseCase(commentId)){
+                is Resource.Error -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false
+                    )
+
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            uiText = deleteCommentResult.uiText ?: UiText.unknownError()
+                        )
+                    )
+                }
+                is Resource.Success -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false
+                    )
+                    getCommentsForPost(postId)
                 }
             }
         }

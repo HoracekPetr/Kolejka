@@ -1,4 +1,4 @@
-package com.example.kolejka.view.ui.screens.post_detail_screen
+package com.example.kolejka.view.ui.components.post_detail
 
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -10,7 +10,6 @@ import com.example.kolejka.R
 
 @Composable
 fun DeletePostDialog(
-    showDialog: Boolean = false,
     onDismissRequestClick: () -> Unit,
     onConfirmButtonClick: () -> Unit
 ) {

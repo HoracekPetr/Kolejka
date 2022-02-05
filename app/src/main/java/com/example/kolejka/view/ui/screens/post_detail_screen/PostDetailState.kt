@@ -8,5 +8,7 @@ data class PostDetailState(
     val requesterId: String? = "",
     val post: Post? = null,
     val comments: List<Comment>? = null,
-    val showDeletePostDialog: Boolean = false
+    val showDeletePostDialog: Boolean = false,
+    val showDeleteCommentDialog: Boolean = false,
+
 )

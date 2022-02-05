@@ -5,7 +5,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,14 +18,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import com.example.kolejka.R
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.kolejka.models.Comment
 import com.example.kolejka.view.theme.*
+import com.example.kolejka.view.ui.components.post_detail.DeleteCommentDialog
+import com.example.kolejka.view.ui.screens.post_detail_screen.PostDetailEvent
 
 @Composable
 fun CommentComposable(
     modifier: Modifier = Modifier,
-    comment: Comment = Comment()
+    comment: Comment = Comment(),
+    commentOwnerId: String,
+    onDeleteCommentClick: () -> Unit
+
 ) {
     Card(
         modifier = modifier
@@ -37,27 +48,38 @@ fun CommentComposable(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    modifier = Modifier
-                        .size(PostProfileSize)
-                        .weight(1f, fill = false)
-                        .clip(CircleShape),
-                    painter = rememberImagePainter(data = comment.profilePictureUrl),
-                    contentDescription = null
-                )
-                Spacer(modifier = Modifier.width(Space8))
-                Text(
-                    text = comment.username,
-                    style = Typography.subtitle2,
-                    color = BlackAccent
-                )
+                Row {
+                    Image(
+                        modifier = Modifier
+                            .size(PostProfileSize)
+                            .weight(1f, fill = false)
+                            .clip(CircleShape),
+                        painter = rememberImagePainter(data = comment.profilePictureUrl),
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(Space8))
+                    Text(
+                        text = comment.username,
+                        style = Typography.subtitle2,
+                        color = BlackAccent
+                    )
+                }
+                if (comment.userId == commentOwnerId) {
+                    IconButton(onClick = { onDeleteCommentClick() }) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete comment",
+                            tint = DarkPurple
+                        )
+                    }
+                }
             }
             Spacer(modifier = Modifier.size(Space8))
             Text(text = comment.comment, style = Typography.caption, color = DarkGray)
         }
     }
-
 }
