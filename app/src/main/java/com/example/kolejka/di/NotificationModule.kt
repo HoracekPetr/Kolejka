@@ -7,6 +7,7 @@ import com.example.kolejka.data.features.post.PostApi
 import com.example.kolejka.data.features.post.repository.PostRepository
 import com.example.kolejka.data.features.post.repository.PostRepositoryImpl
 import com.example.kolejka.data.util.Constants
+import com.example.kolejka.use_cases.notifications.GetNotificationsCountUseCase
 import com.example.kolejka.use_cases.notifications.GetNotificationsUseCase
 import com.google.gson.Gson
 import dagger.Module
@@ -44,5 +45,11 @@ object NotificationModule {
     @Singleton
     fun provideGetNotificationUseCase(repository: NotificationRepository): GetNotificationsUseCase{
         return GetNotificationsUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetNotificationsCountUseCase(repository: NotificationRepository): GetNotificationsCountUseCase{
+        return GetNotificationsCountUseCase((repository))
     }
 }

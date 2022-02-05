@@ -18,4 +18,8 @@ class NotificationRepositoryImpl(
         get() = Pager(PagingConfig(pageSize = Constants.DEFAULT_PAGE_SIZE)) {
             NotificationsSource(api)
         }.flow
+
+    override suspend fun getNotificationsCount(): Int {
+        return api.getNotificationsCount()
+    }
 }

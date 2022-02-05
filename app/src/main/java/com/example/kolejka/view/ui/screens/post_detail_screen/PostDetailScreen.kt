@@ -128,7 +128,8 @@ fun PostDetailScreen(
                                 Button(
                                     onClick = {
                                         if (post?.available ?: 0 > 0) {
-                                            viewModel.addPostMember(postId = postId ?: "")
+                                            //viewModel.addPostMember(postId = postId ?: "")
+                                            viewModel.onEvent(PostDetailEvent.AddMember)
                                         }
                                     },
                                     enabled = post?.available != 0,
@@ -181,10 +182,12 @@ fun PostDetailScreen(
                     )
                     Spacer(Modifier.size(Space4))
                     SendCommentComposable(modifier = Modifier.weight(1f)) {
-                        postId?.let { postId ->
+/*                        postId?.let { postId ->
                             viewModel.createComment(postId)
                             viewModel.setCommentText("")
-                        }
+                        }*/
+                        viewModel.onEvent(PostDetailEvent.Comment)
+                        viewModel.setCommentText("")
                     }
                 }
             }

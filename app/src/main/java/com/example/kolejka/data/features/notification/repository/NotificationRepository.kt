@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface NotificationRepository {
     val notifications: Flow<PagingData<NotificationDto>>
+
+    suspend fun getNotificationsCount(): Int
 }

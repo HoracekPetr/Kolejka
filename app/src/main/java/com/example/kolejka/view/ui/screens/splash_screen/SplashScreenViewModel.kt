@@ -2,8 +2,10 @@ package com.example.kolejka.view.ui.screens.splash_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kolejka.KolejkaApp
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.use_cases.auth.AuthenticateUseCase
+import com.example.kolejka.use_cases.notifications.GetNotificationsCountUseCase
 import com.example.kolejka.view.util.Screen
 import com.example.kolejka.view.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashScreenViewModel @Inject constructor(
-    private val authenticateUseCase: AuthenticateUseCase
+    private val authenticateUseCase: AuthenticateUseCase,
 ): ViewModel() {
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()

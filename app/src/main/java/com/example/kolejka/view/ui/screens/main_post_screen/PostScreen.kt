@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @ExperimentalPagerApi
 @Composable
-fun PostScreen(navController: NavController) {
+fun PostScreen(navController: NavController, viewModel: PostScreenViewModel = hiltViewModel()) {
 
     val pagerState = rememberPagerState(pageCount = TabItem.values().size)
     val scope = rememberCoroutineScope()

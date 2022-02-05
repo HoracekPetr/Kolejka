@@ -13,4 +13,7 @@ interface NotificationApi {
         @Query("page") page: Int = 0,
         @Query("pageSize") pageSize: Int = DEFAULT_PAGE_SIZE
     ): List<NotificationDto>
+
+    @GET("/api/notifications/getCount")
+    suspend fun getNotificationsCount(): Int
 }

@@ -24,7 +24,7 @@ class PostDetailScreenViewModel @Inject constructor(
     private val getCommentsForPostUseCase: GetCommentsForPostUseCase,
     private val createCommentUseCase: CreateCommentUseCase,
     private val addPostMemberUseCase: AddPostMemberUseCase,
-    savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     private var _availability = mutableStateOf(0)
@@ -51,6 +51,17 @@ class PostDetailScreenViewModel @Inject constructor(
             getPostById(postId)
             getCommentsForPost(postId)
             refreshScreen(postId)
+        }
+    }
+
+    fun onEvent(event: PostDetailEvent){
+        when(event){
+            PostDetailEvent.Comment -> savedStateHandle.get<String>("postId")?.let{ postId ->
+                createComment(postId)
+            }
+            PostDetailEvent.AddMember -> savedStateHandle.get<String>("postId")?.let{ postId ->
+                addPostMember(postId)
+            }
         }
     }
 
@@ -90,7 +101,7 @@ class PostDetailScreenViewModel @Inject constructor(
         }
     }
 
-    fun getCommentsForPost(postId: String){
+    private fun getCommentsForPost(postId: String){
         viewModelScope.launch {
             _state.value = _state.value.copy(
                 isLoading = true

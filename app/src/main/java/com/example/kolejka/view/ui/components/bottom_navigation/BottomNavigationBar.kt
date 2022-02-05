@@ -1,18 +1,28 @@
-package com.example.kolejka.view.ui.components
+package com.example.kolejka.view.ui.components.bottom_navigation
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.BadgedBox
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.kolejka.KolejkaApp
+import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
-import com.example.kolejka.view.ui.components.bottom_navigation.BottomNavItem
+import com.example.kolejka.view.util.Screen
 
 @Composable
 fun BottomNavigationBar(
@@ -20,9 +30,30 @@ fun BottomNavigationBar(
     navController: NavController,
     showBottomBar: Boolean,
     modifier: Modifier = Modifier,
-    onItemClick: (BottomNavItem) -> Unit
+    onItemClick: (BottomNavItem) -> Unit,
+    viewModel: BottomNavBarViewModel = hiltViewModel()
 ) {
     val backStackEntry = navController.currentBackStackEntryAsState()
+
+/*    val bottomBarItems = listOf(
+        BottomNavItem(
+            //name = getString(R.string.posts),
+            name = stringResource(id = R.string.posts),
+            route = Screen.PostScreen.route,
+            Icons.Outlined.Menu
+        ),
+        BottomNavItem(
+            name = stringResource(R.string.notifications),
+            route = Screen.NotificationScreen.route,
+            Icons.Outlined.Notifications,
+            notificationCount = notificationCount
+        ),
+        BottomNavItem(
+            name = stringResource(R.string.profile),
+            route = Screen.ProfileScreen.route,
+            Icons.Outlined.Person
+        )
+    )*/
 
     if (showBottomBar) {
         BottomNavigation(
@@ -38,7 +69,7 @@ fun BottomNavigationBar(
                     unselectedContentColor = DarkGray,
                     onClick = {
                         onItemClick(item)
-                        item.notificationCount = 0
+                        KolejkaApp.notificationsCount = 0
                     },
                     icon = {
                         if (item.notificationCount != 0) {
