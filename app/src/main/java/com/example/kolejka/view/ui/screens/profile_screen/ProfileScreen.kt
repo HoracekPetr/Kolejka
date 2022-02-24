@@ -17,6 +17,7 @@ import androidx.paging.compose.items
 import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.posts.PostStrip
+import com.example.kolejka.view.ui.components.profile.LogoutDialog
 import com.example.kolejka.view.ui.components.profile.ProfileBannerComposable
 import com.example.kolejka.view.ui.components.profile.edit_profile_dialog.EditProfileDialog
 import com.example.kolejka.view.util.Screen
@@ -52,13 +53,32 @@ fun ProfileScreen(
                         user = user,
                         onEditIconClick = {
                             viewModel.setEditProfileDialogEnabled(true)
-                        }
+                        },
+                        onLogoutIconClick = {viewModel.setLogoutDialogEnabled(true)}
                     )
 
                     if (viewModel.showEditProfileDialog.value) {
                         EditProfileDialog(
                             onDismissRequestClick = { viewModel.setEditProfileDialogEnabled(false) },
                             onConfirmRequestClick = { viewModel.setEditProfileDialogEnabled(false) })
+                    }
+
+                    if(viewModel.showLogoutDialog.value) {
+                        LogoutDialog(
+                            onLogoutDialogDismiss = {viewModel.setLogoutDialogEnabled(false)},
+                            onLogoutConfirmClick = {
+                                viewModel.setLogoutDialogEnabled(false)
+                                viewModel.logout()
+
+                                navController.navigate(Screen.LoginScreen.route){
+                                    launchSingleTop = true
+                                    popUpTo(Screen.PostScreen.route){
+                                        inclusive = true
+                                    }
+                                }
+
+                            }
+                        )
                     }
                 }
                 Spacer(modifier = Modifier.size(Space4))

@@ -19,13 +19,6 @@ import com.example.kolejka.view.ui.screens.main_post_screen.sub_post_screens.eve
 import com.example.kolejka.view.util.PostType
 import kotlinx.coroutines.launch
 
-val offerList = listOf(
-    Post("Guláš", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("Salát", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("Staré židle", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("Volant od felicie", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD"),
-    Post("Humahumahuma", description = "HAMEHAMEHAFASABESABESLAFAFASDASPDOKASPDOKASDPOPOKPKPASDDPASD")
-)
 
 @Composable
 fun OfferScreen(navController: NavController, viewModel: EventScreenViewModel = hiltViewModel()) {

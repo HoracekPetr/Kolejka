@@ -84,4 +84,10 @@ class AuthRepositoryImpl(
             Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
         }
     }
+
+    override fun logout() {
+        sharedPreferences.edit()
+            .remove(JWT_TOKEN)
+            .apply()
+    }
 }

@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ExperimentalGraphicsApi
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.kolejka.view.theme.KolejkaTheme
@@ -89,7 +90,12 @@ class MainActivity : ComponentActivity() {
                                 onItemClick = {
                                     if (navBackStackEntry?.destination?.route != it.route) navController.navigate(
                                         it.route
-                                    )
+                                    ){
+                                        launchSingleTop = true
+                                        popUpTo(Screen.PostScreen.route) {
+                                            saveState = true
+                                        }
+                                    }
                                 },
                                 showBottomBar = navBackStackEntry?.destination?.route in screensWithBottomBar
                             )

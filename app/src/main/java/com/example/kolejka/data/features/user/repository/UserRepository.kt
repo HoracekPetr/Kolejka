@@ -18,4 +18,5 @@ interface UserRepository{
         bannerB: Float,
         profileImageUri: Uri?
     ): SimpleResource
+
 }

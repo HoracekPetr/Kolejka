@@ -12,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.EditAttributes
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.colorspace.ColorSpaces
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColor
@@ -36,6 +38,7 @@ fun ProfileBannerComposable(
     modifier: Modifier = Modifier,
     user: User,
     onEditIconClick: () -> Unit = {},
+    onLogoutIconClick: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier.padding(PaddingMedium),
@@ -65,12 +68,20 @@ fun ProfileBannerComposable(
             )
             Spacer(modifier = Modifier.size(Space4))
             Text(text = user.username, style = Typography.body1)
-            Spacer(modifier = Modifier.size(Space4))
-            Icon(
-                modifier = Modifier.clickable { onEditIconClick() },
-                imageVector = Icons.Default.Edit,
-                contentDescription = "Edit"
-            )
+            Spacer(modifier = Modifier.size(Space8))
+            Row {
+                Icon(
+                    modifier = Modifier.clickable { onEditIconClick() },
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Edit"
+                )
+                Spacer(modifier = Modifier.size(Space36))
+                Icon(
+                    modifier = Modifier.clickable { onLogoutIconClick() },
+                    imageVector = Icons.Default.Logout,
+                    contentDescription = "Logout"
+                )
+            }
 
         }
     }

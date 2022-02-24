@@ -60,4 +60,6 @@
     <string name="delete_post_really">Do you really want to delete this post?</string>
     <string name="delete_comment">Delete comment</string>
     <string name="delete_comment_really">Do you really want to delete this comment?</string>
+    <string name="log_out_question">Do you really want to log out?</string>
+    <string name="log_out">Log out</string>
 </resources>

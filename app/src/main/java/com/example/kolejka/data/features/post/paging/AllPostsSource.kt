@@ -1,5 +1,12 @@
 package com.example.kolejka.data.features.post.paging
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.kolejka.data.features.post.PostApi
@@ -10,7 +17,7 @@ import java.io.IOException
 
 class AllPostsSource(
     private val api: PostApi
-): PagingSource<Int, Post>() {
+) : PagingSource<Int, Post>() {
 
     private var currentPage = 0
 
@@ -36,3 +43,4 @@ class AllPostsSource(
         }
     }
 }
+

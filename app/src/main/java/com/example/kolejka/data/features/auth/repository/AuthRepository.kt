@@ -17,4 +17,6 @@ interface AuthRepository {
     ): SimpleResource
 
     suspend fun authenticate(): SimpleResource
+
+    fun logout()
 }

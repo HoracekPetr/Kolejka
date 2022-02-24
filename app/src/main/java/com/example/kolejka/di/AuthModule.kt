@@ -7,6 +7,7 @@ import com.example.kolejka.data.features.auth.repository.AuthRepositoryImpl
 import com.example.kolejka.data.util.Constants.BASE_URL
 import com.example.kolejka.use_cases.auth.AuthenticateUseCase
 import com.example.kolejka.use_cases.auth.LoginUseCase
+import com.example.kolejka.use_cases.auth.LogoutUseCase
 import com.example.kolejka.use_cases.auth.RegisterUseCase
 import dagger.Module
 import dagger.Provides
@@ -55,5 +56,11 @@ object AuthModule {
     @Singleton
     fun provideAuthenticateUseCase(repository: AuthRepository): AuthenticateUseCase {
         return AuthenticateUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLogoutUseCase(repository: AuthRepository): LogoutUseCase{
+        return LogoutUseCase(repository)
     }
 }

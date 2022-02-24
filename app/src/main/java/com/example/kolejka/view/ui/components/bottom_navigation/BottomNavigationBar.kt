@@ -35,25 +35,6 @@ fun BottomNavigationBar(
 ) {
     val backStackEntry = navController.currentBackStackEntryAsState()
 
-/*    val bottomBarItems = listOf(
-        BottomNavItem(
-            //name = getString(R.string.posts),
-            name = stringResource(id = R.string.posts),
-            route = Screen.PostScreen.route,
-            Icons.Outlined.Menu
-        ),
-        BottomNavItem(
-            name = stringResource(R.string.notifications),
-            route = Screen.NotificationScreen.route,
-            Icons.Outlined.Notifications,
-            notificationCount = notificationCount
-        ),
-        BottomNavItem(
-            name = stringResource(R.string.profile),
-            route = Screen.ProfileScreen.route,
-            Icons.Outlined.Person
-        )
-    )*/
 
     if (showBottomBar) {
         BottomNavigation(

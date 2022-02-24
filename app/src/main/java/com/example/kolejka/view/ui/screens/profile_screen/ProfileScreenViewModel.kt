@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.models.User
+import com.example.kolejka.use_cases.auth.LogoutUseCase
 import com.example.kolejka.use_cases.post.GetPostsByCreatorUseCase
 import com.example.kolejka.use_cases.post.GetPostsWhereMemberUseCase
 import com.example.kolejka.use_cases.user.GetUserProfileUseCase
@@ -25,6 +26,7 @@ class ProfileScreenViewModel @Inject constructor(
     private val getUserProfileUseCase: GetUserProfileUseCase,
     getPostsByCreatorUseCase: GetPostsByCreatorUseCase,
     getPostsWhereMemberUseCase: GetPostsWhereMemberUseCase,
+    private val logoutUseCase: LogoutUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -44,6 +46,9 @@ class ProfileScreenViewModel @Inject constructor(
     private var _showEditProfileDialog = mutableStateOf(false)
     var showEditProfileDialog: State<Boolean> = _showEditProfileDialog
 
+    private var _showLogoutDialog = mutableStateOf(false)
+    var showLogoutDialog: State<Boolean> = _showLogoutDialog
+
     private var _eventsRadioEnabled = mutableStateOf(true)
     var eventsRadioEnabled: State<Boolean> = _eventsRadioEnabled
 
@@ -57,6 +62,10 @@ class ProfileScreenViewModel @Inject constructor(
 
     fun setEditProfileDialogEnabled(enabled: Boolean) {
         _showEditProfileDialog.value = enabled
+    }
+
+    fun setLogoutDialogEnabled(enabled: Boolean) {
+        _showLogoutDialog.value = enabled
     }
 
     fun setYourPostsRadioEnabled(enabled: Boolean) {
@@ -104,5 +113,9 @@ class ProfileScreenViewModel @Inject constructor(
             getProfile()
             _isRefreshing.emit(false)
         }
+    }
+
+    fun logout(){
+        logoutUseCase()
     }
 }

@@ -70,7 +70,6 @@ fun Navigation(navController: NavHostController) {
             )
         ) {
             val postId = it.arguments?.getString("postId")
-            println("POST ID: $postId")
             PostDetailScreen(
                 navController = navController,
                 postId = postId

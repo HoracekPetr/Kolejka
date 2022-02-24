@@ -214,10 +214,13 @@ fun RegisterScreen(
                     style = Typography.subtitle2,
                     color = DarkPurple,
                     modifier = Modifier.clickable {
-                        navController.popBackStack()
                         navController.navigate(
                             Screen.LoginScreen.route
-                        )
+                        ) {
+                            popUpTo(Screen.LoginScreen.route){
+                                inclusive = true
+                            }
+                        }
                     })
             }
         }
