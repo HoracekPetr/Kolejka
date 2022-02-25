@@ -9,8 +9,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DeleteOutline
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import com.example.kolejka.R
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.kolejka.models.Comment
@@ -30,8 +33,10 @@ fun CommentComposable(
     modifier: Modifier = Modifier,
     comment: Comment = Comment(),
     commentOwnerId: String,
-    onDeleteCommentClick: () -> Unit
-
+    onDeleteCommentClick: () -> Unit,
+    onConfirmDeleteClick: () -> Unit,
+    onDismissDeleteClick: () -> Unit,
+    deleteComment: Boolean = false
 ) {
     Card(
         modifier = modifier
@@ -68,13 +73,39 @@ fun CommentComposable(
                     )
                 }
                 if (comment.userId == commentOwnerId) {
-                    IconButton(onClick = { onDeleteCommentClick() }) {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete comment",
-                            tint = DarkPurple
-                        )
+                    IconButton(onClick = {
+                        onDeleteCommentClick()
+                    }) {
+                        if (deleteComment) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(text = stringResource(R.string.ask_delete_comment), style = Typography.subtitle1, color = MediumOpaquePurple)
+                                Row {
+                                    IconButton(onClick = {onConfirmDeleteClick()}) {
+                                        Icon(
+                                            modifier = Modifier.size(DeleteCommentDialogIconSize),
+                                            imageVector = Icons.Default.Done,
+                                            contentDescription = "Delete Comment",
+                                            tint = MediumGreen
+                                        )
+                                    }
+                                    IconButton(onClick = {onDismissDeleteClick()}) {
+                                        Icon(
+                                            modifier = Modifier.size(DeleteCommentDialogIconSize),
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = "Dismiss",
+                                            tint = MediumRed
+                                        )
+                                    }
+                                }
+                            }
+                        } else {
+                            Icon(
+                                modifier = Modifier.size(20.dp),
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete comment",
+                                tint = DarkPurple
+                            )
+                        }
                     }
                 }
             }

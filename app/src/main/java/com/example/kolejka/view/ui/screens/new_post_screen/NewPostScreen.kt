@@ -3,6 +3,8 @@ package com.example.kolejka.view.ui.screens.new_post_screen
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -60,6 +62,8 @@ fun NewPostScreen(
     val description = viewModel.descriptionState
     val limit = viewModel.limitState
 
+    val scrollState = rememberScrollState()
+
 
     val cropActivityLauncher = rememberLauncherForActivityResult(
         contract = CropActivityResultContract(aspectX = 16f, aspectY = 9f)
@@ -100,14 +104,15 @@ fun NewPostScreen(
                     interactionSource = interactionSource,
                     indication = null
                 ) { localFocusManager.clearFocus() }
-                .padding(PaddingMedium),
+                .padding(PaddingMedium)
+                .scrollable(state = scrollState, orientation = Orientation.Vertical),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             //Add Post Picture
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(16f/9f)
+                    .aspectRatio(16f / 9f)
                     //.fillMaxHeight(0.35f)
                     .clip(
                         RoundedCornerShape(
@@ -128,7 +133,9 @@ fun NewPostScreen(
 
                 imageUri.value?.let { uri ->
                     Image(
-                        modifier = Modifier.matchParentSize().aspectRatio(16f/9f),
+                        modifier = Modifier
+                            .matchParentSize()
+                            .aspectRatio(16f / 9f),
                         painter = rememberImagePainter(
                             request = ImageRequest.Builder(LocalContext.current)
                                 .data(uri)
@@ -181,7 +188,7 @@ fun NewPostScreen(
                 placeholderTextColor = DarkGray,
                 placeholderTextStyle = MaterialTheme.typography.body1,
             )
-            Spacer(modifier = Modifier.size(Space8))
+            Spacer(modifier = Modifier.size(Space16))
             StandardTextField(
                 modifier = Modifier
                     .fillMaxHeight(0.4f)
@@ -195,7 +202,7 @@ fun NewPostScreen(
                 singleLine = false,
                 maxLines = 3
             )
-            Spacer(modifier = Modifier.size(Space8))
+            Spacer(modifier = Modifier.size(Space16))
             StandardTextField(
                 modifier = Modifier.fillMaxWidth(0.25f),
                 text = limit.value.text,
@@ -212,7 +219,7 @@ fun NewPostScreen(
                 placeholderTextStyle = MaterialTheme.typography.h3,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
-            Spacer(modifier = Modifier.size(Space8))
+            Spacer(modifier = Modifier.size(Space16))
             if (viewModel.isLoading.value) {
 
                 CircularProgressIndicator(

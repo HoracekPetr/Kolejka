@@ -1,5 +1,6 @@
 package com.example.kolejka.view.theme
 
+import androidx.compose.material.lightColors
 import androidx.compose.ui.graphics.Color
 
 /*val Purple200 = Color(0xFFBB86FC)
@@ -17,3 +18,7 @@ val DarkPurple = Color(0xFF7E1A47)
 val MediumOpaquePurple = Color(0xBE7E1A47)
 val LightOpaquePurple = Color(0x807E1A47)
 val LightPurple = Color(0xFFCF4483)
+val MediumGreen = Color(0xFF67992D)
+val MediumRed = Color(0xFFB91919)
+
+private val LightColors = lightColors()

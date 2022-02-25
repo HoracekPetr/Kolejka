@@ -220,6 +220,7 @@ class PostDetailScreenViewModel @Inject constructor(
                         isLoading = false
                     )
                     getPostById(postId)
+                    getCommentsForPost(postId)
                 }
             }
         }

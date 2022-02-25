@@ -62,4 +62,6 @@
     <string name="delete_comment_really">Do you really want to delete this comment?</string>
     <string name="log_out_question">Do you really want to log out?</string>
     <string name="log_out">Log out</string>
+    <string name="tulmailerror">You can only register with TUL email.</string>
+    <string name="ask_delete_comment">Delete?</string>
 </resources>

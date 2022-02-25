@@ -128,7 +128,7 @@ fun PostDetailScreen(
                                     color = DarkPurple
                                 )
                                 Text(
-                                    text = "${(post?.limit ?: 0) - (post?.members?.size ?: 0) + 1} / ${post?.limit}",
+                                    text = "${post?.available} / ${post?.limit}",
                                     style = MaterialTheme.typography.body1
                                 )
                             }
@@ -182,7 +182,10 @@ fun PostDetailScreen(
                                 comment = comment,
                                 modifier = Modifier.fillMaxWidth(),
                                 commentOwnerId = requesterId ?: "",
-                                onDeleteCommentClick = {viewModel.onEvent(PostDetailEvent.ConfirmCommentDelete(comment.id))}
+                                deleteComment = viewModel.state.value.showDeleteCommentDialog,
+                                onDeleteCommentClick = {viewModel.onEvent(PostDetailEvent.DeleteComment)},
+                                onConfirmDeleteClick = {viewModel.onEvent(PostDetailEvent.ConfirmCommentDelete(comment.id))},
+                                onDismissDeleteClick = {viewModel.onEvent(PostDetailEvent.DismissCommentDelete)}
                             )
                         }
                     }

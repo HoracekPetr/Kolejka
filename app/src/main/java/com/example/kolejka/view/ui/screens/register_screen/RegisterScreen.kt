@@ -110,6 +110,7 @@ fun RegisterScreen(
                     error = when (emailState.error) {
                         is Errors.EmptyField -> stringResource(id = R.string.this_field_cant_be_empty)
                         is Errors.InvalidEmail -> stringResource(id = R.string.invalid_email)
+                        is Errors.NotTULEmail -> stringResource(R.string.tulmailerror)
                         else -> ""
                     },
                     placeholderTextColor = DarkGray,

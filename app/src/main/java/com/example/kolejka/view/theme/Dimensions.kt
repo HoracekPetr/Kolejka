@@ -21,3 +21,5 @@ val PostDetailProfileSize = 50.dp
 val ProfilePicSize = 90.dp
 
 val PostStripPicSize = 75.dp
+
+val DeleteCommentDialogIconSize = 25.dp

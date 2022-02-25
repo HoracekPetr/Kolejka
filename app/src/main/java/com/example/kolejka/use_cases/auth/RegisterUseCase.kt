@@ -47,6 +47,10 @@ private fun validateEmail(email: String): Errors? {
         return Errors.EmptyField
     }
 
+    if(!trimEmail.endsWith("tul.cz")){
+        return Errors.NotTULEmail
+    }
+
     return null
 }
 
