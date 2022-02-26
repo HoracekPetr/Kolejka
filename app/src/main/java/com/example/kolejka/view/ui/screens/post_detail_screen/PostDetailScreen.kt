@@ -172,7 +172,11 @@ fun PostDetailScreen(
                         DeletePostDialog(onDismissRequestClick = { viewModel.onEvent(PostDetailEvent.DismissPostDelete) }) {
                             viewModel.onEvent(PostDetailEvent.ConfirmPostDelete)
                             navController.popBackStack()
-                            navController.navigate(Screen.PostScreen.route)
+                            navController.navigate(Screen.PostScreen.route) {
+                                popUpTo(Screen.PostScreen.route) {
+                                    inclusive = true
+                                }
+                            }
                         }
                     }
                 }

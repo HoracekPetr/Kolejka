@@ -1,5 +1,6 @@
 package com.example.kolejka.view.ui.screens.new_post_screen
 
+import android.widget.CalendarView
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
@@ -12,7 +13,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddAPhoto
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Event
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -28,8 +31,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
@@ -104,9 +110,9 @@ fun NewPostScreen(
                     interactionSource = interactionSource,
                     indication = null
                 ) { localFocusManager.clearFocus() }
-                .padding(PaddingMedium)
-                .scrollable(state = scrollState, orientation = Orientation.Vertical),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .verticalScroll(scrollState)
+                .padding(PaddingMedium),
+            //horizontalAlignment = Alignment.CenterHorizontally
         ) {
             //Add Post Picture
             Box(
@@ -179,66 +185,162 @@ fun NewPostScreen(
                 }
             }
             Spacer(modifier = Modifier.size(Space12))
-            StandardTextField(
-                modifier = Modifier.fillMaxWidth(),
-                text = title.value.text,
-                hint = stringResource(R.string.title),
-                textStyle = MaterialTheme.typography.body1,
-                onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredTitle(it)) },
-                placeholderTextColor = DarkGray,
-                placeholderTextStyle = MaterialTheme.typography.body1,
-            )
-            Spacer(modifier = Modifier.size(Space16))
-            StandardTextField(
-                modifier = Modifier
-                    .fillMaxHeight(0.4f)
-                    .fillMaxWidth(),
-                text = description.value.text,
-                hint = stringResource(id = R.string.description),
-                onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredDescription(it)) },
-                placeholderTextColor = DarkGray,
-                textStyle = MaterialTheme.typography.h3,
-                placeholderTextStyle = MaterialTheme.typography.h3,
-                singleLine = false,
-                maxLines = 3
-            )
-            Spacer(modifier = Modifier.size(Space16))
-            StandardTextField(
-                modifier = Modifier.fillMaxWidth(0.25f),
-                text = limit.value.text,
-                hint = stringResource(id = R.string.limit),
-                onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredLimit(it)) },
-                placeholderTextColor = DarkGray,
-                textStyle = TextStyle(
-                    fontFamily = roboto_mono,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 18.sp,
-                    textAlign = TextAlign.Center
-                ),
-                placeholderTextAlignment = TextAlign.Justify,
-                placeholderTextStyle = MaterialTheme.typography.h3,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
-            Spacer(modifier = Modifier.size(Space16))
-            if (viewModel.isLoading.value) {
+            if (optionsRadio.value.eventEnabled) {
 
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    color = DarkPurple
+                //TITLE
+
+                StandardTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = title.value.text,
+                    hint = stringResource(R.string.title),
+                    textStyle = MaterialTheme.typography.body1,
+                    onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredTitle(it)) },
+                    placeholderTextColor = DarkGray,
+                    placeholderTextStyle = MaterialTheme.typography.body1,
                 )
+                Spacer(modifier = Modifier.size(Space24))
 
-            } else {
-                FloatingAddPostButton(
-                    showButton = true,
-                    buttonIcon = Icons.Default.Create,
-                    buttonText = stringResource(
-                        id = R.string.create_the_post
-                    ),
-                    iconDescription = ""
+                //DESCRIPTION
+
+                StandardTextField(
+                    modifier = Modifier
+                        .weight(2f)
+                        .fillMaxWidth(),
+                    text = description.value.text,
+                    hint = stringResource(id = R.string.description),
+                    onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredDescription(it)) },
+                    placeholderTextColor = DarkGray,
+                    textStyle = MaterialTheme.typography.h3,
+                    placeholderTextStyle = MaterialTheme.typography.h3,
+                    singleLine = false,
+                    maxLines = 5
+                )
+                Spacer(modifier = Modifier.size(Space24))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    viewModel.onEvent(NewPostEvent.CreatePost)
+
+                    TextButton(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(Space12))
+                            .background(ExtraLightGray)
+                            .padding(
+                                Space4
+                            ),
+                        onClick = { viewModel.onEvent(NewPostEvent.CalendarEnabled(viewModel.showCalendarView.value)) },
+                    ) {
+                        if (viewModel.selectedDate.value == stringResource(R.string.no_selected_date)) {
+                            Icon(imageVector = Icons.Default.Event, contentDescription = "")
+                            Text(text = stringResource(id = R.string.no_selected_date))
+                        } else {
+                            Text(
+                                text = viewModel.selectedDate.value,
+                                style = MaterialTheme.typography.h3,
+                                color = DarkPurple,
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.size(Space24))
+                    //LIMIT
+
+                    StandardTextField(
+                        text = limit.value.text,
+                        hint = stringResource(id = R.string.limit),
+                        onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredLimit(it)) },
+                        placeholderTextColor = DarkGray,
+                        textStyle = TextStyle(
+                            fontFamily = roboto_mono,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 18.sp,
+                            textAlign = TextAlign.Center
+                        ),
+                        //placeholderTextAlignment = TextAlign.Justify,
+                        placeholderTextStyle = MaterialTheme.typography.h3,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
                 }
+                if (viewModel.showCalendarView.value) {
+
+                    AlertDialog(
+                        onDismissRequest = {
+                            viewModel.onEvent(
+                                NewPostEvent.CalendarEnabled(
+                                    viewModel.showCalendarView.value
+                                )
+                            )
+                        },
+                        text = {
+                            AndroidView(
+                                {
+                                    CalendarView(
+                                        android.view.ContextThemeWrapper(
+                                            it,
+                                            R.style.CustomCalendar
+                                        )
+                                    ).apply {
+                                    }
+                                },
+                                modifier = Modifier.wrapContentSize(),
+                                update = { views ->
+                                    views.setOnDateChangeListener { _, year, month, dayOfMonth ->
+                                        viewModel.onEvent(NewPostEvent.SelectDate("$dayOfMonth/${month + 1}/$year"))
+                                    }
+                                })
+                        },
+                        confirmButton = {
+                            Button(onClick = {
+                                viewModel.onEvent(
+                                    NewPostEvent.CalendarEnabled(
+                                        viewModel.showCalendarView.value
+                                    )
+                                )
+                            }) {
+                                Text("Select Date")
+                            }
+                        },
+                        dismissButton = {
+                            Button(onClick = {
+                                viewModel.onEvent(NewPostEvent.CalendarEnabled(viewModel.showCalendarView.value))
+                                viewModel.onEvent(NewPostEvent.SelectDate("No date selected"))
+                            }) {
+                                Text("Close")
+                            }
+                        }
+                    )
+                }
+
+                Spacer(modifier = Modifier.size(Space24))
+                if (viewModel.isLoading.value) {
+
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        color = DarkPurple
+                    )
+
+                } else {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        FloatingAddPostButton(
+                            showButton = true,
+                            buttonIcon = Icons.Default.Create,
+                            buttonText = stringResource(
+                                id = R.string.create_the_post
+                            ),
+                            iconDescription = ""
+                        ) {
+                            viewModel.onEvent(NewPostEvent.CreatePost)
+                        }
+                    }
+                }
+            } else if (optionsRadio.value.offerEnabled) {
+                Text("Offer")
             }
+
         }
     }
 }

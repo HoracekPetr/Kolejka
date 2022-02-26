@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="android:textColorPrimary">@color/black_accent</item>
+        <item name="colorAccent">@color/medium_opaque_purple</item>
+        <item name="colorOnPrimary">@color/dark_purple</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+</resources>

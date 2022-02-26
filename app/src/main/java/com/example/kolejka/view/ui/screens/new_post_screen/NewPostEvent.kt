@@ -10,6 +10,9 @@ sealed class NewPostEvent{
     data class CropImage(val uri: Uri?): NewPostEvent()
     object EventPicked : NewPostEvent()
     object OfferPicked: NewPostEvent()
+    data class CalendarEnabled(val enabled: Boolean): NewPostEvent()
+    data class SelectDate(val date: String): NewPostEvent()
     object CreatePost: NewPostEvent()
+
 }
 

@@ -1,6 +1,7 @@
 package com.example.kolejka.view.ui.screens.new_post_screen
 
 import android.net.Uri
+import androidx.annotation.StringRes
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.res.stringResource
@@ -13,6 +14,7 @@ import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.states.NewPostRadioState
 import com.example.kolejka.view.util.states.StandardTextfieldState
 import com.example.kolejka.view.util.uitext.UiText
+import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -38,6 +40,12 @@ class NewPostScreenViewModel @Inject constructor(
 
     private var _optionsRadioState = mutableStateOf(NewPostRadioState())
     var optionsRadioState: State<NewPostRadioState> = _optionsRadioState
+
+    private var _showCalendarView = mutableStateOf(false)
+    var showCalendarView: State<Boolean> = _showCalendarView
+
+    private var _selectedDate = mutableStateOf("No date selected")
+    var selectedDate: State<String> = _selectedDate
 
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
@@ -123,6 +131,12 @@ class NewPostScreenViewModel @Inject constructor(
                         }
                     }
                 }
+            }
+            is NewPostEvent.CalendarEnabled -> {
+                _showCalendarView.value = !event.enabled
+            }
+            is NewPostEvent.SelectDate -> {
+                _selectedDate.value = event.date
             }
         }
     }
