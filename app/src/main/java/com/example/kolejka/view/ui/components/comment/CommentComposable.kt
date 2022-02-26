@@ -13,7 +13,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,11 +33,14 @@ fun CommentComposable(
     modifier: Modifier = Modifier,
     comment: Comment = Comment(),
     commentOwnerId: String,
-    onDeleteCommentClick: () -> Unit,
+    onDeleteCommentClick: () -> String,
     onConfirmDeleteClick: () -> Unit,
-    onDismissDeleteClick: () -> Unit,
+    onDismissDeleteClick: () -> String,
     deleteComment: Boolean = false
 ) {
+
+    var commentId by remember { mutableStateOf("")}
+
     Card(
         modifier = modifier
             .clip(RoundedCornerShape(Space8))
@@ -74,9 +77,9 @@ fun CommentComposable(
                 }
                 if (comment.userId == commentOwnerId) {
                     IconButton(onClick = {
-                        onDeleteCommentClick()
+                        commentId = onDeleteCommentClick()
                     }) {
-                        if (deleteComment) {
+                        if (comment.id == commentId) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(text = stringResource(R.string.ask_delete_comment), style = Typography.subtitle1, color = MediumOpaquePurple)
                                 Row {
@@ -88,7 +91,7 @@ fun CommentComposable(
                                             tint = MediumGreen
                                         )
                                     }
-                                    IconButton(onClick = {onDismissDeleteClick()}) {
+                                    IconButton(onClick = {commentId = onDismissDeleteClick()}) {
                                         Icon(
                                             modifier = Modifier.size(DeleteCommentDialogIconSize),
                                             imageVector = Icons.Default.Close,

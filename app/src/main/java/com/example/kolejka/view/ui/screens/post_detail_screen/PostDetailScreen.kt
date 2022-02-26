@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -177,15 +178,15 @@ fun PostDetailScreen(
                 }
                 if (requesterId == post?.userId || requesterId ?: "" in post?.members ?: emptyList()) {
                     comments?.let { comments ->
-                        items(comments) { comment ->
+                        itemsIndexed(comments) { index, comment ->
                             CommentComposable(
                                 comment = comment,
                                 modifier = Modifier.fillMaxWidth(),
                                 commentOwnerId = requesterId ?: "",
-                                deleteComment = viewModel.state.value.showDeleteCommentDialog,
-                                onDeleteCommentClick = {viewModel.onEvent(PostDetailEvent.DeleteComment)},
+                                deleteComment = false,
+                                onDeleteCommentClick = {comments[index].id},
                                 onConfirmDeleteClick = {viewModel.onEvent(PostDetailEvent.ConfirmCommentDelete(comment.id))},
-                                onDismissDeleteClick = {viewModel.onEvent(PostDetailEvent.DismissCommentDelete)}
+                                onDismissDeleteClick = {""}
                             )
                         }
                     }
