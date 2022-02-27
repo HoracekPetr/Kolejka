@@ -73,10 +73,12 @@ class PostRepositoryImpl(
         description: String,
         limit: Int?,
         type: Int,
-        imageUri: Uri
+        imageUri: Uri,
+        date: String,
+        location: String
     ): SimpleResource {
 
-        val request = CreatePostRequest(title, description, limit ?: 0, type)
+        val request = CreatePostRequest(title, description, limit ?: 0, type, date, location)
         val imageFile = imageUri.toFile()
 
         return try {

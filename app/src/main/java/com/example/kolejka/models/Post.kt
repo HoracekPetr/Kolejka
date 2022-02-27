@@ -1,7 +1,5 @@
 package com.example.kolejka.models
 
-import javax.inject.Inject
-
 data class Post(
         val title: String,
         val id: String = "",
@@ -13,5 +11,7 @@ data class Post(
         var available: Int = 0,
         val limit: Int? = 0,
         val type: Int = 0,
-        val profilePictureUrl: String? = ""
+        val profilePictureUrl: String? = "",
+        val date: String? = null,
+        val location: String? = null
 )

@@ -67,4 +67,8 @@
     <string name="pick_date">Pick date!</string>
     <string name="pick_date_for_event">Pick date for event</string>
     <string name="no_selected_date">No selected date</string>
+    <string name="location">Location</string>
+    <string name="create_the_event">Create the event!</string>
+    <string name="create_the_offer">Create the offer!</string>
+    <string name="date">Date</string>
 </resources>

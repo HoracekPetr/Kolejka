@@ -8,6 +8,8 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -19,9 +21,11 @@ import androidx.compose.material.icons.filled.Event
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -44,12 +48,16 @@ import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.StandardTextField
 import com.example.kolejka.view.ui.components.bottom_navigation.FloatingAddPostButton
+import com.example.kolejka.view.util.Constants.DESC_MAX_CHARS
 import com.example.kolejka.view.util.Screen
 import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.crop.CropActivityResultContract
 import com.example.kolejka.view.util.uitext.asString
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@ExperimentalFoundationApi
 @Composable
 fun NewPostScreen(
     navController: NavController,
@@ -57,6 +65,10 @@ fun NewPostScreen(
 ) {
     val localFocusManager = LocalFocusManager.current
     val localContext = LocalContext.current
+    val viewRequester = BringIntoViewRequester()
+
+    val coroutineScope = rememberCoroutineScope()
+
     val interactionSource = remember { MutableInteractionSource() }
     val scaffoldState = rememberScaffoldState()
 
@@ -66,6 +78,7 @@ fun NewPostScreen(
 
     val title = viewModel.titleState
     val description = viewModel.descriptionState
+    val location = viewModel.locationState
     val limit = viewModel.limitState
 
     val scrollState = rememberScrollState()
@@ -185,6 +198,9 @@ fun NewPostScreen(
                 }
             }
             Spacer(modifier = Modifier.size(Space12))
+
+            ////////////////////////////////////////
+
             if (optionsRadio.value.eventEnabled) {
 
                 //TITLE
@@ -204,25 +220,63 @@ fun NewPostScreen(
 
                 StandardTextField(
                     modifier = Modifier
-                        .weight(2f)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .onFocusEvent {
+                            if (it.isFocused) {
+                                coroutineScope.launch {
+                                    delay(200)
+                                    viewRequester.bringIntoView()
+                                }
+                            }
+                        }
+                        .bringIntoViewRequester(viewRequester)
+                        .height(125.dp),
                     text = description.value.text,
                     hint = stringResource(id = R.string.description),
-                    onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredDescription(it)) },
+                    onTextChanged = {
+                        if (it.length <= DESC_MAX_CHARS) {
+                            viewModel.onEvent(
+                                NewPostEvent.EnteredDescription(it)
+                            )
+                        }
+                    },
+
                     placeholderTextColor = DarkGray,
                     textStyle = MaterialTheme.typography.h3,
                     placeholderTextStyle = MaterialTheme.typography.h3,
                     singleLine = false,
-                    maxLines = 5
+                    maxLines = 4
                 )
+                Spacer(modifier = Modifier.size(Space24))
+
+                //LOCATION
+
+                StandardTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusEvent {
+                            if (it.isFocused) {
+                                coroutineScope.launch {
+                                    delay(200)
+                                    viewRequester.bringIntoView()
+                                }
+                            }
+                        }
+                        .bringIntoViewRequester(viewRequester),
+                    text = location.value.text,
+                    hint = stringResource(id = R.string.location),
+                    onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredLocation(it)) },
+                    placeholderTextColor = DarkGray,
+                    textStyle = MaterialTheme.typography.h3,
+                    placeholderTextStyle = MaterialTheme.typography.h3,
+                )
+
                 Spacer(modifier = Modifier.size(Space24))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-
                     TextButton(
                         modifier = Modifier
                             .clip(RoundedCornerShape(Space12))
@@ -247,6 +301,17 @@ fun NewPostScreen(
                     //LIMIT
 
                     StandardTextField(
+                        modifier = Modifier
+                            .width(90.dp)
+                            .onFocusEvent {
+                                if (it.isFocused) {
+                                    coroutineScope.launch {
+                                        delay(200)
+                                        viewRequester.bringIntoView()
+                                    }
+                                }
+                            }
+                            .bringIntoViewRequester(viewRequester),
                         text = limit.value.text,
                         hint = stringResource(id = R.string.limit),
                         onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredLimit(it)) },
@@ -262,6 +327,7 @@ fun NewPostScreen(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                 }
+
                 if (viewModel.showCalendarView.value) {
 
                     AlertDialog(
@@ -329,7 +395,7 @@ fun NewPostScreen(
                             showButton = true,
                             buttonIcon = Icons.Default.Create,
                             buttonText = stringResource(
-                                id = R.string.create_the_post
+                                id = R.string.create_the_event
                             ),
                             iconDescription = ""
                         ) {
@@ -337,8 +403,139 @@ fun NewPostScreen(
                         }
                     }
                 }
+
+                ////////////////////////////////////////
+                //////////////OFFER////////////////////
+
+
             } else if (optionsRadio.value.offerEnabled) {
-                Text("Offer")
+                //TITLE
+
+                StandardTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = title.value.text,
+                    hint = stringResource(R.string.title),
+                    textStyle = MaterialTheme.typography.body1,
+                    onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredTitle(it)) },
+                    placeholderTextColor = DarkGray,
+                    placeholderTextStyle = MaterialTheme.typography.body1,
+                )
+                Spacer(modifier = Modifier.size(Space24))
+
+                //DESCRIPTION
+
+                StandardTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusEvent {
+                            if (it.isFocused) {
+                                coroutineScope.launch {
+                                    delay(200)
+                                    viewRequester.bringIntoView()
+                                }
+                            }
+                        }
+                        .bringIntoViewRequester(viewRequester)
+                        .height(125.dp),
+                    text = description.value.text,
+                    hint = stringResource(id = R.string.description),
+                    onTextChanged = {
+                        if (it.length <= DESC_MAX_CHARS) {
+                            viewModel.onEvent(
+                                NewPostEvent.EnteredDescription(it)
+                            )
+                        }
+                    },
+
+                    placeholderTextColor = DarkGray,
+                    textStyle = MaterialTheme.typography.h3,
+                    placeholderTextStyle = MaterialTheme.typography.h3,
+                    singleLine = false,
+                    maxLines = 4
+                )
+                Spacer(modifier = Modifier.size(Space24))
+
+                //LOCATION
+
+                StandardTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusEvent {
+                            if (it.isFocused) {
+                                coroutineScope.launch {
+                                    delay(200)
+                                    viewRequester.bringIntoView()
+                                }
+                            }
+                        }
+                        .bringIntoViewRequester(viewRequester),
+                    text = location.value.text,
+                    hint = stringResource(id = R.string.location),
+                    onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredLocation(it)) },
+                    placeholderTextColor = DarkGray,
+                    textStyle = MaterialTheme.typography.h3,
+                    placeholderTextStyle = MaterialTheme.typography.h3,
+                )
+
+                Spacer(modifier = Modifier.size(Space24))
+
+
+                //LIMIT
+
+                StandardTextField(
+                    modifier = Modifier
+                        .width(90.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .onFocusEvent {
+                            if (it.isFocused) {
+                                coroutineScope.launch {
+                                    delay(200)
+                                    viewRequester.bringIntoView()
+                                }
+                            }
+                        }
+                        .bringIntoViewRequester(viewRequester),
+                    text = limit.value.text,
+                    hint = stringResource(id = R.string.limit),
+                    onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredLimit(it)) },
+                    placeholderTextColor = DarkGray,
+                    textStyle = TextStyle(
+                        fontFamily = roboto_mono,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center
+                    ),
+                    //placeholderTextAlignment = TextAlign.Justify,
+                    placeholderTextStyle = MaterialTheme.typography.h3,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+                //}
+
+                Spacer(modifier = Modifier.size(Space24))
+                if (viewModel.isLoading.value) {
+
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        color = DarkPurple
+                    )
+
+                } else {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        FloatingAddPostButton(
+                            showButton = true,
+                            buttonIcon = Icons.Default.Create,
+                            buttonText = stringResource(
+                                id = R.string.create_the_offer
+                            ),
+                            iconDescription = ""
+                        ) {
+                            viewModel.onEvent(NewPostEvent.CreatePost)
+                        }
+                    }
+                }
             }
 
         }

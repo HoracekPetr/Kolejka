@@ -1,5 +1,6 @@
 package com.example.kolejka.view.util
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ExperimentalGraphicsApi
@@ -19,6 +20,7 @@ import com.example.kolejka.view.ui.screens.register_screen.RegisterScreen
 import com.example.kolejka.view.ui.screens.splash_screen.SplashScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
+@ExperimentalFoundationApi
 @ExperimentalGraphicsApi
 @ExperimentalPagerApi
 @ExperimentalMaterialApi

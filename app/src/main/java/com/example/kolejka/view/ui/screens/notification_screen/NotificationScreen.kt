@@ -1,18 +1,27 @@
 package com.example.kolejka.view.ui.screens.notification_screen
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.example.kolejka.models.notification.Notification
 import com.example.kolejka.models.notification.NotificationAction
+import com.example.kolejka.view.theme.DarkPurple
 import com.example.kolejka.view.theme.PaddingMedium
 import com.example.kolejka.view.ui.components.notification.NotificationComposable
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 
@@ -23,27 +32,48 @@ fun NotificationScreen(
 ) {
     val notifications = viewModel.notifications.collectAsLazyPagingItems()
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(PaddingMedium)
-    ) {
-/*        items(notifications) {
-            NotificationComposable(
-                notification = Notification(
-                    username = "Petr Horáček",
-                    notificationType = if (Random.nextInt(2) == 0) {
-                        NotificationAction.JoinedEvent
-                    } else NotificationAction.CalledDibs,
-                    formattedTime = viewModel.timestampToFormattedString(
-                        timestamp = System.currentTimeMillis(),
-                        pattern = "MMM dd, HH:mm "
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+
+    Scaffold(scaffoldState = scaffoldState) {
+        Box {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(PaddingMedium)
+            ) {
+
+                items(notifications) { notification ->
+                    NotificationComposable(
+                        notification = notification?.toNotification(),
+                        navController
                     )
-                )
-            )
-        }*/
-        items(notifications){ notification ->
-            NotificationComposable(notification = notification?.toNotification(), navController)
+                }
+            }
+
+            notifications.apply {
+                when {
+                    loadState.refresh is LoadState.Loading -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center),
+                            color = DarkPurple
+                        )
+                    }
+                    loadState.append is LoadState.Loading -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center),
+                            color = DarkPurple
+                        )
+                    }
+                    loadState.append is LoadState.Error -> {
+                        scope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = "An error has occured."
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }

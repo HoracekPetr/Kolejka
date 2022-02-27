@@ -25,7 +25,9 @@ interface PostRepository {
         description: String,
         limit: Int?,
         type: Int,
-        imageUri: Uri
+        imageUri: Uri,
+        date: String,
+        location: String
     ): SimpleResource
 
     suspend fun deletePost(postId: String): SimpleResource

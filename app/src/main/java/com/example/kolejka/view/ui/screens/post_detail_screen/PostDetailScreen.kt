@@ -1,11 +1,12 @@
 package com.example.kolejka.view.ui.screens.post_detail_screen
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -15,8 +16,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -30,17 +34,21 @@ import com.example.kolejka.view.ui.components.StandardTextField
 import com.example.kolejka.view.ui.components.post_detail.DeleteCommentDialog
 import com.example.kolejka.view.ui.components.post_detail.DeletePostDialog
 import com.example.kolejka.view.ui.components.send_comment.SendCommentComposable
+import com.example.kolejka.view.util.PostType
 import com.example.kolejka.view.util.Screen
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
+@ExperimentalFoundationApi
 @Composable
 fun PostDetailScreen(
     navController: NavController,
     viewModel: PostDetailScreenViewModel = hiltViewModel(),
     postId: String? = null
 ) {
-
     val post = viewModel.state.value.post
     val requesterId = viewModel.state.value.requesterId
     val comments = viewModel.state.value.comments
@@ -71,12 +79,14 @@ fun PostDetailScreen(
                             painter = rememberImagePainter(data = post?.postPictureUrl),
                             contentDescription = "Post Image"
                         )
-                        Spacer(modifier = Modifier.size(Space12))
+                        Spacer(modifier = Modifier.size(Space24))
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
+                            //TITLE
+
                             Text(
                                 modifier = Modifier.weight(4f),
                                 text = post?.title ?: "",
@@ -89,6 +99,13 @@ fun PostDetailScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.SpaceEvenly
                             ) {
+/*                                Text(
+                                    text = post?.username ?: "",
+                                    style = Typography.h5,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )*/
+
                                 Image(
                                     modifier = Modifier
                                         .size(PostDetailProfileSize)
@@ -97,23 +114,58 @@ fun PostDetailScreen(
                                     painter = rememberImagePainter(post?.profilePictureUrl),
                                     contentDescription = "Profile Image",
                                 )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.size(Space16))
+                        //DESCRIPTION
+
+                        Text(
+                            text = post?.description ?: "",
+                            style = MaterialTheme.typography.subtitle1,
+                            color = DarkGray
+                        )
+
+                        Spacer(modifier = Modifier.size(Space12))
+                        Divider(color = DarkGray)
+                        Spacer(modifier = Modifier.size(Space12))
+
+
+                        //DATE
+
+                        if(post?.type == PostType.Event.type){
+                            Row {
                                 Text(
-                                    text = post?.username ?: "",
-                                    style = Typography.h5,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
+                                    text = stringResource(id = R.string.date) + ": ",
+                                    style = MaterialTheme.typography.caption,
+                                    color = BlackAccent
+                                )
+                                Text(
+                                    text = post?.date ?: "",
+                                    style = MaterialTheme.typography.caption,
+                                    color = DarkGray
                                 )
                             }
                         }
-                        Spacer(modifier = Modifier.size(Space8))
-                        Divider(color = DarkGray)
-                        Spacer(modifier = Modifier.size(Space8))
-                        Text(
-                            text = post?.description ?: "",
-                            style = MaterialTheme.typography.caption,
-                            color = DarkGray
-                        )
+
                         Spacer(modifier = Modifier.size(Space12))
+
+                        //LOCATION
+
+                        Row {
+                            Text(
+                                text = stringResource(id = R.string.location) + ": ",
+                                style = MaterialTheme.typography.caption,
+                                color = BlackAccent
+                            )
+                            Text(
+                                text = post?.location ?: "",
+                                style = MaterialTheme.typography.caption,
+                                color = DarkGray
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.size(Space8))
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -125,12 +177,12 @@ fun PostDetailScreen(
                             ) {
                                 Text(
                                     text = stringResource(R.string.available) + ": ",
-                                    style = MaterialTheme.typography.body1,
+                                    style = MaterialTheme.typography.h3,
                                     color = DarkPurple
                                 )
                                 Text(
                                     text = "${post?.available} / ${post?.limit}",
-                                    style = MaterialTheme.typography.body1
+                                    style = MaterialTheme.typography.h3
                                 )
                             }
                             if (requesterId != post?.userId) {
@@ -141,21 +193,22 @@ fun PostDetailScreen(
                                         }
                                     },
                                     enabled = post?.available != 0,
-                                    modifier = Modifier.clip(RoundedCornerShape(10.dp))
+                                    modifier = Modifier.clip(RoundedCornerShape(10.dp)),
+                                    contentPadding = PaddingValues(Space4)
                                 )
                                 {
                                     Text(
                                         text = if ((requesterId
                                                 ?: "") in post?.members ?: emptyList()
                                         ) stringResource(R.string.leave) else stringResource(R.string.join),
-                                        style = MaterialTheme.typography.h3
+                                        style = MaterialTheme.typography.subtitle1
                                     )
                                 }
                             } else {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     IconButton(onClick = { viewModel.onEvent(PostDetailEvent.DeletePost) }) {
                                         Icon(
-                                            modifier = Modifier.size(50.dp),
+                                            modifier = Modifier.size(30.dp),
                                             tint = DarkPurple,
                                             imageVector = Icons.Default.DeleteOutline,
                                             contentDescription = "Delete post"
@@ -166,7 +219,7 @@ fun PostDetailScreen(
                         }
                         Spacer(modifier = Modifier.size(Space4))
                         Divider(color = DarkGray)
-                        Spacer(modifier = Modifier.size(Space8))
+                        Spacer(modifier = Modifier.size(Space2))
                     }
                     if (showDeletePostDialog) {
                         DeletePostDialog(onDismissRequestClick = { viewModel.onEvent(PostDetailEvent.DismissPostDelete) }) {
@@ -188,9 +241,15 @@ fun PostDetailScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 commentOwnerId = requesterId ?: "",
                                 deleteComment = false,
-                                onDeleteCommentClick = {comments[index].id},
-                                onConfirmDeleteClick = {viewModel.onEvent(PostDetailEvent.ConfirmCommentDelete(comment.id))},
-                                onDismissDeleteClick = {""}
+                                onDeleteCommentClick = { comments[index].id },
+                                onConfirmDeleteClick = {
+                                    viewModel.onEvent(
+                                        PostDetailEvent.ConfirmCommentDelete(
+                                            comment.id
+                                        )
+                                    )
+                                },
+                                onDismissDeleteClick = { "" }
                             )
                         }
                     }
@@ -201,7 +260,7 @@ fun PostDetailScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp),
+                        .padding(5.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -231,3 +290,4 @@ fun PostDetailScreen(
         }
     }
 }
+

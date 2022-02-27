@@ -17,7 +17,9 @@ class CreatePostUseCase(
         description: String,
         limit: Int?,
         type: Int,
-        imageUri: Uri?
+        imageUri: Uri?,
+        date: String,
+        location: String
     ): SimpleResource{
         if(title.isBlank() || description.isBlank()){
             return Resource.Error(uiText = UiText.StringResource(R.string.fields_blank))
@@ -35,7 +37,7 @@ class CreatePostUseCase(
             return Resource.Error(uiText = UiText.StringResource(R.string.description_too_long))
         }
 
-        return postRepository.createPost(title, description, limit, type, imageUri)
+        return postRepository.createPost(title, description, limit, type, imageUri, date, location)
     }
 
 }

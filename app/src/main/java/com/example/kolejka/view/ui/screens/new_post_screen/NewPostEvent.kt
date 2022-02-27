@@ -5,6 +5,7 @@ import android.net.Uri
 sealed class NewPostEvent{
     data class EnteredTitle(val title: String): NewPostEvent()
     data class EnteredDescription(val description: String): NewPostEvent()
+    data class EnteredLocation(val location: String): NewPostEvent()
     data class EnteredLimit(val limit: String): NewPostEvent()
     data class PickedImage(val uri: Uri?): NewPostEvent()
     data class CropImage(val uri: Uri?): NewPostEvent()

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.use_cases.post.CreatePostUseCase
+import com.example.kolejka.view.util.PostType
 import com.example.kolejka.view.util.Screen
 import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.states.NewPostRadioState
@@ -34,6 +35,9 @@ class NewPostScreenViewModel @Inject constructor(
 
     private var _descriptionState = mutableStateOf(StandardTextfieldState())
     var descriptionState: State<StandardTextfieldState> = _descriptionState
+
+    private var _locationState = mutableStateOf(StandardTextfieldState())
+    var locationState: State<StandardTextfieldState> = _locationState
 
     private var _limitState = mutableStateOf(StandardTextfieldState())
     var limitState: State<StandardTextfieldState> = _limitState
@@ -77,6 +81,12 @@ class NewPostScreenViewModel @Inject constructor(
                 )
             }
 
+            is NewPostEvent.EnteredLocation -> {
+                _locationState.value = _locationState.value.copy(
+                    text = event.location
+                )
+            }
+
             is NewPostEvent.EventPicked -> {
                 _optionsRadioState.value = _optionsRadioState.value.copy(
                     eventEnabled = true,
@@ -106,10 +116,12 @@ class NewPostScreenViewModel @Inject constructor(
                         description = descriptionState.value.text,
                         limit = limitState.value.text.toIntOrNull(),
                         type = when (optionsRadioState.value.eventEnabled) {
-                            true -> 0
-                            else -> 1
+                            true -> PostType.Event.type
+                            else -> PostType.Offer.type
                         },
-                        imageUri = pickedImageUri.value
+                        imageUri = pickedImageUri.value,
+                        date = selectedDate.value,
+                        location = locationState.value.text
                     )
 
                     _isLoading.value = false
