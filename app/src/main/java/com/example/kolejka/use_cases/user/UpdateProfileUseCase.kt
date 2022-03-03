@@ -12,14 +12,14 @@ import com.example.kolejka.view.util.uitext.UiText
 class UpdateProfileUseCase(
     private val repository: UserRepository
 ) {
+
     suspend operator fun invoke(
         username: String,
         bannerR: Float,
         bannerG: Float,
         bannerB: Float,
-        profileImageUri: Uri?
+        profilePictureUrl: String?
     ): SimpleResource{
-
         if(username.isBlank()){
             return Resource.Error(
                 uiText = UiText.StringResource(R.string.username_cant_be_empty)
@@ -31,6 +31,12 @@ class UpdateProfileUseCase(
             )
         }
 
-        return repository.updateUserProfile(username, bannerR, bannerG, bannerB, profileImageUri)
+        return repository.updateUserInfo(
+            username = username,
+            bannerR = bannerR,
+            bannerG = bannerG,
+            bannerB = bannerB,
+            profilePictureURL = profilePictureUrl
+        )
     }
 }

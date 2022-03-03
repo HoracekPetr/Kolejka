@@ -397,15 +397,19 @@ fun NewPostScreen(
                             buttonText = stringResource(
                                 id = R.string.create_the_event
                             ),
-                            iconDescription = ""
+                            iconDescription = "",
+                            uploadingImage = viewModel.imageUploading.value
                         ) {
-                            viewModel.onEvent(NewPostEvent.CreatePost)
+                            imageUri.value?.let{ uri ->
+                                viewModel.cloudinaryUpload(uri)
+                            }
                         }
                     }
                 }
 
                 ////////////////////////////////////////
                 //////////////OFFER////////////////////
+                ///////////////////////////////////////
 
 
             } else if (optionsRadio.value.offerEnabled) {
@@ -532,7 +536,11 @@ fun NewPostScreen(
                             ),
                             iconDescription = ""
                         ) {
-                            viewModel.onEvent(NewPostEvent.CreatePost)
+                            //viewModel.onEvent(NewPostEvent.CreatePost)
+                            println("URI: ${imageUri.value}")
+                            imageUri.value?.let{ uri ->
+                                viewModel.cloudinaryUpload(uri)
+                            }
                         }
                     }
                 }

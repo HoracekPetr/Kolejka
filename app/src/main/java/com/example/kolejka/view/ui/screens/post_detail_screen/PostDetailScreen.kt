@@ -22,8 +22,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
@@ -61,229 +64,247 @@ fun PostDetailScreen(
         state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
         onRefresh = { viewModel.refreshScreen(postId ?: "") }
     ) {
-        Column(modifier = Modifier.fillMaxSize())
-        {
-            LazyColumn(modifier = Modifier.weight(1f)) {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(PaddingMedium)
-                    ) {
-                        Image(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(Space8))
-                                .fillMaxWidth()
-                                .height(PostHeight),
-                            contentScale = ContentScale.FillBounds,
-                            painter = rememberImagePainter(data = post?.postPictureUrl),
-                            contentDescription = "Post Image"
-                        )
-                        Spacer(modifier = Modifier.size(Space24))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            //TITLE
+        Box(Modifier.fillMaxSize()) {
 
-                            Text(
-                                modifier = Modifier.weight(4f),
-                                text = post?.title ?: "",
-                                style = MaterialTheme.typography.body1,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1
-                            )
+            if (viewModel.state.value.isPostLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = DarkPurple
+                )
+            } else {
+                Column(modifier = Modifier.fillMaxSize())
+                {
+                    LazyColumn(modifier = Modifier.weight(1f)) {
+                        item {
                             Column(
-                                modifier = Modifier.weight(2f, false),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.SpaceEvenly
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(PaddingMedium)
                             ) {
-/*                                Text(
-                                    text = post?.username ?: "",
-                                    style = Typography.h5,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )*/
-
                                 Image(
                                     modifier = Modifier
-                                        .size(PostDetailProfileSize)
-                                        .clip(CircleShape),
-                                    contentScale = ContentScale.Fit,
-                                    painter = rememberImagePainter(post?.profilePictureUrl),
-                                    contentDescription = "Profile Image",
+                                        .clip(RoundedCornerShape(Space8))
+                                        .fillMaxWidth()
+                                        .height(PostHeight),
+                                    contentScale = ContentScale.FillBounds,
+                                    painter = rememberImagePainter(data = post?.postPictureUrl),
+                                    contentDescription = "Post Image"
                                 )
-                            }
-                        }
+                                Spacer(modifier = Modifier.size(Space24))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    //TITLE
 
-                        Spacer(modifier = Modifier.size(Space16))
-                        //DESCRIPTION
+                                    Text(
+                                        modifier = Modifier.weight(4f),
+                                        text = post?.title ?: "",
+                                        style = if (post?.title?.length ?: 0 < 15) MaterialTheme.typography.body1 else TextStyle(
+                                            fontFamily = roboto_mono,
+                                            fontWeight = FontWeight.Medium,
+                                            fontSize = 18.sp
+                                        ),
+                                        overflow = TextOverflow.Clip,
+                                        maxLines = 1
+                                    )
+                                    Column(
+                                        modifier = Modifier.weight(1f, false),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.SpaceEvenly
+                                    ) {
 
-                        Text(
-                            text = post?.description ?: "",
-                            style = MaterialTheme.typography.subtitle1,
-                            color = DarkGray
-                        )
+                                        Image(
+                                            modifier = Modifier
+                                                .size(PostDetailProfileSize)
+                                                .clip(CircleShape),
+                                            contentScale = ContentScale.Fit,
+                                            painter = rememberImagePainter(post?.profilePictureUrl),
+                                            contentDescription = "Profile Image",
+                                        )
+                                    }
+                                }
 
-                        Spacer(modifier = Modifier.size(Space12))
-                        Divider(color = DarkGray)
-                        Spacer(modifier = Modifier.size(Space12))
+                                Spacer(modifier = Modifier.size(Space16))
+                                //DESCRIPTION
 
-
-                        //DATE
-
-                        if(post?.type == PostType.Event.type){
-                            Row {
                                 Text(
-                                    text = stringResource(id = R.string.date) + ": ",
-                                    style = MaterialTheme.typography.caption,
-                                    color = BlackAccent
-                                )
-                                Text(
-                                    text = post?.date ?: "",
-                                    style = MaterialTheme.typography.caption,
+                                    text = post?.description ?: "",
+                                    style = MaterialTheme.typography.subtitle1,
                                     color = DarkGray
                                 )
-                            }
-                        }
 
-                        Spacer(modifier = Modifier.size(Space12))
+                                Spacer(modifier = Modifier.size(Space12))
+                                Divider(color = DarkGray)
+                                Spacer(modifier = Modifier.size(Space12))
 
-                        //LOCATION
 
-                        Row {
-                            Text(
-                                text = stringResource(id = R.string.location) + ": ",
-                                style = MaterialTheme.typography.caption,
-                                color = BlackAccent
-                            )
-                            Text(
-                                text = post?.location ?: "",
-                                style = MaterialTheme.typography.caption,
-                                color = DarkGray
-                            )
-                        }
+                                //DATE
 
-                        Spacer(modifier = Modifier.size(Space8))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceEvenly,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.available) + ": ",
-                                    style = MaterialTheme.typography.h3,
-                                    color = DarkPurple
-                                )
-                                Text(
-                                    text = "${post?.available} / ${post?.limit}",
-                                    style = MaterialTheme.typography.h3
-                                )
-                            }
-                            if (requesterId != post?.userId) {
-                                Button(
-                                    onClick = {
-                                        if (post?.available ?: 0 > 0) {
-                                            viewModel.onEvent(PostDetailEvent.AddMember)
-                                        }
-                                    },
-                                    enabled = post?.available != 0,
-                                    modifier = Modifier.clip(RoundedCornerShape(10.dp)),
-                                    contentPadding = PaddingValues(Space4)
-                                )
-                                {
+                                if (post?.type == PostType.Event.type) {
+                                    Row {
+                                        Text(
+                                            text = stringResource(id = R.string.date) + ": ",
+                                            style = MaterialTheme.typography.caption,
+                                            color = BlackAccent
+                                        )
+                                        Text(
+                                            text = post?.date ?: "",
+                                            style = MaterialTheme.typography.caption,
+                                            color = DarkGray
+                                        )
+                                    }
+                                }
+
+                                Spacer(modifier = Modifier.size(Space12))
+
+                                //LOCATION
+
+                                Row {
                                     Text(
-                                        text = if ((requesterId
-                                                ?: "") in post?.members ?: emptyList()
-                                        ) stringResource(R.string.leave) else stringResource(R.string.join),
-                                        style = MaterialTheme.typography.subtitle1
+                                        text = stringResource(id = R.string.location) + ": ",
+                                        style = MaterialTheme.typography.caption,
+                                        color = BlackAccent
+                                    )
+                                    Text(
+                                        text = post?.location ?: "",
+                                        style = MaterialTheme.typography.caption,
+                                        color = DarkGray
                                     )
                                 }
-                            } else {
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    IconButton(onClick = { viewModel.onEvent(PostDetailEvent.DeletePost) }) {
-                                        Icon(
-                                            modifier = Modifier.size(30.dp),
-                                            tint = DarkPurple,
-                                            imageVector = Icons.Default.DeleteOutline,
-                                            contentDescription = "Delete post"
+
+                                Spacer(modifier = Modifier.size(Space8))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Row(
+                                        horizontalArrangement = Arrangement.SpaceEvenly,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = stringResource(R.string.available) + ": ",
+                                            style = MaterialTheme.typography.h3,
+                                            color = DarkPurple
                                         )
+                                        Text(
+                                            text = "${post?.available} / ${post?.limit}",
+                                            style = MaterialTheme.typography.h3
+                                        )
+                                    }
+                                    if (requesterId != post?.userId) {
+                                        Button(
+                                            onClick = {
+                                                if (post?.available ?: 0 > 0) {
+                                                    viewModel.onEvent(PostDetailEvent.AddMember)
+                                                }
+                                            },
+                                            enabled = post?.available != 0,
+                                            modifier = Modifier.clip(RoundedCornerShape(10.dp)),
+                                            contentPadding = PaddingValues(Space4)
+                                        )
+                                        {
+                                            if (viewModel.state.value.isLoading) {
+                                                CircularProgressIndicator(color = LightBackgroundWhite)
+                                            } else {
+                                                Text(
+                                                    text = if ((requesterId
+                                                            ?: "") in post?.members ?: emptyList()
+                                                    ) stringResource(R.string.leave) else stringResource(
+                                                        R.string.join
+                                                    ),
+                                                    style = MaterialTheme.typography.subtitle1
+                                                )
+                                            }
+                                        }
+                                    } else {
+                                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                            IconButton(onClick = { viewModel.onEvent(PostDetailEvent.DeletePost) }) {
+                                                Icon(
+                                                    modifier = Modifier.size(30.dp),
+                                                    tint = DarkPurple,
+                                                    imageVector = Icons.Default.DeleteOutline,
+                                                    contentDescription = "Delete post"
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                                Spacer(modifier = Modifier.size(Space4))
+                                Divider(color = DarkGray)
+                                Spacer(modifier = Modifier.size(Space2))
+                            }
+                            if (showDeletePostDialog) {
+                                DeletePostDialog(onDismissRequestClick = {
+                                    viewModel.onEvent(
+                                        PostDetailEvent.DismissPostDelete
+                                    )
+                                }) {
+                                    viewModel.onEvent(PostDetailEvent.ConfirmPostDelete)
+                                    navController.popBackStack()
+                                    navController.navigate(Screen.PostScreen.route) {
+                                        popUpTo(Screen.PostScreen.route) {
+                                            inclusive = true
+                                        }
                                     }
                                 }
                             }
                         }
-                        Spacer(modifier = Modifier.size(Space4))
-                        Divider(color = DarkGray)
-                        Spacer(modifier = Modifier.size(Space2))
-                    }
-                    if (showDeletePostDialog) {
-                        DeletePostDialog(onDismissRequestClick = { viewModel.onEvent(PostDetailEvent.DismissPostDelete) }) {
-                            viewModel.onEvent(PostDetailEvent.ConfirmPostDelete)
-                            navController.popBackStack()
-                            navController.navigate(Screen.PostScreen.route) {
-                                popUpTo(Screen.PostScreen.route) {
-                                    inclusive = true
+                        if (requesterId == post?.userId || requesterId ?: "" in post?.members ?: emptyList()) {
+                            comments?.let { comments ->
+                                itemsIndexed(comments) { index, comment ->
+                                    CommentComposable(
+                                        comment = comment,
+                                        modifier = Modifier.fillMaxWidth(),
+                                        commentOwnerId = requesterId ?: "",
+                                        deleteComment = false,
+                                        onDeleteCommentClick = { comments[index].id },
+                                        onConfirmDeleteClick = {
+                                            viewModel.onEvent(
+                                                PostDetailEvent.ConfirmCommentDelete(
+                                                    comment.id
+                                                )
+                                            )
+                                        },
+                                        onDismissDeleteClick = { "" }
+                                    )
                                 }
                             }
                         }
                     }
-                }
-                if (requesterId == post?.userId || requesterId ?: "" in post?.members ?: emptyList()) {
-                    comments?.let { comments ->
-                        itemsIndexed(comments) { index, comment ->
-                            CommentComposable(
-                                comment = comment,
-                                modifier = Modifier.fillMaxWidth(),
-                                commentOwnerId = requesterId ?: "",
-                                deleteComment = false,
-                                onDeleteCommentClick = { comments[index].id },
-                                onConfirmDeleteClick = {
-                                    viewModel.onEvent(
-                                        PostDetailEvent.ConfirmCommentDelete(
-                                            comment.id
-                                        )
-                                    )
-                                },
-                                onDismissDeleteClick = { "" }
-                            )
-                        }
-                    }
-                }
-            }
 
-            if (requesterId == post?.userId || requesterId ?: "" in post?.members ?: emptyList()) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(5.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    StandardTextField(
-                        modifier = Modifier
-                            .weight(4f)
-                            .border(1.dp, Color.DarkGray, shape = RoundedCornerShape(10.dp)),
-                        text = viewModel.commentState.value.text,
-                        hint = stringResource(R.string.your_comment),
-                        onTextChanged = { viewModel.setCommentText(it) },
-                        placeholderTextColor = DarkGray,
-                        textStyle = MaterialTheme.typography.caption,
-                        placeholderTextStyle = MaterialTheme.typography.caption,
-                        textfieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White)
-                    )
-                    Spacer(Modifier.size(Space4))
-                    SendCommentComposable(modifier = Modifier.weight(1f)) {
-/*                        postId?.let { postId ->
-                            viewModel.createComment(postId)
-                            viewModel.setCommentText("")
-                        }*/
-                        viewModel.onEvent(PostDetailEvent.Comment)
-                        viewModel.setCommentText("")
+                    if (requesterId == post?.userId || requesterId ?: "" in post?.members ?: emptyList()) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(5.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            StandardTextField(
+                                modifier = Modifier
+                                    .weight(4f)
+                                    .border(
+                                        1.dp,
+                                        Color.DarkGray,
+                                        shape = RoundedCornerShape(10.dp)
+                                    ),
+                                text = viewModel.commentState.value.text,
+                                hint = stringResource(R.string.your_comment),
+                                onTextChanged = { viewModel.setCommentText(it) },
+                                placeholderTextColor = DarkGray,
+                                textStyle = MaterialTheme.typography.caption,
+                                placeholderTextStyle = MaterialTheme.typography.caption,
+                                textfieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White)
+                            )
+                            Spacer(Modifier.size(Space4))
+                            SendCommentComposable(modifier = Modifier.weight(1f), sending = viewModel.state.value.isLoading) {
+                                viewModel.onEvent(PostDetailEvent.Comment)
+                                viewModel.setCommentText("")
+                            }
+                        }
                     }
                 }
             }

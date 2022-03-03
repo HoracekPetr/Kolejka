@@ -1,5 +1,6 @@
 package com.example.kolejka.view.ui.screens.new_post_screen
 
+import android.content.Context
 import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.compose.runtime.State
@@ -7,8 +8,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cloudinary.Cloudinary
+import com.cloudinary.android.MediaManager
+import com.cloudinary.android.callback.ErrorInfo
+import com.cloudinary.android.callback.UploadCallback
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.use_cases.post.CreatePostUseCase
+import com.example.kolejka.use_cases.post.NewPostUseCase
+import com.example.kolejka.view.util.CloudinaryConsts
 import com.example.kolejka.view.util.PostType
 import com.example.kolejka.view.util.Screen
 import com.example.kolejka.view.util.UiEvent
@@ -24,11 +31,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewPostScreenViewModel @Inject constructor(
-    private val createPostUseCase: CreatePostUseCase
+    private val newPostUseCase: NewPostUseCase
 ) : ViewModel() {
 
     private val _pickedImageUri = mutableStateOf<Uri?>(null)
     val pickedImageUri = _pickedImageUri
+
+    private val _imageUrl = mutableStateOf<String?>("")
+    val imageUrl = _imageUrl
 
     private var _titleText = mutableStateOf(StandardTextfieldState())
     var titleState: State<StandardTextfieldState> = _titleText
@@ -54,9 +64,15 @@ class NewPostScreenViewModel @Inject constructor(
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
+    private val _imageUploading = mutableStateOf(false)
+    val imageUploading: State<Boolean> = _imageUploading
+
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    private val config: HashMap<String, String> = HashMap()
+
+    private val cloudinary = Cloudinary()
 
     fun onEvent(event: NewPostEvent) {
         when (event) {
@@ -106,12 +122,19 @@ class NewPostScreenViewModel @Inject constructor(
                 )
             }
 
+            is NewPostEvent.CalendarEnabled -> {
+                _showCalendarView.value = !event.enabled
+            }
+            is NewPostEvent.SelectDate -> {
+                _selectedDate.value = event.date
+            }
+
             is NewPostEvent.CreatePost -> {
                 viewModelScope.launch {
 
                     _isLoading.value = true
 
-                    val postResult = createPostUseCase(
+                    val postResult = newPostUseCase(
                         title = titleState.value.text,
                         description = descriptionState.value.text,
                         limit = limitState.value.text.toIntOrNull(),
@@ -119,9 +142,9 @@ class NewPostScreenViewModel @Inject constructor(
                             true -> PostType.Event.type
                             else -> PostType.Offer.type
                         },
-                        imageUri = pickedImageUri.value,
                         date = selectedDate.value,
-                        location = locationState.value.text
+                        location = locationState.value.text,
+                        postImageURL = _imageUrl.value
                     )
 
                     _isLoading.value = false
@@ -144,12 +167,32 @@ class NewPostScreenViewModel @Inject constructor(
                     }
                 }
             }
-            is NewPostEvent.CalendarEnabled -> {
-                _showCalendarView.value = !event.enabled
-            }
-            is NewPostEvent.SelectDate -> {
-                _selectedDate.value = event.date
-            }
         }
+    }
+
+    fun cloudinaryUpload(uri: Uri){
+        val requestId = MediaManager.get().upload(uri).callback(object: UploadCallback{
+            override fun onStart(requestId: String?) {
+            }
+
+            override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
+                _isLoading.value = true
+            }
+
+            override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
+                println("CLOUDINARY SUCCESS")
+                _isLoading.value = false
+                _imageUrl.value = resultData?.getValue("secure_url").toString()
+                onEvent(NewPostEvent.CreatePost)
+            }
+
+            override fun onError(requestId: String?, error: ErrorInfo?) {
+                println("CLOUDINARY FAIL")
+                _isLoading.value = false
+            }
+
+            override fun onReschedule(requestId: String?, error: ErrorInfo?) {
+            }
+        }).dispatch()
     }
 }

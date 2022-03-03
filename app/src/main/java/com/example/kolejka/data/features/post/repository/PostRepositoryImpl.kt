@@ -9,6 +9,7 @@ import com.example.data.requests.CreatePostRequest
 import com.example.kolejka.R
 import com.example.kolejka.data.features.post.PostApi
 import com.example.kolejka.data.features.post.dto.request.AddMemberRequest
+import com.example.kolejka.data.features.post.dto.request.NewPostRequest
 import com.example.kolejka.data.features.post.dto.response.PostDetailResponse
 import com.example.kolejka.data.features.post.paging.AllPostsSource
 import com.example.kolejka.data.features.post.paging.CreatorPostsSource
@@ -68,42 +69,35 @@ class PostRepositoryImpl(
         }
     }
 
-    override suspend fun createPost(
+    override suspend fun createNewPost(
         title: String,
         description: String,
         limit: Int?,
         type: Int,
-        imageUri: Uri,
-        date: String,
-        location: String
+        date: String?,
+        location: String?,
+        postImageURL: String?
     ): SimpleResource {
-
-        val request = CreatePostRequest(title, description, limit ?: 0, type, date, location)
-        val imageFile = imageUri.toFile()
+        val request = NewPostRequest(
+            title,
+            description,
+            limit ?: 0,
+            type,
+            date ?: "",
+            location ?: "",
+            postImageURL ?: ""
+        )
 
         return try {
+            val response = postApi.createNewPost(request)
 
-            val response = postApi.createPost(
-                createPostData = MultipartBody.Part
-                    .createFormData("create_post_data", gson.toJson(request)),
-                createPostImage = MultipartBody.Part
-                    .createFormData(
-                        name = "create_post_image",
-                        filename = imageFile.name,
-                        imageFile.asRequestBody()
-                    )
-            )
-
-            if (response.successful) {
+            if(response.successful){
                 Resource.Success(Unit)
             } else {
                 response.message?.let { msg ->
                     Resource.Error(uiText = UiText.StringDynamic(msg))
-                }
-                    ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
+                } ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
             }
-
-
         } catch (e: IOException) {
             Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
         } catch (e: HttpException) {

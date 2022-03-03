@@ -25,10 +25,12 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.cloudinary.android.MediaManager
 import com.example.kolejka.view.theme.KolejkaTheme
 import com.example.kolejka.view.ui.components.bottom_navigation.BottomNavigationBar
 import com.example.kolejka.view.ui.components.bottom_navigation.BottomNavItem
 import com.example.kolejka.view.ui.components.bottom_navigation.FloatingAddPostButton
+import com.example.kolejka.view.util.CloudinaryConsts
 import com.example.kolejka.view.util.Navigation
 import com.example.kolejka.view.util.Screen
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -46,6 +48,13 @@ class MainActivity : ComponentActivity() {
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val config: HashMap<String, String> = HashMap()
+
+        config["cloud_name"] = CloudinaryConsts.cloud
+        config["api_key"] = CloudinaryConsts.api_key
+        config["api_secret"] = CloudinaryConsts.secret
+        MediaManager.init(applicationContext, config)
 
         val bottomBarItems = listOf(
             BottomNavItem(

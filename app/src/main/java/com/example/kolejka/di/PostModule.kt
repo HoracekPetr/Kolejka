@@ -71,6 +71,12 @@ object PostModule {
 
     @Provides
     @Singleton
+    fun provideNewPostUseCase(repository: PostRepository): NewPostUseCase {
+        return NewPostUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
     fun addPostMemberUseCase(repository: PostRepository): AddPostMemberUseCase {
         return AddPostMemberUseCase(repository)
     }

@@ -4,6 +4,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PostAdd
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.example.kolejka.view.theme.MediumOpaquePurple
@@ -15,6 +16,7 @@ fun FloatingAddPostButton(
     buttonIcon: ImageVector,
     buttonText: String,
     iconDescription: String,
+    uploadingImage: Boolean = false,
     onButtonClick: () -> Unit = {}
 ) {
     if(showButton) {
@@ -24,6 +26,9 @@ fun FloatingAddPostButton(
             },
             onClick = {onButtonClick()},
             icon = {
+                if(uploadingImage){
+                    CircularProgressIndicator(color = Color.White)
+                }
                 Icon(imageVector = buttonIcon, contentDescription = iconDescription)
             },
             backgroundColor = MediumOpaquePurple,

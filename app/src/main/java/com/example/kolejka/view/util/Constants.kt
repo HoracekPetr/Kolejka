@@ -6,3 +6,9 @@ object Constants {
     const val SPLASH_DURATION = 2000L
     const val DESC_MAX_CHARS = 200
 }
+
+object CloudinaryConsts {
+    const val api_key = "734235877855918"
+    const val secret = "GKGe9IoYIGmOKJDbhxcw4IH-gSQ"
+    const val cloud = "kolejka-app-imagecloud"
+}

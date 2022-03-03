@@ -1,27 +1,15 @@
 package com.example.kolejka.data.features.user.repository
 
 import android.content.Context
-import android.net.Uri
-import androidx.core.net.toFile
-import com.example.data.requests.CreatePostRequest
-import com.example.data.responses.ProfileResponse
 import com.example.kolejka.R
 import com.example.kolejka.data.features.user.UserApi
-import com.example.kolejka.data.features.user.dto.request.UpdateProfileRequest
+import com.example.kolejka.data.features.user.dto.request.UpdateUserRequest
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.data.util.SimpleResource
-import com.example.kolejka.data.util.getFileName
 import com.example.kolejka.models.User
 import com.example.kolejka.view.util.uitext.UiText
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.IOException
 
 class UserRepositoryImpl(
@@ -52,43 +40,30 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun updateUserProfile(
+    override suspend fun updateUserInfo(
         username: String,
         bannerR: Float,
         bannerG: Float,
         bannerB: Float,
-        profileImageUri: Uri?
+        profilePictureURL: String?
     ): SimpleResource {
-
-        val request = UpdateProfileRequest(
+        val request = UpdateUserRequest(
             username = username,
             bannerR = bannerR,
             bannerG = bannerG,
-            bannerB = bannerB
+            bannerB = bannerB,
+            profilePictureURL = profilePictureURL
         )
-        val profileImage = profileImageUri?.toFile()
 
         return try {
-            val response = userApi.updateUserProfile(
-                updateProfileData = MultipartBody.Part.createFormData(
-                    name = "update_profile_data", gson.toJson(request)
-                ),
-                updateProfileImage = profileImage?.let {
-                    MultipartBody.Part.createFormData(
-                        name = "update_profile_image",
-                        filename = profileImage.name,
-                        body = profileImage.asRequestBody()
-                    )
-                }
-            )
+            val response = userApi.updateUserInfo(request)
 
-            if (response.successful) {
+            if(response.successful){
                 Resource.Success(Unit)
             } else {
                 response.message?.let { msg ->
                     Resource.Error(uiText = UiText.StringDynamic(msg))
-                }
-                    ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
+                } ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
             }
         } catch (e: IOException) {
             Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
@@ -96,6 +71,4 @@ class UserRepositoryImpl(
             Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
         }
     }
-
-
 }

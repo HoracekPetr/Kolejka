@@ -10,5 +10,5 @@ sealed class EditProfileEvent{
     data class ChangedB(val b: Float): EditProfileEvent()
     data class PickedImage(val uri: Uri?): EditProfileEvent()
     data class CropImage(val uri: Uri?): EditProfileEvent()
-    object UpdateProfile: EditProfileEvent()
+    data class UpdateProfile(val uri: Uri?): EditProfileEvent()
 }

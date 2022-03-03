@@ -44,7 +44,7 @@ fun PostStrip(
                     .clip(RoundedCornerShape(Space8))
                     .size(PostStripPicSize)
                     .weight(2f),
-                painter = rememberImagePainter(data = post.profilePictureUrl),
+                painter = rememberImagePainter(data = post.postPictureUrl),
                 contentDescription = null
             )
             Spacer(modifier = Modifier.size(Space4))

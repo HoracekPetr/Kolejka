@@ -1,6 +1,7 @@
 package com.example.kolejka.data.features.post
 
 import com.example.kolejka.data.features.post.dto.request.AddMemberRequest
+import com.example.kolejka.data.features.post.dto.request.NewPostRequest
 import com.example.kolejka.data.features.post.dto.response.PostDetailResponse
 import com.example.kolejka.data.response.BasicApiResponse
 import com.example.kolejka.models.Post
@@ -32,11 +33,10 @@ interface PostApi {
         @Query("pageSize") pageSize: Int
     ): List<Post>
 
-    @Multipart
-    @POST("/api/post/create")
-    suspend fun createPost(
-        @Part createPostData: MultipartBody.Part,
-        @Part createPostImage: MultipartBody.Part
+
+    @POST("api/post/new")
+    suspend fun createNewPost(
+        @Body request: NewPostRequest
     ): BasicApiResponse<Unit>
 
     @POST("/api/post/addPostMember")

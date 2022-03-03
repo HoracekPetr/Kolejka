@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,7 +39,6 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun EditProfileDialog(
-    //user: User,
     onConfirmRequestClick: () -> Unit = {},
     onDismissRequestClick: () -> Unit = {},
     viewModel: EditProfileDialogViewModel = hiltViewModel()
@@ -47,6 +47,8 @@ fun EditProfileDialog(
     val editProfileState = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
     val localContext = LocalContext.current
+
+    val coroutineScope = rememberCoroutineScope()
 
     val cropActivityLauncher = rememberLauncherForActivityResult(
         contract = CropActivityResultContract(aspectX = 1f, aspectY = 1f)
@@ -73,9 +75,6 @@ fun EditProfileDialog(
             }
         }
     }
-
-
-    //val userColor = Color(editProfileState.bannerR/255, editProfileState.bannerG/255, editProfileState.bannerB/255)
 
     Dialog(onDismissRequest = { onDismissRequestClick() }, content = {
         Card(
@@ -176,8 +175,9 @@ fun EditProfileDialog(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(onClick = {
+
                         onConfirmRequestClick()
-                        viewModel.onEvent(EditProfileEvent.UpdateProfile)
+                        viewModel.onEvent(EditProfileEvent.UpdateProfile(viewModel.profileImageUri.value))
                     }) {
                         Icon(imageVector = Icons.Default.Check, contentDescription = null)
                     }
@@ -187,9 +187,7 @@ fun EditProfileDialog(
                     }) {
                         Icon(imageVector = Icons.Default.Cancel, contentDescription = null)
                     }
-
                 }
-
             }
         }
     })

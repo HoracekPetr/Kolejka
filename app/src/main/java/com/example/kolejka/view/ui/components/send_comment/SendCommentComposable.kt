@@ -19,6 +19,7 @@ import com.example.kolejka.view.theme.*
 @Composable
 fun SendCommentComposable(
         modifier: Modifier = Modifier,
+        sending: Boolean = false,
         onSendClick: () -> Unit
 ) {
     Button(
@@ -30,8 +31,12 @@ fun SendCommentComposable(
             elevation = ButtonDefaults.elevation(Space4)
     ) {
         Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(modifier = Modifier.size(18.dp),imageVector = Icons.Filled.Send, contentDescription = stringResource(R.string.send_comment), tint = Color.White)
-            Text(text = stringResource(R.string.send), style = Typography.caption)
+            if(sending){
+                CircularProgressIndicator(modifier = Modifier.size(30.dp), color = Color.White)
+            } else {
+                Icon(modifier = Modifier.size(18.dp),imageVector = Icons.Filled.Send, contentDescription = stringResource(R.string.send_comment), tint = Color.White)
+                Text(text = stringResource(R.string.send), style = Typography.caption)
+            }
         }
     }
 }

@@ -126,4 +126,8 @@ dependencies {
 
     implementation 'com.godaddy.android.colorpicker:compose-color-picker:0.2.1'
 
+    //Cloudinary
+
+    implementation group: 'com.cloudinary', name: 'cloudinary-android', version: '1.30.0'
+
 }

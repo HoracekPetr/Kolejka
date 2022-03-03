@@ -114,14 +114,14 @@ class PostDetailScreenViewModel @Inject constructor(
     private fun getPostById(postId: String){
         viewModelScope.launch {
             _state.value = _state.value.copy(
-                isLoading = true
+                isPostLoading = true
             )
 
             when(val postResult = getPostByIdUseCase(postId)){
                 is Resource.Error -> {
 
                     _state.value = _state.value.copy(
-                        isLoading = false
+                        isPostLoading = false
                     )
 
                     _eventFlow.emit(
@@ -132,7 +132,7 @@ class PostDetailScreenViewModel @Inject constructor(
                 }
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
-                        isLoading = false,
+                        isPostLoading = false,
                         post = postResult.data?.post,
                         requesterId = postResult.data?.requesterId
                     )

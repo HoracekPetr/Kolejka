@@ -5,10 +5,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cloudinary.android.MediaManager
+import com.cloudinary.android.callback.ErrorInfo
+import com.cloudinary.android.callback.UploadCallback
 import com.example.kolejka.R
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.use_cases.user.GetUserProfileUseCase
 import com.example.kolejka.use_cases.user.UpdateProfileUseCase
+import com.example.kolejka.view.ui.screens.new_post_screen.NewPostEvent
 import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.uitext.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,8 +30,14 @@ class EditProfileDialogViewModel @Inject constructor(
     private val _state = mutableStateOf(EditProfileState())
     val state: State<EditProfileState> = _state
 
+    private val _isLoading = mutableStateOf(false)
+    val isLoading: State<Boolean> = _isLoading
+
     private val _profileImageUri = mutableStateOf<Uri?>(null)
     val profileImageUri: State<Uri?> = _profileImageUri
+
+    private val _imageUrl = mutableStateOf<String?>(null)
+    val imageUrl = _imageUrl
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -68,7 +78,14 @@ class EditProfileDialogViewModel @Inject constructor(
             }
 
             is EditProfileEvent.UpdateProfile -> {
-                updateProfile()
+                println("IMAGE URL: ${_imageUrl.value}")
+                if (_profileImageUri.value == null){
+                    updateProfile()
+                } else {
+                    event.uri?.let {
+                        cloudinaryUpload(it)
+                    }
+                }
             }
         }
     }
@@ -80,7 +97,7 @@ class EditProfileDialogViewModel @Inject constructor(
                 bannerR = _state.value.bannerR,
                 bannerG = _state.value.bannerG,
                 bannerB = _state.value.bannerB,
-                profileImageUri = _profileImageUri.value
+                profilePictureUrl = _imageUrl.value
             )
 
             when(result){
@@ -95,6 +112,33 @@ class EditProfileDialogViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun cloudinaryUpload(uri: Uri){
+
+        val requestId = MediaManager.get().upload(uri).callback(object: UploadCallback {
+            override fun onStart(requestId: String?) {
+            }
+
+            override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
+                _isLoading.value = true
+            }
+
+            override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
+                println("CLOUDINARY SUCCESS")
+                _isLoading.value = false
+                _imageUrl.value = resultData?.getValue("secure_url").toString()
+                updateProfile()
+            }
+
+            override fun onError(requestId: String?, error: ErrorInfo?) {
+                println("CLOUDINARY FAIL")
+                _isLoading.value = false
+            }
+
+            override fun onReschedule(requestId: String?, error: ErrorInfo?) {
+            }
+        }).dispatch()
     }
 
     private fun getProfile() {

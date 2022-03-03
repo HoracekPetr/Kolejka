@@ -20,14 +20,14 @@ interface PostRepository {
 
     suspend fun addPostMember(postId: String): SimpleResource
 
-    suspend fun createPost(
+    suspend fun createNewPost(
         title: String,
         description: String,
         limit: Int?,
         type: Int,
-        imageUri: Uri,
-        date: String,
-        location: String
+        date: String?,
+        location: String?,
+        postImageURL: String?
     ): SimpleResource
 
     suspend fun deletePost(postId: String): SimpleResource
