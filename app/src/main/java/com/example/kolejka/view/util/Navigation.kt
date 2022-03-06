@@ -16,6 +16,7 @@ import com.example.kolejka.view.ui.screens.new_post_screen.NewPostScreen
 import com.example.kolejka.view.ui.screens.notification_screen.NotificationScreen
 import com.example.kolejka.view.ui.screens.post_detail_screen.PostDetailScreen
 import com.example.kolejka.view.ui.screens.profile_screen.ProfileScreen
+import com.example.kolejka.view.ui.screens.profile_screen.other_user_screen.OtherUserScreen
 import com.example.kolejka.view.ui.screens.register_screen.RegisterScreen
 import com.example.kolejka.view.ui.screens.splash_screen.SplashScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -76,6 +77,20 @@ fun Navigation(navController: NavHostController) {
                 navController = navController,
                 postId = postId
             )
+        }
+
+        composable(
+            route = Screen.OtherUserScreen.route + "?userId={userId}",
+            arguments = listOf(
+                navArgument(name = "userId"){
+                    nullable = true
+                    defaultValue = null
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            val userId = it.arguments?.getString("userId")
+            OtherUserScreen(navController = navController, userId = userId)
         }
 
         composable(

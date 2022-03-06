@@ -5,6 +5,7 @@ import com.example.kolejka.data.features.user.UserApi
 import com.example.kolejka.data.features.user.repository.UserRepository
 import com.example.kolejka.data.features.user.repository.UserRepositoryImpl
 import com.example.kolejka.data.util.Constants
+import com.example.kolejka.use_cases.user.GetOtherUserProfileUseCase
 import com.example.kolejka.use_cases.user.GetUserProfileUseCase
 import com.example.kolejka.use_cases.user.UpdateProfileUseCase
 import com.google.gson.Gson
@@ -43,6 +44,12 @@ object UserModule {
     @Singleton
     fun provideGetUserProfileUseCase(repository: UserRepository): GetUserProfileUseCase {
         return GetUserProfileUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetOtherUserProfileUseCase(repository: UserRepository): GetOtherUserProfileUseCase{
+        return GetOtherUserProfileUseCase(repository)
     }
 
     @Provides

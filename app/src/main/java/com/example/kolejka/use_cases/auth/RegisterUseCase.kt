@@ -13,19 +13,27 @@ class RegisterUseCase(
     suspend operator fun invoke(
         email: String,
         username: String,
-        password: String
+        password: String,
+        inputCode: String,
+        correctCode: String
     ): RegisterResult {
 
         val emailError = validateEmail(email)
         val usernameError = validateUsername(username)
         val passwordError = validatePassword(password)
+        val codeError = validateCode(inputCode)
 
-        if(emailError != null || usernameError != null || passwordError != null){
+        if(emailError != null || usernameError != null || passwordError != null || codeError != null){
             return RegisterResult(
                 emailError = emailError,
                 usernameError = usernameError,
                 passwordError = passwordError,
+                codeError = codeError
             )
+        }
+
+        if(inputCode != correctCode){
+            return RegisterResult(codesNotMatching = true)
         }
 
         val result = authRepository.registerAccount(email, username, password)
@@ -79,6 +87,16 @@ private fun validatePassword(password: String): Errors?{
 
     if(!trimPassword.contains(Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]+\$"))){
         return Errors.InvalidPassword
+    }
+
+    return null
+}
+
+private fun validateCode(code: String): Errors?{
+    val trimCode = code.trim()
+
+    if(trimCode.isBlank()){
+        return Errors.EmptyField
     }
 
     return null

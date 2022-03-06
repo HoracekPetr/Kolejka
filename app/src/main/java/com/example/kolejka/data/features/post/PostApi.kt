@@ -27,6 +27,13 @@ interface PostApi {
         @Query("pageSize") pageSize: Int
     ): List<Post>
 
+    @GET("/api/post/getPostsByOtherCreator")
+    suspend fun getPostsByOtherCreator(
+        @Query("userId") userId: String,
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int
+    ): List<Post>
+
     @GET("/api/post/getPostsWhereMember")
     suspend fun getPostsWhereUserIsMember(
         @Query("page") page: Int,

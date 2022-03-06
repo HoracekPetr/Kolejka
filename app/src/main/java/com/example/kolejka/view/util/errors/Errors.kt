@@ -7,4 +7,5 @@ sealed class Errors{
     object InputTooShort: Errors()
     object InvalidEmail: Errors()
     object InvalidPassword: Errors()
+    object IncorrectCode: Errors()
 }

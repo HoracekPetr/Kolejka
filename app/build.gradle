@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "com.plcoding.cryptocurrencyappyt"
         minSdk 21
-        targetSdk 31
+        targetSdk 29
         versionCode 1
         versionName "1.0"
 
@@ -129,5 +129,8 @@ dependencies {
     //Cloudinary
 
     implementation group: 'com.cloudinary', name: 'cloudinary-android', version: '1.30.0'
+
+    //MAIL DROID
+    implementation 'com.github.nedimf:maildroid:v0.0.8-release'
 
 }

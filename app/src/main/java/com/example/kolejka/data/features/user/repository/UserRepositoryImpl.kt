@@ -40,6 +40,28 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun getOtherUserProfile(userId: String): Resource<User> {
+        return try {
+
+            val response = userApi.getOtherUserProfile(userId)
+
+            if (response.successful) {
+                Resource.Success(response.data)
+            } else {
+                response.message?.let { msg ->
+                    Resource.Error(uiText = UiText.StringDynamic(msg))
+                }
+                    ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
+            }
+
+
+        } catch (e: IOException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
+        } catch (e: HttpException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
+        }
+    }
+
     override suspend fun updateUserInfo(
         username: String,
         bannerR: Float,

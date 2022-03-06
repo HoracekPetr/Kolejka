@@ -118,7 +118,16 @@ fun PostDetailScreen(
                                         Image(
                                             modifier = Modifier
                                                 .size(PostDetailProfileSize)
-                                                .clip(CircleShape),
+                                                .clip(CircleShape)
+                                                .clickable {
+                                                    if(post?.userId == requesterId)
+                                                    {
+                                                        navController.navigate(Screen.ProfileScreen.route)
+                                                    } else
+                                                    {
+                                                        navController.navigate(Screen.OtherUserScreen.route + "?userId=${post?.userId}")
+                                                    }
+                                                },
                                             contentScale = ContentScale.Fit,
                                             painter = rememberImagePainter(post?.profilePictureUrl),
                                             contentDescription = "Profile Image",
@@ -300,7 +309,10 @@ fun PostDetailScreen(
                                 textfieldColors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White)
                             )
                             Spacer(Modifier.size(Space4))
-                            SendCommentComposable(modifier = Modifier.weight(1f), sending = viewModel.state.value.isLoading) {
+                            SendCommentComposable(
+                                modifier = Modifier.weight(1f),
+                                sending = viewModel.state.value.isLoading
+                            ) {
                                 viewModel.onEvent(PostDetailEvent.Comment)
                                 viewModel.setCommentText("")
                             }

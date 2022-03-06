@@ -11,5 +11,13 @@ sealed class UiText {
         fun unknownError(): UiText {
             return UiText.StringResource(R.string.an_unknown_error_occured)
         }
+
+        fun cantSendMail(): UiText {
+            return UiText.StringResource(R.string.cant_send_email)
+        }
+
+        fun sentMail(): UiText {
+            return UiText.StringResource(R.string.email_sent)
+        }
     }
 }

@@ -1,21 +1,28 @@
 package com.example.kolejka.view.ui.screens.register_screen
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -33,8 +40,11 @@ import com.example.kolejka.view.util.Screen
 import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.errors.Errors
 import com.example.kolejka.view.util.uitext.asString
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RegisterScreen(
     viewModel: RegisterScreenViewModel = hiltViewModel(),
@@ -46,20 +56,28 @@ fun RegisterScreen(
     val interactionSource = remember { MutableInteractionSource() }
     val scaffoldState = rememberScaffoldState()
 
+    val viewRequester = BringIntoViewRequester()
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val scrollState = rememberScrollState()
+
     val usernameState = viewModel.usernameState.value
     val emailState = viewModel.emailState.value
     val passwordState = viewModel.passwordState.value
+    val verificationState = viewModel.verificationCodeState.value
     val registerState = viewModel.registerState.value
-    
-    LaunchedEffect(key1 = true){
+
+    LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
-            when(event){
+            when (event) {
                 is UiEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.uiText.asString(localContext),
                         duration = SnackbarDuration.Short
                     )
                 }
+                else -> {}
             }
         }
     }
@@ -67,6 +85,7 @@ fun RegisterScreen(
     Scaffold(
         scaffoldState = scaffoldState
     ) {
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -78,8 +97,9 @@ fun RegisterScreen(
                     start = PaddingMedium,
                     end = PaddingMedium,
                     top = PaddingMedium,
-                    bottom = PaddingExtraLarge
+                    bottom = PaddingLarge
                 )
+                .verticalScroll(scrollState)
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -99,7 +119,17 @@ fun RegisterScreen(
                 //EMAIL FIELD
 
                 StandardTextField(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusEvent {
+                            if (it.isFocused) {
+                                coroutineScope.launch {
+                                    delay(200)
+                                    viewRequester.bringIntoView()
+                                }
+                            }
+                        }
+                        .bringIntoViewRequester(viewRequester),
                     text = emailState.text,
                     hint = stringResource(R.string.email),
                     onTextChanged = {
@@ -124,7 +154,17 @@ fun RegisterScreen(
                 //USERNAME FIELD
 
                 StandardTextField(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusEvent {
+                            if (it.isFocused) {
+                                coroutineScope.launch {
+                                    delay(200)
+                                    viewRequester.bringIntoView()
+                                }
+                            }
+                        }
+                        .bringIntoViewRequester(viewRequester),
                     text = usernameState.text,
                     hint = stringResource(R.string.username),
                     textStyle = MaterialTheme.typography.h2,
@@ -135,7 +175,10 @@ fun RegisterScreen(
                     },
                     error = when (usernameState.error) {
                         is Errors.EmptyField -> stringResource(id = R.string.this_field_cant_be_empty)
-                        is Errors.InputTooShort -> stringResource(id = R.string.username_too_short, Constants.MIN_USERNAME_LENGTH)
+                        is Errors.InputTooShort -> stringResource(
+                            id = R.string.username_too_short,
+                            Constants.MIN_USERNAME_LENGTH
+                        )
                         else -> ""
                     },
                     placeholderTextColor = DarkGray,
@@ -147,7 +190,17 @@ fun RegisterScreen(
                 //PASSWORD FIELD
 
                 StandardTextField(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusEvent {
+                            if (it.isFocused) {
+                                coroutineScope.launch {
+                                    delay(200)
+                                    viewRequester.bringIntoView()
+                                }
+                            }
+                        }
+                        .bringIntoViewRequester(viewRequester),
                     text = passwordState.text,
                     hint = stringResource(R.string.password),
                     onTextChanged = {
@@ -157,7 +210,10 @@ fun RegisterScreen(
                     },
                     error = when (passwordState.error) {
                         is Errors.EmptyField -> stringResource(id = R.string.this_field_cant_be_empty)
-                        is Errors.InputTooShort -> stringResource(id = R.string.password_too_short, Constants.MIN_PASSWORD_LENGTH)
+                        is Errors.InputTooShort -> stringResource(
+                            id = R.string.password_too_short,
+                            Constants.MIN_PASSWORD_LENGTH
+                        )
                         is Errors.InvalidPassword -> stringResource(id = R.string.invalid_password)
                         else -> ""
                     },
@@ -165,7 +221,13 @@ fun RegisterScreen(
                     textStyle = MaterialTheme.typography.h2,
                     placeholderTextStyle = MaterialTheme.typography.h2,
                     trailingIcon = {
-                        IconButton(onClick = {viewModel.onEvent(RegisterEvent.ChangePasswordVisibility(!passwordState.visible))}) {
+                        IconButton(onClick = {
+                            viewModel.onEvent(
+                                RegisterEvent.ChangePasswordVisibility(
+                                    !passwordState.visible
+                                )
+                            )
+                        }) {
                             Icon(
                                 imageVector = if (passwordState.visible)
                                     Icons.Filled.Visibility
@@ -177,7 +239,52 @@ fun RegisterScreen(
                     visualTransformation = if (passwordState.visible) VisualTransformation.None else PasswordVisualTransformation()
                 )
 
-                Spacer(modifier = Modifier.size(Space16))
+                Spacer(modifier = Modifier.size(Space36))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    StandardTextField(
+                        modifier = Modifier
+                            .wrapContentWidth()
+                            .onFocusEvent {
+                                if (it.isFocused) {
+                                    coroutineScope.launch {
+                                        delay(200)
+                                        viewRequester.bringIntoView()
+                                    }
+                                }
+                            }
+                            .bringIntoViewRequester(viewRequester),
+                        text = verificationState.text,
+                        hint = stringResource(R.string.verification_code),
+                        onTextChanged = { viewModel.onEvent(RegisterEvent.EnteredVerificationCode(it)) },
+                        placeholderTextColor = DarkGray,
+                        textStyle = MaterialTheme.typography.h3,
+                        error = when (verificationState.error) {
+                            is Errors.EmptyField -> stringResource(id = R.string.fields_blank)
+                            else -> ""
+                        },
+                        placeholderTextStyle = MaterialTheme.typography.h3,
+                        errorBelow = true
+                    )
+                    Spacer(modifier = Modifier.size(Space8))
+                    Button(
+                        modifier = Modifier.wrapContentWidth(),
+                        onClick = { viewModel.onEvent(RegisterEvent.SendVerificationCode) },
+                        shape = CircleShape
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Send,
+                            contentDescription = "Send verification code."
+                        )
+                    }
+                }
+
+
+                Spacer(modifier = Modifier.size(Space36))
 
                 Button(
                     onClick = {
@@ -185,17 +292,23 @@ fun RegisterScreen(
                     },
                     enabled = !registerState.isLoading,
                     modifier = Modifier
-                        .align(Alignment.End)
+                        .align(Alignment.CenterHorizontally)
                         .clip(
                             RoundedCornerShape(10.dp)
                         )
                 ) {
-                    Text(text = stringResource(R.string.register), style = MaterialTheme.typography.h3)
+                    Text(
+                        text = stringResource(R.string.register),
+                        style = MaterialTheme.typography.h3
+                    )
                 }
 
-                if(registerState.isLoading){
+                if (registerState.isLoading) {
                     Spacer(Modifier.size(Space8))
-                    CircularProgressIndicator(modifier = Modifier.align(CenterHorizontally),color = DarkPurple)
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(CenterHorizontally),
+                        color = DarkPurple
+                    )
                 }
             }
 
@@ -218,7 +331,7 @@ fun RegisterScreen(
                         navController.navigate(
                             Screen.LoginScreen.route
                         ) {
-                            popUpTo(Screen.LoginScreen.route){
+                            popUpTo(Screen.LoginScreen.route) {
                                 inclusive = true
                             }
                         }

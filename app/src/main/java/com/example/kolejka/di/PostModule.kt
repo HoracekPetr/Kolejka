@@ -59,15 +59,21 @@ object PostModule {
 
     @Provides
     @Singleton
-    fun provideGetPostsWhereMemberUseCase(repository: PostRepository): GetPostsWhereMemberUseCase {
-        return GetPostsWhereMemberUseCase(repository)
+    fun provideGetPostsByOtherCreatorUseCase(repository: PostRepository): GetPostsByOtherCreatorUseCase{
+        return GetPostsByOtherCreatorUseCase(repository)
     }
 
     @Provides
     @Singleton
+    fun provideGetPostsWhereMemberUseCase(repository: PostRepository): GetPostsWhereMemberUseCase {
+        return GetPostsWhereMemberUseCase(repository)
+    }
+
+/*    @Provides
+    @Singleton
     fun provideCreatePostsUseCase(repository: PostRepository): CreatePostUseCase {
         return CreatePostUseCase(repository)
-    }
+    }*/
 
     @Provides
     @Singleton

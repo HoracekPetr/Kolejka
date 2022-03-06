@@ -14,12 +14,10 @@ interface UserApi {
         //@Query("userId") userId: String
     ): BasicApiResponse<User>
 
-    @Multipart
-    @PUT("/api/user/update")
-    suspend fun updateUserProfile(
-        @Part updateProfileData: MultipartBody.Part,
-        @Part updateProfileImage: MultipartBody.Part?
-    ): BasicApiResponse<Unit>
+    @GET("/api/user/other")
+    suspend fun getOtherUserProfile(
+        @Query("userId") userId: String
+    ): BasicApiResponse<User>
 
     @PUT("/api/user/update2")
     suspend fun updateUserInfo(

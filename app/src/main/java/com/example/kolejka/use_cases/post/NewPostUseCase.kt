@@ -22,9 +22,9 @@ class NewPostUseCase(
             return Resource.Error(uiText = UiText.StringResource(R.string.fields_blank))
         }
 
-/*        if(imageUri == null){
+        if(postImageURL == null){
             return Resource.Error(uiText = UiText.StringResource(R.string.pick_an_image))
-        }*/
+        }
 
         if(limit == null){
             return Resource.Error(uiText = UiText.StringResource(R.string.fields_blank))

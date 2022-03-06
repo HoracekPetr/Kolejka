@@ -82,9 +82,7 @@ class EditProfileDialogViewModel @Inject constructor(
                 if (_profileImageUri.value == null){
                     updateProfile()
                 } else {
-                    event.uri?.let {
-                        cloudinaryUpload(it)
-                    }
+                    cloudinaryUpload(event.uri)
                 }
             }
         }
@@ -105,6 +103,7 @@ class EditProfileDialogViewModel @Inject constructor(
                     _eventFlow.emit(UiEvent.ShowSnackbar(
                         uiText = UiText.StringResource(R.string.user_updated)
                     ))
+                    getProfile()
                 }
                 is Resource.Error -> {
                     _eventFlow.emit(UiEvent.ShowSnackbar(result.uiText ?: UiText.unknownError()
@@ -114,31 +113,36 @@ class EditProfileDialogViewModel @Inject constructor(
         }
     }
 
-    private fun cloudinaryUpload(uri: Uri){
+    private fun cloudinaryUpload(uri: Uri?){
 
-        val requestId = MediaManager.get().upload(uri).callback(object: UploadCallback {
-            override fun onStart(requestId: String?) {
-            }
+        if(uri == null){
+            return
+        } else {
+            val requestId = MediaManager.get().upload(uri).callback(object: UploadCallback {
+                override fun onStart(requestId: String?) {
+                    _isLoading.value = true
+                }
 
-            override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
-                _isLoading.value = true
-            }
+                override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
+                    _isLoading.value = true
+                }
 
-            override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
-                println("CLOUDINARY SUCCESS")
-                _isLoading.value = false
-                _imageUrl.value = resultData?.getValue("secure_url").toString()
-                updateProfile()
-            }
+                override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
+                    println("CLOUDINARY SUCCESS")
+                    _isLoading.value = false
+                    _imageUrl.value = resultData?.getValue("secure_url").toString()
+                    updateProfile()
+                }
 
-            override fun onError(requestId: String?, error: ErrorInfo?) {
-                println("CLOUDINARY FAIL")
-                _isLoading.value = false
-            }
+                override fun onError(requestId: String?, error: ErrorInfo?) {
+                    println("CLOUDINARY FAIL")
+                    _isLoading.value = false
+                }
 
-            override fun onReschedule(requestId: String?, error: ErrorInfo?) {
-            }
-        }).dispatch()
+                override fun onReschedule(requestId: String?, error: ErrorInfo?) {
+                }
+            }).dispatch()
+        }
     }
 
     private fun getProfile() {

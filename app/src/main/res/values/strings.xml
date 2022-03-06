@@ -67,8 +67,14 @@
     <string name="pick_date">Pick date!</string>
     <string name="pick_date_for_event">Pick date for event</string>
     <string name="no_selected_date">No selected date</string>
+    <string name="select_a_date">Select a date please.</string>
     <string name="location">Location</string>
     <string name="create_the_event">Create the event!</string>
     <string name="create_the_offer">Create the offer!</string>
     <string name="date">Date</string>
+    <string name="verification_code">Verification code</string>
+    <string name="incorrect_code">Incorrect code!</string>
+    <string name="wrong_code">Verification code is incorrect!</string>
+    <string name="cant_send_email">Cannot send the verification email.</string>
+    <string name="email_sent">Email sent successfully!</string>
 </resources>

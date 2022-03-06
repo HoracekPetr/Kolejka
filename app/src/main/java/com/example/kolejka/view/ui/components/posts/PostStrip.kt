@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -27,10 +28,10 @@ fun PostStrip(
     post: Post
 ) {
     Card(
+        backgroundColor = if (post.type == PostType.Event.type) PostStripEvent else PostStripOffer,
         modifier = modifier,
         shape = RoundedCornerShape(Space12),
-        elevation = Space8,
-        backgroundColor = if (post.type == PostType.Event.type) DarkPurple else LightPurple
+        elevation = Space12
     ) {
         Row(
             modifier = Modifier
@@ -45,6 +46,7 @@ fun PostStrip(
                     .size(PostStripPicSize)
                     .weight(2f),
                 painter = rememberImagePainter(data = post.postPictureUrl),
+                contentScale = ContentScale.FillBounds,
                 contentDescription = null
             )
             Spacer(modifier = Modifier.size(Space4))

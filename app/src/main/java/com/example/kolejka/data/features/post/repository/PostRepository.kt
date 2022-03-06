@@ -14,6 +14,8 @@ interface PostRepository {
 
     val postsByCreator: Flow<PagingData<Post>>
 
+    suspend fun postsByOtherCreator(userId: String): Flow<PagingData<Post>>
+
     val postsWhereMember: Flow<PagingData<Post>>
 
     suspend fun getPostById(postId: String): Resource<PostDetailResponse>

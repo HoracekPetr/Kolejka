@@ -8,6 +8,8 @@ interface UserRepository{
 
     suspend fun getUserProfile(): Resource<User>
 
+    suspend fun getOtherUserProfile(userId: String): Resource<User>
+
     suspend fun updateUserInfo(
         username: String,
         bannerR: Float,

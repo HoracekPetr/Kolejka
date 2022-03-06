@@ -1,13 +1,18 @@
 package com.example.kolejka.view.ui.screens.register_screen
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.nedim.maildroidx.MaildroidXType
+import co.nedim.maildroidx.callback
+import co.nedim.maildroidx.sendEmail
 import com.example.kolejka.R
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.use_cases.auth.RegisterUseCase
 import com.example.kolejka.view.util.UiEvent
+import com.example.kolejka.view.util.errors.Errors
 import com.example.kolejka.view.util.states.PasswordTextfieldState
 import com.example.kolejka.view.util.states.StandardTextfieldState
 import com.example.kolejka.view.util.uitext.UiText
@@ -22,6 +27,9 @@ class RegisterScreenViewModel @Inject constructor(
     private val registerUseCase: RegisterUseCase
 ) : ViewModel() {
 
+    private val _verificationCode = mutableStateOf<String?>(null)
+    val verificationCode: State<String?> = _verificationCode
+
     private val _emailState = mutableStateOf(StandardTextfieldState())
     val emailState: State<StandardTextfieldState> = _emailState
 
@@ -34,11 +42,14 @@ class RegisterScreenViewModel @Inject constructor(
     private val _registerState = mutableStateOf(RegisterState())
     val registerState: State<RegisterState> = _registerState
 
+    private val _verificationCodeState = mutableStateOf(StandardTextfieldState())
+    val verificationCodeState: State<StandardTextfieldState> = _verificationCodeState
+
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
     fun onEvent(event: RegisterEvent) {
-        when(event){
+        when (event) {
 
             is RegisterEvent.EnteredEmail -> {
                 _emailState.value = _emailState.value.copy(
@@ -63,13 +74,24 @@ class RegisterScreenViewModel @Inject constructor(
                     visible = event.visibility
                 )
             }
+
+            is RegisterEvent.EnteredVerificationCode -> {
+                _verificationCodeState.value = _verificationCodeState.value.copy(
+                    text = event.code
+                )
+            }
+
+            is RegisterEvent.SendVerificationCode -> {
+                sendVerificationCode()
+            }
+
             is RegisterEvent.Register -> {
                 register()
             }
         }
     }
 
-    private fun register(){
+    private fun register() {
 
         viewModelScope.launch {
 
@@ -83,26 +105,43 @@ class RegisterScreenViewModel @Inject constructor(
                 error = null
             )
 
+            _verificationCodeState.value = _verificationCodeState.value.copy(
+                error = null
+            )
 
             val registerResult = registerUseCase(
                 email = emailState.value.text,
                 username = usernameState.value.text,
-                password = passwordState.value.text
+                password = passwordState.value.text,
+                inputCode = verificationCodeState.value.text,
+                correctCode = _verificationCode.value ?: ""
             )
 
-            if(registerResult.emailError != null){
+            if (registerResult.emailError != null) {
                 _emailState.value = _emailState.value.copy(
                     error = registerResult.emailError
                 )
             }
-            if(registerResult.usernameError != null){
+            if (registerResult.usernameError != null) {
                 _usernameState.value = _usernameState.value.copy(
                     error = registerResult.usernameError
                 )
             }
-            if(registerResult.passwordError != null){
+            if (registerResult.passwordError != null) {
                 _passwordState.value = _passwordState.value.copy(
                     error = registerResult.passwordError
+                )
+            }
+
+            if(registerResult.codeError != null) {
+                _verificationCodeState.value = _verificationCodeState.value.copy(
+                    error = registerResult.codeError
+                )
+            }
+
+            if(registerResult.codesNotMatching){
+                _eventFlow.emit(
+                    UiEvent.ShowSnackbar(UiText.StringResource(R.string.wrong_code))
                 )
             }
 
@@ -110,7 +149,7 @@ class RegisterScreenViewModel @Inject constructor(
                 isLoading = true
             )
 
-            when(registerResult.result){
+            when (registerResult.result) {
                 is Resource.Success -> {
                     _eventFlow.emit(
                         UiEvent.ShowSnackbar(UiText.StringResource(R.string.successful_registration))
@@ -121,6 +160,7 @@ class RegisterScreenViewModel @Inject constructor(
                     _emailState.value = StandardTextfieldState()
                     _usernameState.value = StandardTextfieldState()
                     _passwordState.value = PasswordTextfieldState()
+                    _verificationCodeState.value = StandardTextfieldState()
                 }
                 is Resource.Error -> {
                     _registerState.value = RegisterState(
@@ -137,5 +177,51 @@ class RegisterScreenViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun sendVerificationCode() {
+
+        _verificationCode.value = getRandomString(6)
+
+        sendEmail {
+            smtp("rumburak.mydreams.cz")
+            smtpUsername("kolejka@kolejka-app.eu")
+            smtpPassword("@bk6KaoVQ")
+            port("25")
+            type(MaildroidXType.HTML)
+            to(_emailState.value.text)
+            from("verifikace@kolejka-app.eu")
+            subject("Ověřovací kód aplikace Kolejka")
+            body("<h4>Váš ověřovací kód aplikace:</h4><h2>${_verificationCode.value}</h2><br><p>---------------------</p><p>Tým Kolejka<p>")
+            callback {
+                timeOut(3000)
+                onSuccess {
+                    Log.d("MaildroidX", "SUCCESS")
+                    println("SUXES")
+                    viewModelScope.launch {
+                        _eventFlow.emit(
+                            UiEvent.ShowSnackbar(UiText.sentMail())
+                        )
+                    }
+                }
+                onFail {
+                    Log.d("MaildroidX", "FAIL")
+                    println("FAIL")
+                    viewModelScope.launch {
+                        _eventFlow.emit(
+                            UiEvent.ShowSnackbar(UiText.cantSendMail())
+                        )
+                    }
+                }
+            }
+
+        }
+    }
+
+    private fun getRandomString(length: Int): String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..length)
+            .map { allowedChars.random() }
+            .joinToString("")
     }
 }

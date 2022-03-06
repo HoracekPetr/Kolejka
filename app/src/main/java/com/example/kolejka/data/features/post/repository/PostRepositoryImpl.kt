@@ -14,6 +14,7 @@ import com.example.kolejka.data.features.post.dto.response.PostDetailResponse
 import com.example.kolejka.data.features.post.paging.AllPostsSource
 import com.example.kolejka.data.features.post.paging.CreatorPostsSource
 import com.example.kolejka.data.features.post.paging.MemberPostsSource
+import com.example.kolejka.data.features.post.paging.OtherCreatorPostsSource
 import com.example.kolejka.data.util.Constants
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.data.util.SimpleResource
@@ -45,6 +46,12 @@ class PostRepositoryImpl(
         get() = Pager(PagingConfig(pageSize = Constants.DEFAULT_PAGE_SIZE)){
             MemberPostsSource(postApi)
         }.flow
+
+    override suspend fun postsByOtherCreator(userId: String): Flow<PagingData<Post>> {
+        return Pager(PagingConfig(pageSize = Constants.DEFAULT_PAGE_SIZE)){
+            OtherCreatorPostsSource(userId,postApi)
+        }.flow
+    }
 
     override suspend fun getPostById(postId: String): Resource<PostDetailResponse> {
         return try {

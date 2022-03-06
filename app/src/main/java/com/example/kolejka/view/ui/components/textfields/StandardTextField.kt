@@ -1,5 +1,6 @@
 package com.example.kolejka.view.ui.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,37 +37,75 @@ fun StandardTextField(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    errorBelow: Boolean = false
 ) {
-    TextField(
-        modifier = modifier
-            .clip(RoundedCornerShape(10.dp)),
-        value = text,
-        textStyle = textStyle,
-        onValueChange = onTextChanged,
-        isError = error != "",
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
-        placeholder = {
-            Text(
-                text = hint,
-                style = placeholderTextStyle,
-                color = placeholderTextColor,
-                textAlign = placeholderTextAlignment
+    if(errorBelow){
+        Column {
+            TextField(
+                modifier = modifier
+                    .clip(RoundedCornerShape(10.dp)),
+                value = text,
+                textStyle = textStyle,
+                onValueChange = onTextChanged,
+                isError = error != "",
+                leadingIcon = leadingIcon,
+                trailingIcon = trailingIcon,
+                placeholder = {
+                    Text(
+                        text = hint,
+                        style = placeholderTextStyle,
+                        color = placeholderTextColor,
+                        textAlign = placeholderTextAlignment
+                    )
+                },
+                singleLine = singleLine,
+                colors = textfieldColors,
+                maxLines = maxLines,
+                keyboardOptions = keyboardOptions,
+                visualTransformation = visualTransformation
             )
-        },
-        singleLine = singleLine,
-        colors = textfieldColors,
-        maxLines = maxLines,
-        keyboardOptions = keyboardOptions,
-        visualTransformation = visualTransformation
-    )
 
-    if(error != ""){
-        Text(
-            text = error,
-            color = MaterialTheme.colors.error,
-            style = MaterialTheme.typography.caption,
-            modifier = Modifier.padding(start = 16.dp)
+            if(error != ""){
+                Text(
+                    text = error,
+                    color = MaterialTheme.colors.error,
+                    style = MaterialTheme.typography.caption,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+        }
+    } else {
+        TextField(
+            modifier = modifier
+                .clip(RoundedCornerShape(10.dp)),
+            value = text,
+            textStyle = textStyle,
+            onValueChange = onTextChanged,
+            isError = error != "",
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            placeholder = {
+                Text(
+                    text = hint,
+                    style = placeholderTextStyle,
+                    color = placeholderTextColor,
+                    textAlign = placeholderTextAlignment
+                )
+            },
+            singleLine = singleLine,
+            colors = textfieldColors,
+            maxLines = maxLines,
+            keyboardOptions = keyboardOptions,
+            visualTransformation = visualTransformation
         )
+
+        if(error != ""){
+            Text(
+                text = error,
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
     }
 }

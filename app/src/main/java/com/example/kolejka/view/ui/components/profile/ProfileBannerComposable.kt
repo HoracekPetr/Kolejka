@@ -37,6 +37,7 @@ import com.example.kolejka.view.theme.*
 fun ProfileBannerComposable(
     modifier: Modifier = Modifier,
     user: User,
+    isLoggedUser: Boolean,
     onEditIconClick: () -> Unit = {},
     onLogoutIconClick: () -> Unit = {}
 ) {
@@ -69,18 +70,20 @@ fun ProfileBannerComposable(
             Spacer(modifier = Modifier.size(Space4))
             Text(text = user.username, style = Typography.body1)
             Spacer(modifier = Modifier.size(Space8))
-            Row {
-                Icon(
-                    modifier = Modifier.clickable { onEditIconClick() },
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit"
-                )
-                Spacer(modifier = Modifier.size(Space36))
-                Icon(
-                    modifier = Modifier.clickable { onLogoutIconClick() },
-                    imageVector = Icons.Default.Logout,
-                    contentDescription = "Logout"
-                )
+            if(isLoggedUser){
+                Row {
+                    Icon(
+                        modifier = Modifier.clickable { onEditIconClick() },
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Edit"
+                    )
+                    Spacer(modifier = Modifier.size(Space36))
+                    Icon(
+                        modifier = Modifier.clickable { onLogoutIconClick() },
+                        imageVector = Icons.Default.Logout,
+                        contentDescription = "Logout"
+                    )
+                }
             }
 
         }

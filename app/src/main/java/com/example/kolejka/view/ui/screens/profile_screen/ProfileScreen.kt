@@ -54,7 +54,8 @@ fun ProfileScreen(
                         onEditIconClick = {
                             viewModel.setEditProfileDialogEnabled(true)
                         },
-                        onLogoutIconClick = {viewModel.setLogoutDialogEnabled(true)}
+                        onLogoutIconClick = {viewModel.setLogoutDialogEnabled(true)},
+                        isLoggedUser = true
                     )
 
                     if (viewModel.showEditProfileDialog.value) {

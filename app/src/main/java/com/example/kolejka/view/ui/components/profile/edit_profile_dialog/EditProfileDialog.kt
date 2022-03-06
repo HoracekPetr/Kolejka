@@ -36,6 +36,7 @@ import com.example.kolejka.view.util.crop.CropActivityResultContract
 import com.example.kolejka.view.util.uitext.asString
 import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun EditProfileDialog(
@@ -58,7 +59,9 @@ fun EditProfileDialog(
 
     val getImageFromGallery =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
-            cropActivityLauncher.launch(it)
+            if(it != null){
+                cropActivityLauncher.launch(it)
+            }
         }
 
     LaunchedEffect(key1 = true) {
@@ -175,10 +178,14 @@ fun EditProfileDialog(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(onClick = {
-
-                        onConfirmRequestClick()
-                        viewModel.onEvent(EditProfileEvent.UpdateProfile(viewModel.profileImageUri.value))
+                        coroutineScope.launch {
+                            viewModel.onEvent(EditProfileEvent.UpdateProfile(viewModel.profileImageUri.value))
+                            onConfirmRequestClick()
+                        }
                     }) {
+                        if(viewModel.isLoading.value){
+                            CircularProgressIndicator()
+                        } else
                         Icon(imageVector = Icons.Default.Check, contentDescription = null)
                     }
 

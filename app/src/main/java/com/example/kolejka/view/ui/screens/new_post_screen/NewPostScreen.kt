@@ -18,10 +18,7 @@ import androidx.compose.material.icons.filled.AddAPhoto
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Event
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +46,7 @@ import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.ui.components.StandardTextField
 import com.example.kolejka.view.ui.components.bottom_navigation.FloatingAddPostButton
 import com.example.kolejka.view.util.Constants.DESC_MAX_CHARS
+import com.example.kolejka.view.util.Constants.NO_DATE_SELECTED
 import com.example.kolejka.view.util.Screen
 import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.crop.CropActivityResultContract
@@ -79,7 +77,9 @@ fun NewPostScreen(
     val title = viewModel.titleState
     val description = viewModel.descriptionState
     val location = viewModel.locationState
+    var date = viewModel.selectedDate
     val limit = viewModel.limitState
+    val url = viewModel.imageUrl
 
     val scrollState = rememberScrollState()
 
@@ -92,7 +92,9 @@ fun NewPostScreen(
 
     val getImageFromGallery =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
-            cropActivityLauncher.launch(it)
+            if(it != null){
+                cropActivityLauncher.launch(it)
+            }
         }
 
     LaunchedEffect(key1 = true) {
@@ -370,7 +372,7 @@ fun NewPostScreen(
                         dismissButton = {
                             Button(onClick = {
                                 viewModel.onEvent(NewPostEvent.CalendarEnabled(viewModel.showCalendarView.value))
-                                viewModel.onEvent(NewPostEvent.SelectDate("No date selected"))
+                                viewModel.onEvent(NewPostEvent.SelectDate(NO_DATE_SELECTED))
                             }) {
                                 Text("Close")
                             }
@@ -400,9 +402,7 @@ fun NewPostScreen(
                             iconDescription = "",
                             uploadingImage = viewModel.imageUploading.value
                         ) {
-                            imageUri.value?.let{ uri ->
-                                viewModel.cloudinaryUpload(uri)
-                            }
+                            viewModel.cloudinaryUpload(imageUri.value)
                         }
                     }
                 }
@@ -413,6 +413,7 @@ fun NewPostScreen(
 
 
             } else if (optionsRadio.value.offerEnabled) {
+
                 //TITLE
 
                 StandardTextField(
@@ -536,11 +537,7 @@ fun NewPostScreen(
                             ),
                             iconDescription = ""
                         ) {
-                            //viewModel.onEvent(NewPostEvent.CreatePost)
-                            println("URI: ${imageUri.value}")
-                            imageUri.value?.let{ uri ->
-                                viewModel.cloudinaryUpload(uri)
-                            }
+                            viewModel.cloudinaryUpload(imageUri.value)
                         }
                     }
                 }
