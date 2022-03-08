@@ -241,14 +241,16 @@ fun RegisterScreen(
 
                 Spacer(modifier = Modifier.size(Space36))
 
+                //Verification
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     StandardTextField(
                         modifier = Modifier
-                            .wrapContentWidth()
+                            .width(250.dp)
                             .onFocusEvent {
                                 if (it.isFocused) {
                                     coroutineScope.launch {
@@ -271,44 +273,55 @@ fun RegisterScreen(
                         errorBelow = true
                     )
                     Spacer(modifier = Modifier.size(Space8))
-                    Button(
-                        modifier = Modifier.wrapContentWidth(),
-                        onClick = { viewModel.onEvent(RegisterEvent.SendVerificationCode) },
-                        shape = CircleShape
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Send,
-                            contentDescription = "Send verification code."
-                        )
+                    if (registerState.isLoading) {
+                        CircularProgressIndicator(modifier = Modifier.size(40.dp, 30.dp))
+                    } else {
+                        Button(
+                            modifier = Modifier.width(70.dp),
+                            onClick = { viewModel.onEvent(RegisterEvent.SendVerificationCode) },
+                            shape = CircleShape,
+                            elevation = ButtonDefaults.elevation(Space4)
+                        ) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Icon(
+                                    modifier = Modifier.size(20.dp),
+                                    imageVector = Icons.Default.Send,
+                                    contentDescription = "Send verification code."
+                                )
+                                Text(
+                                    text = stringResource(id = R.string.send),
+                                    style = MaterialTheme.typography.caption
+                                )
+                            }
+                        }
                     }
                 }
 
 
                 Spacer(modifier = Modifier.size(Space36))
 
-                Button(
-                    onClick = {
-                        viewModel.onEvent(RegisterEvent.Register)
-                    },
-                    enabled = !registerState.isLoading,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .clip(
-                            RoundedCornerShape(10.dp)
-                        )
-                ) {
-                    Text(
-                        text = stringResource(R.string.register),
-                        style = MaterialTheme.typography.h3
-                    )
-                }
-
                 if (registerState.isLoading) {
-                    Spacer(Modifier.size(Space8))
                     CircularProgressIndicator(
                         modifier = Modifier.align(CenterHorizontally),
                         color = DarkPurple
                     )
+                } else {
+                    Button(
+                        onClick = {
+                            viewModel.onEvent(RegisterEvent.Register)
+                        },
+                        enabled = !registerState.isLoading,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .clip(
+                                RoundedCornerShape(10.dp)
+                            )
+                    ) {
+                        Text(
+                            text = stringResource(R.string.register),
+                            style = MaterialTheme.typography.h3
+                        )
+                    }
                 }
             }
 

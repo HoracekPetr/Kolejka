@@ -93,6 +93,10 @@ class RegisterScreenViewModel @Inject constructor(
 
     private fun register() {
 
+        _registerState.value = _registerState.value.copy(
+            isLoading = true
+        )
+
         viewModelScope.launch {
 
             _emailState.value = _emailState.value.copy(
@@ -145,30 +149,29 @@ class RegisterScreenViewModel @Inject constructor(
                 )
             }
 
-            _registerState.value = RegisterState(
-                isLoading = true
-            )
-
             when (registerResult.result) {
                 is Resource.Success -> {
                     _eventFlow.emit(
                         UiEvent.ShowSnackbar(UiText.StringResource(R.string.successful_registration))
                     )
-                    _registerState.value = RegisterState(
+                    _registerState.value = _registerState.value.copy(
                         isLoading = false
                     )
                     _emailState.value = StandardTextfieldState()
                     _usernameState.value = StandardTextfieldState()
                     _passwordState.value = PasswordTextfieldState()
                     _verificationCodeState.value = StandardTextfieldState()
+                    _verificationCode.value = null
                 }
                 is Resource.Error -> {
-                    _registerState.value = RegisterState(
+                    _registerState.value = _registerState.value.copy(
                         isLoading = false
                     )
                     _eventFlow.emit(
                         UiEvent.ShowSnackbar(registerResult.result.uiText ?: UiText.unknownError())
                     )
+
+                    _verificationCode.value = null
                 }
                 null -> {
                     _registerState.value = RegisterState(
@@ -181,23 +184,30 @@ class RegisterScreenViewModel @Inject constructor(
 
     private fun sendVerificationCode() {
 
-        _verificationCode.value = getRandomString(6)
+        _registerState.value = _registerState.value.copy(
+            isLoading = true
+        )
+
+        _verificationCode.value = getRandomString(6).uppercase()
 
         sendEmail {
+            isStartTLSEnabled(true)
             smtp("rumburak.mydreams.cz")
             smtpUsername("kolejka@kolejka-app.eu")
-            smtpPassword("@bk6KaoVQ")
-            port("25")
+            smtpPassword("aaxzyULQPF8#5")
+            port("587")
             type(MaildroidXType.HTML)
             to(_emailState.value.text)
             from("verifikace@kolejka-app.eu")
             subject("Ověřovací kód aplikace Kolejka")
             body("<h4>Váš ověřovací kód aplikace:</h4><h2>${_verificationCode.value}</h2><br><p>---------------------</p><p>Tým Kolejka<p>")
             callback {
-                timeOut(3000)
+                timeOut(100)
                 onSuccess {
                     Log.d("MaildroidX", "SUCCESS")
-                    println("SUXES")
+                    _registerState.value = _registerState.value.copy(
+                        isLoading = false
+                    )
                     viewModelScope.launch {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(UiText.sentMail())
@@ -206,7 +216,9 @@ class RegisterScreenViewModel @Inject constructor(
                 }
                 onFail {
                     Log.d("MaildroidX", "FAIL")
-                    println("FAIL")
+                    _registerState.value = _registerState.value.copy(
+                        isLoading = false
+                    )
                     viewModelScope.launch {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(UiText.cantSendMail())
