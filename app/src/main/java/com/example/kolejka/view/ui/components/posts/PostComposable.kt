@@ -1,5 +1,6 @@
 package com.example.kolejka.view.ui.components.posts
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,16 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
-import com.example.kolejka.R
 import com.example.kolejka.models.Post
-import com.example.kolejka.models.User
 import com.example.kolejka.view.theme.*
+import com.example.kolejka.view.util.PostType
 
 @Composable
 fun PostComposable(
@@ -34,16 +32,18 @@ fun PostComposable(
         modifier = Modifier
             .fillMaxWidth()
             .padding(PaddingMedium)
-            .clip(RoundedCornerShape(Space12))
+            //.clip(RoundedCornerShape(Space12))
             .clickable { onPostClick() },
 
-        elevation = Space16
+        elevation = Space12,
+        shape = RoundedCornerShape(Space12),
+        border = if (post.type == PostType.Event.type) BorderStroke(1.dp, PostStripEvent) else BorderStroke(1.dp, PostStripOffer)
 
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.LightGray)
+                .background(PostWhite)
                 .padding(PaddingMedium),
             horizontalAlignment = Alignment.Start
         ) {

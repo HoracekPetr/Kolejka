@@ -7,8 +7,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.kolejka.view.ui.components.tab_navigation.TabItem
 import com.example.kolejka.view.ui.components.tab_navigation.Tabs
-import com.example.kolejka.view.ui.screens.main_post_screen.sub_post_screens.EventScreen
-import com.example.kolejka.view.ui.screens.main_post_screen.sub_post_screens.OfferScreen
+import com.example.kolejka.view.ui.screens.main_post_screen.sub_post_screens.event_screen.EventScreen
+import com.example.kolejka.view.ui.screens.main_post_screen.sub_post_screens.offer_screen.OfferScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState

@@ -7,9 +7,9 @@
     <application
         android:name=".KolejkaApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_kolejkaicon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_kolejkaicon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kolejka">
         <activity

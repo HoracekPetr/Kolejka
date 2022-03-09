@@ -122,9 +122,11 @@ fun PostDetailScreen(
                                                 .clickable {
                                                     if(post?.userId == requesterId)
                                                     {
+                                                        navController.popBackStack()
                                                         navController.navigate(Screen.ProfileScreen.route)
                                                     } else
                                                     {
+                                                        navController.popBackStack()
                                                         navController.navigate(Screen.OtherUserScreen.route + "?userId=${post?.userId}")
                                                     }
                                                 },

@@ -1,5 +1,6 @@
 package com.example.kolejka.view.ui.components.posts
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,7 +13,6 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -28,7 +28,8 @@ fun PostStrip(
     post: Post
 ) {
     Card(
-        backgroundColor = if (post.type == PostType.Event.type) PostStripEvent else PostStripOffer,
+        border = if (post.type == PostType.Event.type) BorderStroke(1.dp, PostStripEvent) else BorderStroke(1.dp, PostStripOffer),
+        backgroundColor = PostWhite,
         modifier = modifier,
         shape = RoundedCornerShape(Space12),
         elevation = Space12

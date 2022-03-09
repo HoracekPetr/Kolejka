@@ -8,6 +8,8 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +23,8 @@ import com.example.kolejka.models.notification.NotificationAction
 import com.example.kolejka.view.theme.DarkPurple
 import com.example.kolejka.view.theme.PaddingMedium
 import com.example.kolejka.view.ui.components.notification.NotificationComposable
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
@@ -32,44 +36,51 @@ fun NotificationScreen(
 ) {
     val notifications = viewModel.notifications.collectAsLazyPagingItems()
 
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
-    Scaffold(scaffoldState = scaffoldState) {
-        Box {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(PaddingMedium)
-            ) {
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+        onRefresh = { viewModel.refreshScreen(notifications) }
+    ){
+        Scaffold(scaffoldState = scaffoldState) {
+            Box {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(PaddingMedium)
+                ) {
 
-                items(notifications) { notification ->
-                    NotificationComposable(
-                        notification = notification?.toNotification(),
-                        navController
-                    )
+                    items(notifications) { notification ->
+                        NotificationComposable(
+                            notification = notification?.toNotification(),
+                            navController
+                        )
+                    }
                 }
-            }
 
-            notifications.apply {
-                when {
-                    loadState.refresh is LoadState.Loading -> {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center),
-                            color = DarkPurple
-                        )
-                    }
-                    loadState.append is LoadState.Loading -> {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center),
-                            color = DarkPurple
-                        )
-                    }
-                    loadState.append is LoadState.Error -> {
-                        scope.launch {
-                            scaffoldState.snackbarHostState.showSnackbar(
-                                message = "An error has occured."
+                notifications.apply {
+                    when {
+                        loadState.refresh is LoadState.Loading -> {
+                            CircularProgressIndicator(
+                                modifier = Modifier.align(Alignment.Center),
+                                color = DarkPurple
                             )
+                        }
+                        loadState.append is LoadState.Loading -> {
+                            CircularProgressIndicator(
+                                modifier = Modifier.align(Alignment.Center),
+                                color = DarkPurple
+                            )
+                        }
+                        loadState.append is LoadState.Error -> {
+                            scope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    message = "An error has occured."
+                                )
+                            }
                         }
                     }
                 }

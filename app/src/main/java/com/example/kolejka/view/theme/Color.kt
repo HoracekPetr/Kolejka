@@ -9,8 +9,9 @@ val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)*/
 
 val LightBackgroundWhite = Color(0xA6F1EAEE)
+val PostWhite = Color(0xFFFAF7F9)
 val DarkBackgroundGray = Color(0x73000000)
-val ExtraLightGray = Color(0xBED6D4D4)
+val ExtraLightGray = Color(0xFFD6D4D4)
 val LightGray = Color(0xFFC4C4C4)
 val DarkGray = Color(0xFF747476)
 val BlackAccent = Color(0xFF1D010E)

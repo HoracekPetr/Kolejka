@@ -1,4 +1,4 @@
-package com.example.kolejka.view.ui.screens.main_post_screen.sub_post_screens
+package com.example.kolejka.view.ui.screens.main_post_screen.sub_post_screens.event_screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -6,23 +6,20 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.kolejka.R
-import com.example.kolejka.models.Post
 import com.example.kolejka.view.theme.DarkPurple
 import com.example.kolejka.view.ui.components.posts.PostList
-import com.example.kolejka.view.ui.screens.main_post_screen.sub_post_screens.event_screen.EventScreenViewModel
 import com.example.kolejka.view.util.PostType
-import kotlinx.coroutines.flow.filter
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 
 
@@ -32,33 +29,40 @@ fun EventScreen(navController: NavController, viewModel: EventScreenViewModel = 
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+
     val posts = viewModel.posts.collectAsLazyPagingItems()
 
-    Scaffold(
-        scaffoldState = scaffoldState
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+        onRefresh = { viewModel.refreshScreen(posts) }
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            PostList(posts = posts, navController = navController, screenType = PostType.Event)
+        Scaffold(
+            scaffoldState = scaffoldState
+        ) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                PostList(posts = posts, navController = navController, screenType = PostType.Event)
 
-            posts.apply {
-                when {
-                    loadState.refresh is LoadState.Loading -> {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center),
-                            color = DarkPurple
-                        )
-                    }
-                    loadState.append is LoadState.Loading -> {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center),
-                            color = DarkPurple
-                        )
-                    }
-                    loadState.append is LoadState.Error -> {
-                        scope.launch {
-                            scaffoldState.snackbarHostState.showSnackbar(
-                                message = "An error has occured."
+                posts.apply {
+                    when {
+                        loadState.refresh is LoadState.Loading -> {
+                            CircularProgressIndicator(
+                                modifier = Modifier.align(Alignment.Center),
+                                color = DarkPurple
                             )
+                        }
+                        loadState.append is LoadState.Loading -> {
+                            CircularProgressIndicator(
+                                modifier = Modifier.align(Alignment.Center),
+                                color = DarkPurple
+                            )
+                        }
+                        loadState.append is LoadState.Error -> {
+                            scope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    message = "An error has occured."
+                                )
+                            }
                         }
                     }
                 }
