@@ -1,6 +1,7 @@
 package com.example.kolejka.view.ui.components.comment
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,7 +37,8 @@ fun CommentComposable(
     onDeleteCommentClick: () -> String,
     onConfirmDeleteClick: () -> Unit,
     onDismissDeleteClick: () -> String,
-    deleteComment: Boolean = false
+    deleteComment: Boolean = false,
+    onNavigateProfile: () -> Unit
 ) {
 
     var commentId by remember { mutableStateOf("")}
@@ -64,12 +66,14 @@ fun CommentComposable(
                         modifier = Modifier
                             .size(PostProfileSize)
                             .weight(1f, fill = false)
-                            .clip(CircleShape),
+                            .clip(CircleShape)
+                            .clickable { onNavigateProfile() },
                         painter = rememberImagePainter(data = comment.profilePictureUrl),
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(Space8))
                     Text(
+                        modifier = Modifier.clickable {  onNavigateProfile()  },
                         text = comment.username,
                         style = Typography.subtitle2,
                         color = BlackAccent

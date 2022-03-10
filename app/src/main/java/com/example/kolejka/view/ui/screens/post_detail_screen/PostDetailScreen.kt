@@ -208,11 +208,11 @@ fun PostDetailScreen(
                                     if (requesterId != post?.userId) {
                                         Button(
                                             onClick = {
-                                                if (post?.available ?: 0 > 0) {
+                                                if (post?.available ?: 0 > -1) {
                                                     viewModel.onEvent(PostDetailEvent.AddMember)
                                                 }
                                             },
-                                            enabled = post?.available != 0,
+                                            //enabled = post?.available != 0,
                                             modifier = Modifier.clip(RoundedCornerShape(10.dp)),
                                             contentPadding = PaddingValues(Space4)
                                         )
@@ -279,7 +279,16 @@ fun PostDetailScreen(
                                                 )
                                             )
                                         },
-                                        onDismissDeleteClick = { "" }
+                                        onDismissDeleteClick = { "" },
+                                        onNavigateProfile = {
+                                            if(comment.userId == requesterId)
+                                            {
+                                                navController.navigate(Screen.ProfileScreen.route)
+                                            } else
+                                            {
+                                                navController.navigate(Screen.OtherUserScreen.route + "?userId=${comment.userId}")
+                                            }
+                                        }
                                     )
                                 }
                             }
