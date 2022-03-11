@@ -49,13 +49,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-/*        val config: HashMap<String, String> = HashMap()
-
-        config["cloud_name"] = CloudinaryConsts.cloud
-        config["api_key"] = CloudinaryConsts.api_key
-        config["api_secret"] = CloudinaryConsts.secret
-        MediaManager.init(applicationContext, config)*/
-
         val bottomBarItems = listOf(
             BottomNavItem(
                 name = getString(R.string.posts),
