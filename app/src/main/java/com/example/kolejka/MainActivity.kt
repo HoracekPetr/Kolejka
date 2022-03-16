@@ -49,34 +49,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val bottomBarItems = listOf(
-            BottomNavItem(
-                name = getString(R.string.posts),
-                route = Screen.PostScreen.route,
-                Icons.Outlined.Menu
-            ),
-            BottomNavItem(
-                name = getString(R.string.notifications),
-                route = Screen.NotificationScreen.route,
-                Icons.Outlined.Notifications,
-                notificationCount = 0
-            ),
-            BottomNavItem(
-                name = getString(R.string.profile),
-                route = Screen.ProfileScreen.route,
-                Icons.Outlined.Person
-            )
-        )
-
-        val screensWithBottomBar = listOf(
-            Screen.PostScreen.route,
-            Screen.NotificationScreen.route,
-            Screen.ProfileScreen.route
-        )
-        val screensWithAddPostButton = listOf(
-            Screen.PostScreen.route
-        )
-
         setContent {
 
             KolejkaTheme {
@@ -87,10 +59,13 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
+                    val screensWithAddPostButton = listOf(
+                        Screen.PostScreen.route
+                    )
+
                     Scaffold(
                         bottomBar = {
                             BottomNavigationBar(
-                                items = bottomBarItems,
                                 navController = navController,
                                 onItemClick = {
                                     if (navBackStackEntry?.destination?.route != it.route) navController.navigate(
@@ -101,8 +76,7 @@ class MainActivity : ComponentActivity() {
                                             saveState = true
                                         }
                                     }
-                                },
-                                showBottomBar = navBackStackEntry?.destination?.route in screensWithBottomBar
+                                }
                             )
                         },
                         floatingActionButton = {
@@ -119,7 +93,6 @@ class MainActivity : ComponentActivity() {
                             Navigation(navController)
                         }
                     }
-
                 }
             }
         }

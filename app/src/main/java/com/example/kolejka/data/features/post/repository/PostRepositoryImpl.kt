@@ -57,7 +57,6 @@ class PostRepositoryImpl(
         return try {
 
             val response = postApi.getPostById(postId)
-            println(response)
 
             if (response.successful) {
                 Resource.Success(response.data)

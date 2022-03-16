@@ -26,14 +26,39 @@ import com.example.kolejka.view.util.Screen
 
 @Composable
 fun BottomNavigationBar(
-    items: List<BottomNavItem>,
     navController: NavController,
-    showBottomBar: Boolean,
     modifier: Modifier = Modifier,
     onItemClick: (BottomNavItem) -> Unit,
-    viewModel: BottomNavBarViewModel = hiltViewModel()
 ) {
-    val backStackEntry = navController.currentBackStackEntryAsState()
+    val backStackEntry by navController.currentBackStackEntryAsState()
+
+    val bottomBarItems = listOf(
+        BottomNavItem(
+            name = stringResource(id = R.string.posts),
+            route = Screen.PostScreen.route,
+            Icons.Outlined.Menu
+        ),
+        BottomNavItem(
+            name = stringResource(id = R.string.notifications),
+            route = Screen.NotificationScreen.route,
+            Icons.Outlined.Notifications,
+            notificationCount = 0
+        ),
+        BottomNavItem(
+            name = stringResource(id = R.string.profile),
+            route = Screen.ProfileScreen.route,
+            Icons.Outlined.Person
+        )
+    )
+
+    val screensWithBottomBar = listOf(
+        Screen.PostScreen.route,
+        Screen.NotificationScreen.route,
+        Screen.ProfileScreen.route
+    )
+
+    val showBottomBar = backStackEntry?.destination?.route in screensWithBottomBar
+
 
 
     if (showBottomBar) {
@@ -42,8 +67,8 @@ fun BottomNavigationBar(
             backgroundColor = LightGray,
             elevation = Space8
         ) {
-            items.forEach { item ->
-                val selected = item.route == backStackEntry.value?.destination?.route
+            bottomBarItems.forEach { item ->
+                val selected = item.route == backStackEntry?.destination?.route
                 BottomNavigationItem(
                     selected = selected,
                     selectedContentColor = DarkPurple,
