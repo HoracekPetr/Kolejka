@@ -22,4 +22,8 @@ class NotificationRepositoryImpl(
     override suspend fun getNotificationsCount(): Int {
         return api.getNotificationsCount()
     }
+
+    override suspend fun setNotificationsToZero() {
+        return api.setNotificationsToZero()
+    }
 }

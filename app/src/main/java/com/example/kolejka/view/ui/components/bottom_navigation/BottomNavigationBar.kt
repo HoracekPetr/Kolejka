@@ -28,7 +28,9 @@ import com.example.kolejka.view.util.Screen
 fun BottomNavigationBar(
     navController: NavController,
     modifier: Modifier = Modifier,
+    notificationsCount: Int,
     onItemClick: (BottomNavItem) -> Unit,
+
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
 
@@ -42,7 +44,6 @@ fun BottomNavigationBar(
             name = stringResource(id = R.string.notifications),
             route = Screen.NotificationScreen.route,
             Icons.Outlined.Notifications,
-            notificationCount = 0
         ),
         BottomNavItem(
             name = stringResource(id = R.string.profile),
@@ -71,6 +72,13 @@ fun BottomNavigationBar(
                 val selected = item.route == backStackEntry?.destination?.route
                 BottomNavigationItem(
                     selected = selected,
+                    label = {
+                        Text(
+                            text = item.name,
+                            style = Typography.caption,
+                            color = DarkPurple
+                        )
+                    },
                     selectedContentColor = DarkPurple,
                     unselectedContentColor = DarkGray,
                     onClick = {
@@ -78,38 +86,27 @@ fun BottomNavigationBar(
                         KolejkaApp.notificationsCount = 0
                     },
                     icon = {
-                        if (item.notificationCount != 0) {
+                        if (item.name == stringResource(id = R.string.notifications)) {
                             BadgedBox(badge = {
-                                Text(
-                                    text = item.notificationCount.toString(),
-                                    style = MaterialTheme.typography.caption,
-                                    color = DarkPurple,
-                                )
+                                if (notificationsCount > 0) {
+                                    Badge {
+                                        Text(
+                                            text = notificationsCount.toString(),
+                                        )
+                                    }
+                                }
                             }) {
                                 Column(horizontalAlignment = CenterHorizontally) {
                                     Icon(imageVector = item.icon, contentDescription = item.name)
-                                    if (selected) {
-                                        Text(
-                                            text = item.name,
-                                            style = Typography.caption,
-                                            color = DarkPurple
-                                        )
-                                    }
                                 }
                             }
                         } else {
                             Column(horizontalAlignment = CenterHorizontally) {
                                 Icon(imageVector = item.icon, contentDescription = item.name)
-                                if (selected) {
-                                    Text(
-                                        text = item.name,
-                                        style = Typography.caption,
-                                        color = DarkPurple
-                                    )
-                                }
                             }
                         }
-                    }
+                    },
+                    alwaysShowLabel = false
                 )
             }
         }

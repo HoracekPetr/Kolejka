@@ -1,5 +1,6 @@
 package com.example.kolejka.view.ui.screens.profile_screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,6 +12,7 @@ import androidx.compose.ui.graphics.ExperimentalGraphicsApi
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -28,6 +30,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 @Composable
 fun ProfileScreen(
     navController: NavController,
+    secondaryNavController: NavController,
     viewModel: ProfileScreenViewModel = hiltViewModel(),
 ) {
 
@@ -37,6 +40,7 @@ fun ProfileScreen(
 
     val postsByCreator = viewModel.postsByCreator.collectAsLazyPagingItems()
     val postsWhereMember = viewModel.postsWhereMember.collectAsLazyPagingItems()
+
 
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
@@ -71,13 +75,17 @@ fun ProfileScreen(
                                 viewModel.setLogoutDialogEnabled(false)
                                 viewModel.logout()
 
-                                navController.navigate(Screen.LoginScreen.route){
+                                secondaryNavController.popBackStack()
+                                secondaryNavController.navigate(Screen.LoginScreen.route){
+                                    println("GRAPH: ${navController.backQueue}")
+                                    //navController.backQueue.removeAll(navController.backQueue)
+                                    navController.popBackStack(Screen.PostScreen.route, inclusive = true)
                                     launchSingleTop = true
-                                    popUpTo(Screen.PostScreen.route){
+                                    popUpTo(Screen.SplashScreen.route){
                                         inclusive = true
                                     }
+                                    println("GRAPH: ${navController.backQueue}")
                                 }
-
                             }
                         )
                     }

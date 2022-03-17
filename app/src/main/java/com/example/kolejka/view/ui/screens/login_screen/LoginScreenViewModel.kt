@@ -93,7 +93,7 @@ class LoginScreenViewModel @Inject constructor(
             when (loginResult.result) {
                 is Resource.Success -> {
                     _eventFlow.emit(
-                        UiEvent.Navigate(Screen.PostScreen.route)
+                        UiEvent.Navigate(Screen.AppHolderScreen.route)
                     )
 
                     _emailState.value = StandardTextfieldState()

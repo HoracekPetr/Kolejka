@@ -26,23 +26,15 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
-fun Navigation(navController: NavHostController) {
+fun AppNavigationHost(navController: NavHostController, secondaryNavController: NavHostController) {
 
-    NavHost(navController = navController, startDestination = Screen.SplashScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.PostScreen.route, route = "APP_ROOT") {
 
-        composable(route = Screen.SplashScreen.route){
-            SplashScreen(navController = navController)
-        }
-
+/*
         composable(route = Screen.LoginScreen.route) {
             LoginScreen(navController = navController)
         }
-
-        composable(
-            route = Screen.RegisterScreen.route
-        ) {
-            RegisterScreen(navController = navController)
-        }
+*/
 
         composable(
             route = Screen.PostScreen.route
@@ -59,7 +51,7 @@ fun Navigation(navController: NavHostController) {
         composable(
             route = Screen.ProfileScreen.route,
         ) {
-            ProfileScreen(navController = navController)
+            ProfileScreen(navController = navController, secondaryNavController = secondaryNavController)
         }
 
         composable(

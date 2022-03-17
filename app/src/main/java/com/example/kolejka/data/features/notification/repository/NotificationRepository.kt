@@ -8,4 +8,6 @@ interface NotificationRepository {
     val notifications: Flow<PagingData<NotificationDto>>
 
     suspend fun getNotificationsCount(): Int
+
+    suspend fun setNotificationsToZero(): Unit
 }
