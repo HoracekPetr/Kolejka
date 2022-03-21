@@ -37,7 +37,6 @@ fun AppHolder(
 ) {
     
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val notCount = viewModel.notCount
 
     val screensWithAddPostButton = listOf(
         Screen.PostScreen.route
@@ -57,7 +56,9 @@ fun AppHolder(
                         }
                     }
 
-                    viewModel.setNotificationsToZero()
+                    if(navBackStackEntry?.destination?.route == Screen.NotificationScreen.route){
+                        viewModel.setNotificationsToZero()
+                    }
                 },
                 notificationsCount = viewModel.notificationsCount.value
             )

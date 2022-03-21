@@ -1,12 +1,11 @@
 package com.example.kolejka.use_cases.notifications
 
 import com.example.kolejka.data.features.notification.repository.NotificationRepository
+import kotlinx.coroutines.flow.Flow
 
 class GetNotificationsCountUseCase(
     private val notificationRepository: NotificationRepository
 ) {
 
-    suspend operator fun invoke(): Int{
-        return notificationRepository.getNotificationsCount()
-    }
+    operator fun invoke(): Flow<Int> = notificationRepository.getNotificationsCount()
 }

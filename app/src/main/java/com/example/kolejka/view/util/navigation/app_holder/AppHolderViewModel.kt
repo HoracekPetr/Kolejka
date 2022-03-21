@@ -2,13 +2,17 @@ package com.example.kolejka.view.util.navigation.app_holder
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kolejka.use_cases.notifications.GetNotificationsCountUseCase
 import com.example.kolejka.use_cases.notifications.SetNotificationsToZeroUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,9 +24,6 @@ class AppHolderViewModel @Inject constructor(
     private val _notificationsCount = mutableStateOf(0)
     val notificationsCount: State<Int> = _notificationsCount
 
-    private val _notCount = MutableSharedFlow<Int>()
-    val notCount = _notCount.asSharedFlow()
-
     private fun setNotificationsCount(count: Int){
         _notificationsCount.value = count
     }
@@ -30,7 +31,9 @@ class AppHolderViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             //setNotificationsCount(getNotificationsUseCase())
-            _notCount.emit(getNotificationsUseCase())
+            getNotificationsUseCase().collectLatest { notCount ->
+                setNotificationsCount(notCount)
+            }
         }
     }
 

@@ -22,6 +22,7 @@ import com.example.kolejka.models.notification.Notification
 import com.example.kolejka.models.notification.NotificationAction
 import com.example.kolejka.view.theme.DarkPurple
 import com.example.kolejka.view.theme.PaddingMedium
+import com.example.kolejka.view.theme.PaddingSmall
 import com.example.kolejka.view.ui.components.notification.NotificationComposable
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -50,7 +51,7 @@ fun NotificationScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(PaddingMedium)
+                        .padding(start = PaddingMedium, top = PaddingMedium, end = PaddingMedium)
                 ) {
 
                     items(notifications) { notification ->

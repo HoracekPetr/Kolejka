@@ -32,7 +32,7 @@ fun NotificationComposable(
 ) {
     Card(
         shape = RoundedCornerShape(Space8),
-        backgroundColor = LightGray,
+        backgroundColor = PostWhite,
         elevation = Space4
     ) {
         Row(

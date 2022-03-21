@@ -9,6 +9,7 @@ import com.example.kolejka.data.features.notification.paging.NotificationsSource
 import com.example.kolejka.data.features.post.paging.AllPostsSource
 import com.example.kolejka.data.util.Constants
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class NotificationRepositoryImpl(
     private val api: NotificationApi
@@ -19,8 +20,12 @@ class NotificationRepositoryImpl(
             NotificationsSource(api)
         }.flow
 
-    override suspend fun getNotificationsCount(): Int {
-        return api.getNotificationsCount()
+    override fun getNotificationsCount(): Flow<Int> {
+        return flow {
+            while (true){
+                emit(api.getNotificationsCount())
+            }
+        }
     }
 
     override suspend fun setNotificationsToZero() {
