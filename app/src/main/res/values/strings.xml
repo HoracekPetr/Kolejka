@@ -77,4 +77,17 @@
     <string name="wrong_code">Verification code is incorrect!</string>
     <string name="cant_send_email">Cannot send the verification email.</string>
     <string name="email_sent">Email sent successfully!</string>
+    <string name="forgotten_password">Forgotten password?</string>
+    <string name="email_doesnt_exist">Email doesn\'t exist.</string>
+    <string name="verification_code_sent">Verification code sent to your email!</string>
+    <string name="check_email">Check email</string>
+    <string name="check_email_icon">Check email icon</string>
+    <string name="correct_code">The code is correct!</string>
+    <string name="new_password">New password</string>
+    <string name="new_password_again">New password again</string>
+    <string name="send_verification_code">Send verification code</string>
+    <string name="code">Code</string>
+    <string name="password_dont_match">Passwords don\'t match!</string>
+    <string name="password_changed">Password was changed!</string>
+    <string name="set_new_password">Set a new password</string>
 </resources>

@@ -9,10 +9,8 @@ import com.example.kolejka.use_cases.notifications.GetNotificationsCountUseCase
 import com.example.kolejka.use_cases.notifications.SetNotificationsToZeroUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,8 +28,7 @@ class AppHolderViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            //setNotificationsCount(getNotificationsUseCase())
-            getNotificationsUseCase().collectLatest { notCount ->
+            getNotificationsUseCase().cancellable().collectLatest { notCount ->
                 setNotificationsCount(notCount)
             }
         }

@@ -27,11 +27,6 @@ class NotificationScreenViewModel @Inject constructor(
     val isRefreshing: StateFlow<Boolean>
         get() = _isRefreshing.asStateFlow()
 
-    fun timestampToFormattedString(timestamp: Long, pattern: String): String {
-        return SimpleDateFormat(pattern, Locale.getDefault()).run {
-            format(timestamp)
-        }
-    }
 
     fun refreshScreen(notifications: LazyPagingItems<NotificationDto>){
         viewModelScope.launch{

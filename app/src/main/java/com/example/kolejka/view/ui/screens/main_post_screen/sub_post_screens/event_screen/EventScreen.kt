@@ -2,6 +2,8 @@ package com.example.kolejka.view.ui.screens.main_post_screen.sub_post_screens.ev
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
@@ -15,7 +17,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.kolejka.models.Post
 import com.example.kolejka.view.theme.DarkPurple
+import com.example.kolejka.view.ui.components.posts.PostComposable
 import com.example.kolejka.view.ui.components.posts.PostList
 import com.example.kolejka.view.util.PostType
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -70,3 +74,5 @@ fun EventScreen(navController: NavController, viewModel: EventScreenViewModel = 
         }
     }
 }
+
+

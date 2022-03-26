@@ -8,4 +8,5 @@ sealed class Errors{
     object InvalidEmail: Errors()
     object InvalidPassword: Errors()
     object IncorrectCode: Errors()
+    object PasswordsDoNotMatch: Errors()
 }

@@ -32,7 +32,6 @@ fun PostComposable(
         modifier = Modifier
             .fillMaxWidth()
             .padding(PaddingMedium)
-            //.clip(RoundedCornerShape(Space12))
             .clickable { onPostClick() },
 
         elevation = Space12,

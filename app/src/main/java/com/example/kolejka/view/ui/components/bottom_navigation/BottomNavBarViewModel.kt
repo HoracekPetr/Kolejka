@@ -13,6 +13,4 @@ import javax.inject.Inject
 @HiltViewModel
 class BottomNavBarViewModel @Inject constructor(
 
-): ViewModel() {
-
-}
+): ViewModel()

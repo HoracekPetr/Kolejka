@@ -32,6 +32,7 @@ fun PostList(posts: LazyPagingItems<Post>, navController: NavController, screenT
                     }
                 }
             }
+            else -> {}
         }
     }
 }

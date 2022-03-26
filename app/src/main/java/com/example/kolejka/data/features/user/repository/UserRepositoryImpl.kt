@@ -3,7 +3,9 @@ package com.example.kolejka.data.features.user.repository
 import android.content.Context
 import com.example.kolejka.R
 import com.example.kolejka.data.features.user.UserApi
+import com.example.kolejka.data.features.user.dto.request.ChangePasswordRequest
 import com.example.kolejka.data.features.user.dto.request.UpdateUserRequest
+import com.example.kolejka.data.response.BasicApiResponse
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.data.util.SimpleResource
 import com.example.kolejka.models.User
@@ -90,6 +92,46 @@ class UserRepositoryImpl(
         } catch (e: IOException) {
             Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
         } catch (e: HttpException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
+        }
+    }
+
+    override suspend fun getUserId(userEmail: String): Resource<String> {
+        return try{
+
+            val response = userApi.getUserId(userEmail)
+
+            if(response.successful){
+                Resource.Success(data = response.data)
+            } else {
+                response.message?.let{ msg ->
+                    Resource.Error(uiText = UiText.StringDynamic(msg))
+                } ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
+            }
+        } catch (e: IOException){
+            Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
+        } catch (e: HttpException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
+        }
+    }
+
+    override suspend fun changeUserPassword(userId: String?, newPassword: String): SimpleResource {
+        val changePasswordRequest = ChangePasswordRequest(userId = userId, newPassword = newPassword)
+        println("UserId: ${changePasswordRequest.userId}")
+        println("New password: ${changePasswordRequest.newPassword}")
+        return try{
+            val response = userApi.changeUserPassword(changePasswordRequest)
+
+            if(response.successful){
+                Resource.Success(Unit)
+            } else {
+                response.message?.let{ msg ->
+                    Resource.Error(uiText = UiText.StringDynamic(msg))
+                } ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
+            }
+        } catch(e: IOException){
+            Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
+        } catch (e: HttpException){
             Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
         }
     }

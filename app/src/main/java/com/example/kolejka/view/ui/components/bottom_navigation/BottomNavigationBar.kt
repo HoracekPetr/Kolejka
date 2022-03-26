@@ -30,9 +30,8 @@ fun BottomNavigationBar(
     modifier: Modifier = Modifier,
     notificationsCount: Int,
     onItemClick: (BottomNavItem) -> Unit,
-
 ) {
-    val backStackEntry by navController.currentBackStackEntryAsState()
+
 
     val bottomBarItems = listOf(
         BottomNavItem(
@@ -58,6 +57,7 @@ fun BottomNavigationBar(
         Screen.ProfileScreen.route
     )
 
+    val backStackEntry by navController.currentBackStackEntryAsState()
     val showBottomBar = backStackEntry?.destination?.route in screensWithBottomBar
 
 

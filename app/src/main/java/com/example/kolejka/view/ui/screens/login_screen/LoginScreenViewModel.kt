@@ -28,7 +28,6 @@ class LoginScreenViewModel @Inject constructor(
 
     private val _passwordState = mutableStateOf(PasswordTextfieldState())
     val passwordState: State<PasswordTextfieldState> = _passwordState
-
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
@@ -47,6 +46,7 @@ class LoginScreenViewModel @Inject constructor(
                     text = event.email
                 )
             }
+
             is LoginEvent.EnteredPassword -> {
                 _passwordState.value = _passwordState.value.copy(
                     text = event.password
@@ -111,4 +111,5 @@ class LoginScreenViewModel @Inject constructor(
         }
     }
 }
+
 

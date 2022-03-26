@@ -60,6 +60,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = hiltViewModel(), navController
                     navController.popBackStack()
                     navController.navigate(event.route)
                 }
+                else -> {}
             }
         }
     }
@@ -130,7 +131,13 @@ fun LoginScreen(viewModel: LoginScreenViewModel = hiltViewModel(), navController
                     textStyle = MaterialTheme.typography.h2,
                     placeholderTextStyle = MaterialTheme.typography.h2,
                     trailingIcon = {
-                        IconButton(onClick = { viewModel.onEvent(LoginEvent.ChangePasswordVisibility(!passwordState.visible)) }) {
+                        IconButton(onClick = {
+                            viewModel.onEvent(
+                                LoginEvent.ChangePasswordVisibility(
+                                    !passwordState.visible
+                                )
+                            )
+                        }) {
                             Icon(
                                 imageVector = if (passwordState.visible)
                                     Icons.Filled.Visibility
@@ -142,7 +149,21 @@ fun LoginScreen(viewModel: LoginScreenViewModel = hiltViewModel(), navController
                     visualTransformation = if (passwordState.visible) VisualTransformation.None else PasswordVisualTransformation()
                 )
 
-                Spacer(modifier = Modifier.size(Space16))
+                Spacer(modifier = Modifier.size(Space12))
+
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .offset(x = 5.dp)
+                        .clickable {
+                            navController.navigate(Screen.EnterEmailScreen.route)
+                        },
+                    style = Typography.subtitle2,
+                    color = DarkPurple,
+                    text = stringResource(R.string.forgotten_password)
+                )
+
+                Spacer(modifier = Modifier.size(Space8))
 
                 Button(
                     onClick = {

@@ -1,9 +1,7 @@
 package com.example.kolejka.data.features.notification.dto
 
 import com.example.kolejka.models.notification.Notification
-import com.example.kolejka.models.notification.NotificationAction
 import com.example.kolejka.models.notification.NotificationType
-import okhttp3.internal.format
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,7 +18,7 @@ data class NotificationDto(
             username = username,
             notificationType = when(type){
                 NotificationType.JoinedEvent.type -> NotificationType.JoinedEvent
-                NotificationType.CalledDibs.type -> NotificationType.CalledDibs
+                NotificationType.WantsOffer.type -> NotificationType.WantsOffer
                 NotificationType.CommentedOn.type -> NotificationType.CommentedOn
                 else -> NotificationType.JoinedEvent
             },

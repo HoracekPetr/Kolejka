@@ -23,6 +23,7 @@ class NotificationRepositoryImpl(
     override fun getNotificationsCount(): Flow<Int> {
         return flow {
             while (true){
+
                 emit(api.getNotificationsCount())
             }
         }

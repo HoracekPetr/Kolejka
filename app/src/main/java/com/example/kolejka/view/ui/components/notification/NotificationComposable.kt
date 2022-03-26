@@ -9,17 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.kolejka.R
 import com.example.kolejka.models.notification.Notification
-import com.example.kolejka.models.notification.NotificationAction
 import com.example.kolejka.models.notification.NotificationType
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.util.Screen
@@ -44,14 +40,14 @@ fun NotificationComposable(
         ) {
             val fillerText = when (notification?.notificationType) {
                 is NotificationType.JoinedEvent -> stringResource(id = R.string.joined)
-                is NotificationType.CalledDibs -> stringResource(id = R.string.wants)
+                is NotificationType.WantsOffer -> stringResource(id = R.string.wants)
                 is NotificationType.CommentedOn -> stringResource(id = R.string.commented_on)
                 else -> ""
             }
 
             val notificationText = when (notification?.notificationType) {
                 is NotificationType.JoinedEvent -> stringResource(id = R.string.your_event)
-                is NotificationType.CalledDibs -> stringResource(id = R.string.your_offer)
+                is NotificationType.WantsOffer -> stringResource(id = R.string.your_offer)
                 is NotificationType.CommentedOn -> stringResource(id = R.string.your_post)
                 else -> ""
             }
@@ -91,5 +87,4 @@ fun NotificationComposable(
 
     }
     Spacer(modifier = Modifier.height(Space8))
-
 }

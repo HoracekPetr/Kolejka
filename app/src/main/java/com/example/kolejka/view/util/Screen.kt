@@ -1,10 +1,15 @@
 package com.example.kolejka.view.util
 
 sealed class Screen(val route: String) {
-    object SplashScreen: Screen("splash_screen")
-    object LoginScreen: Screen("login_screen")
-    object RegisterScreen: Screen("register_screen")
+    //AUTH
+    object SplashScreen : Screen("splash_screen")
+    object LoginScreen : Screen("login_screen")
+    object RegisterScreen : Screen("register_screen")
+    object EnterEmailScreen: Screen("enter_email_screen")
+    object EnterVerificationScreen: Screen("enter_verification_screen")
+    object ChangePasswordScreen: Screen("change_password_screen")
 
+    //APP
     object AppHolderScreen: Screen("app_holder_screen")
 
     object PostScreen: Screen("post_screen")
