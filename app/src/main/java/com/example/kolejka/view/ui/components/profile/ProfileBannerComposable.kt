@@ -31,6 +31,7 @@ import coil.compose.rememberImagePainter
 import com.example.kolejka.R
 import com.example.kolejka.models.User
 import com.example.kolejka.view.theme.*
+import com.example.kolejka.view.util.Constants.SUM_THRESHOLD
 
 
 @Composable
@@ -45,7 +46,7 @@ fun ProfileBannerComposable(
         modifier = Modifier.padding(PaddingMedium),
         shape = RoundedCornerShape(Space12),
         border = BorderStroke(2.dp, BlackAccent),
-        backgroundColor = Color(user.bannerR/255, user.bannerG/255, user.bannerB/255)
+        backgroundColor = Color(user.bannerR / 255, user.bannerG / 255, user.bannerB / 255)
     ) {
         Column(
             modifier = Modifier
@@ -68,20 +69,26 @@ fun ProfileBannerComposable(
                 contentDescription = null
             )
             Spacer(modifier = Modifier.size(Space4))
-            Text(text = user.username, style = Typography.body1)
+            Text(
+                text = user.username,
+                style = Typography.body1,
+                color = if ((user.bannerR + user.bannerB + user.bannerG) < SUM_THRESHOLD) Color.White else Color.Black
+            )
             Spacer(modifier = Modifier.size(Space8))
-            if(isLoggedUser){
+            if (isLoggedUser) {
                 Row {
                     Icon(
                         modifier = Modifier.clickable { onEditIconClick() },
                         imageVector = Icons.Default.Edit,
-                        contentDescription = "Edit"
+                        contentDescription = "Edit",
+                        tint = if ((user.bannerR + user.bannerB + user.bannerG) < SUM_THRESHOLD) Color.White else Color.Black
                     )
                     Spacer(modifier = Modifier.size(Space36))
                     Icon(
                         modifier = Modifier.clickable { onLogoutIconClick() },
                         imageVector = Icons.Default.Logout,
-                        contentDescription = "Logout"
+                        contentDescription = "Logout",
+                        tint = if ((user.bannerR + user.bannerB + user.bannerG) < SUM_THRESHOLD) Color.White else Color.Black
                     )
                 }
             }

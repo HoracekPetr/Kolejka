@@ -111,6 +111,7 @@ fun NewPostScreen(
 
                         )
                 }
+                else -> {}
             }
         }
     }
@@ -542,7 +543,6 @@ fun NewPostScreen(
                     }
                 }
             }
-
         }
     }
 }

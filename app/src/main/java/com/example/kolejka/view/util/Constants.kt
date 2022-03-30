@@ -6,6 +6,7 @@ object Constants {
     const val SPLASH_DURATION = 2000L
     const val DESC_MAX_CHARS = 200
     const val NO_DATE_SELECTED = "No date selected"
+    const val SUM_THRESHOLD = 220
 }
 
 object CloudinaryConsts {

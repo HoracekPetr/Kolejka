@@ -59,7 +59,7 @@ fun EditProfileDialog(
 
     val getImageFromGallery =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
-            if(it != null){
+            if (it != null) {
                 cropActivityLauncher.launch(it)
             }
         }
@@ -96,15 +96,14 @@ fun EditProfileDialog(
                 Image(
                     modifier = Modifier
                         .size(ProfilePicSize)
-
-                        .clickable {
-                            getImageFromGallery.launch("image/*")
-                        }
                         .shadow(
                             elevation = Space8,
                             shape = CircleShape,
                             clip = true
-                        ),
+                        )
+                        .clickable {
+                            getImageFromGallery.launch("image/*")
+                        },
                     painter = rememberImagePainter(
                         request = ImageRequest.Builder(LocalContext.current)
                             .data(editProfileState.profileImageUrl)
@@ -183,10 +182,10 @@ fun EditProfileDialog(
                             onConfirmRequestClick()
                         }
                     }) {
-                        if(viewModel.isLoading.value){
+                        if (viewModel.isLoading.value) {
                             CircularProgressIndicator()
                         } else
-                        Icon(imageVector = Icons.Default.Check, contentDescription = null)
+                            Icon(imageVector = Icons.Default.Check, contentDescription = null)
                     }
 
                     Button(onClick = {
