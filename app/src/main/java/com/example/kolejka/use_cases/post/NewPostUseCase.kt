@@ -30,6 +30,10 @@ class NewPostUseCase(
             return Resource.Error(uiText = UiText.StringResource(R.string.fields_blank))
         }
 
+        if(limit > 1000){
+            return Resource.Error(uiText = UiText.StringResource(R.string.max_limit))
+        }
+
         if(description.length > 200){
             return Resource.Error(uiText = UiText.StringResource(R.string.description_too_long))
         }
