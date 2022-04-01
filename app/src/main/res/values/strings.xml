@@ -90,4 +90,5 @@
     <string name="password_dont_match">Passwords don\'t match!</string>
     <string name="password_changed">Password was changed!</string>
     <string name="set_new_password">Set a new password</string>
+    <string name="enter_verification_code">Enter the verification code</string>
 </resources>

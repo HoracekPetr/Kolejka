@@ -78,8 +78,8 @@ fun EnterVerificationScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Enter the verification code",
-                    style = MaterialTheme.typography.body1,
+                    text = stringResource(R.string.enter_verification_code),
+                    style = MaterialTheme.typography.h6,
                     color = DarkPurple
                 )
 

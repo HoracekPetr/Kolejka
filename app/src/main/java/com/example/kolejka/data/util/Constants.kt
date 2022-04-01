@@ -8,5 +8,6 @@ object Constants {
     const val JWT_TOKEN = "jwt_token"
     const val USER_ID = "userId"
     const val SHARED_PREFERENCES_NAME = "shared_pref"
-    const val DEFAULT_PAGE_SIZE = 15
+    const val DEFAULT_PAGE_SIZE = 5
+    const val DEFAULT_NOTIFICATIONS_PAGE_SIZE = 10
 }

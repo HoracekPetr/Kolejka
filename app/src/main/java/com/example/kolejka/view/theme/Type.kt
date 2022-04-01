@@ -58,6 +58,11 @@ val Typography = Typography(
                 fontWeight = FontWeight.Normal,
                 fontSize = 18.sp
         ),
+        h6 = TextStyle(
+                fontFamily = roboto_mono,
+                fontWeight = FontWeight.Medium,
+                fontSize = 18.sp
+        ),
         //Dodatky
         subtitle1 = TextStyle(
                 fontFamily = roboto_mono,
