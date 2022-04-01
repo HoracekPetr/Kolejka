@@ -8,6 +8,7 @@ import com.example.kolejka.data.features.post.PostApi
 import com.example.kolejka.data.features.post.repository.PostRepository
 import com.example.kolejka.data.features.post.repository.PostRepositoryImpl
 import com.example.kolejka.data.util.Constants
+import com.example.kolejka.use_cases.notifications.DeleteNotificationsForUserUseCase
 import com.example.kolejka.use_cases.notifications.GetNotificationsCountUseCase
 import com.example.kolejka.use_cases.notifications.GetNotificationsUseCase
 import com.example.kolejka.use_cases.notifications.SetNotificationsToZeroUseCase
@@ -59,5 +60,11 @@ object NotificationModule {
     @Singleton
     fun setNotificationToZeroUseCase(repository: NotificationRepository): SetNotificationsToZeroUseCase {
         return SetNotificationsToZeroUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun deleteNotificationsForUserUseCase(repository: NotificationRepository): DeleteNotificationsForUserUseCase {
+        return DeleteNotificationsForUserUseCase(repository)
     }
 }

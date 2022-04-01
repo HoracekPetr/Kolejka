@@ -76,7 +76,7 @@ fun BottomNavigationBar(
                     label = {
                         Text(
                             text = item.name,
-                            style = Typography.caption,
+                            style = Typography.h5,
                             color = DarkPurple,
                             overflow = TextOverflow.Ellipsis
                         )

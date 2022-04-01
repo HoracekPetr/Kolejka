@@ -92,4 +92,6 @@
     <string name="set_new_password">Set a new password</string>
     <string name="enter_verification_code">Enter the verification code</string>
     <string name="max_limit">Maximum limit is 1000.</string>
+    <string name="close">Close</string>
+    <string name="delete">Delete</string>
 </resources>
