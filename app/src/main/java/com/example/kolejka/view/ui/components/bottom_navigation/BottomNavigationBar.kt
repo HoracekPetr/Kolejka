@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -76,7 +77,8 @@ fun BottomNavigationBar(
                         Text(
                             text = item.name,
                             style = Typography.caption,
-                            color = DarkPurple
+                            color = DarkPurple,
+                            overflow = TextOverflow.Ellipsis
                         )
                     },
                     selectedContentColor = DarkPurple,
