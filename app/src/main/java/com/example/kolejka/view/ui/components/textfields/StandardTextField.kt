@@ -30,7 +30,10 @@ fun StandardTextField(
     singleLine: Boolean = true,
     placeholderTextStyle: TextStyle,
     placeholderTextAlignment: TextAlign = TextAlign.Start,
-    textfieldColors: TextFieldColors = TextFieldDefaults.textFieldColors(backgroundColor = ExtraLightGray),
+    textfieldColors: TextFieldColors = TextFieldDefaults.textFieldColors(
+        backgroundColor = ExtraLightGray,
+        textColor = MaterialTheme.colors.secondaryVariant
+    ),
     maxLines: Int = 1,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
     error: String = "",
@@ -39,7 +42,7 @@ fun StandardTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     errorBelow: Boolean = false
 ) {
-    if(errorBelow){
+    if (errorBelow) {
         Column {
             TextField(
                 modifier = modifier
@@ -65,7 +68,7 @@ fun StandardTextField(
                 visualTransformation = visualTransformation
             )
 
-            if(error != ""){
+            if (error != "") {
                 Text(
                     text = error,
                     color = MaterialTheme.colors.error,
@@ -99,7 +102,7 @@ fun StandardTextField(
             visualTransformation = visualTransformation
         )
 
-        if(error != ""){
+        if (error != "") {
             Text(
                 text = error,
                 color = MaterialTheme.colors.error,

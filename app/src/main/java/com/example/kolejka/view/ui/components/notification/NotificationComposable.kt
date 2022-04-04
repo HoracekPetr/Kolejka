@@ -80,6 +80,7 @@ fun NotificationComposable(
 
             Text(
                 text = notification?.formattedTime ?: "",
+                color = MaterialTheme.colors.secondary,
                 textAlign = TextAlign.Right,
                 fontSize = 10.sp
             )

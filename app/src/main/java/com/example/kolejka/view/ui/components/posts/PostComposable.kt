@@ -67,7 +67,7 @@ fun PostComposable(
                     text = post.title,
                     style = MaterialTheme.typography.body1,
                     overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colors.secondaryVariant,
+                    color = MaterialTheme.colors.onSurface,
                     maxLines = 1
                 )
                 Image(
@@ -85,7 +85,7 @@ fun PostComposable(
             Text(
                 text = post.description,
                 style = MaterialTheme.typography.caption,
-                color = MaterialTheme.colors.onSurface,
+                color = MaterialTheme.colors.secondaryVariant,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

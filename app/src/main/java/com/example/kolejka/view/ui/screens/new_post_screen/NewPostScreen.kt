@@ -92,7 +92,7 @@ fun NewPostScreen(
 
     val getImageFromGallery =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
-            if(it != null){
+            if (it != null) {
                 cropActivityLauncher.launch(it)
             }
         }
@@ -148,7 +148,8 @@ fun NewPostScreen(
                     }
             ) {
                 Icon(
-                    modifier = Modifier.align(Alignment.Center),
+                    modifier = Modifier.align(Alignment.Center).size(75.dp),
+                    tint = MaterialTheme.colors.onSurface,
                     imageVector = Icons.Default.AddAPhoto,
                     contentDescription = stringResource(R.string.add_a_new_photo)
                 )
@@ -178,12 +179,13 @@ fun NewPostScreen(
                         selected = optionsRadio.value.eventEnabled,
                         colors = RadioButtonDefaults.colors(
                             selectedColor = DarkPurple,
-                            unselectedColor = DarkGray
+                            unselectedColor = MaterialTheme.colors.secondaryVariant
                         ),
                         onClick = { viewModel.onEvent(NewPostEvent.EventPicked) })
                     Text(
                         text = stringResource(R.string.event),
-                        style = MaterialTheme.typography.subtitle2
+                        style = MaterialTheme.typography.subtitle2,
+                        color = if (optionsRadio.value.eventEnabled) DarkPurple else MaterialTheme.colors.secondaryVariant
                     )
                 }
                 Column(
@@ -194,10 +196,15 @@ fun NewPostScreen(
                         selected = optionsRadio.value.offerEnabled,
                         colors = RadioButtonDefaults.colors(
                             selectedColor = DarkPurple,
-                            unselectedColor = DarkGray
+                            unselectedColor = MaterialTheme.colors.secondaryVariant
                         ),
                         onClick = { viewModel.onEvent(NewPostEvent.OfferPicked) })
-                    Text(stringResource(R.string.offer), style = MaterialTheme.typography.subtitle2)
+
+                    Text(
+                        stringResource(R.string.offer),
+                        style = MaterialTheme.typography.subtitle2,
+                        color = if (optionsRadio.value.offerEnabled) DarkPurple else MaterialTheme.colors.secondaryVariant
+                    )
                 }
             }
             Spacer(modifier = Modifier.size(Space12))
