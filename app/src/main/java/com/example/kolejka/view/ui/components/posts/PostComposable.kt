@@ -42,7 +42,8 @@ fun PostComposable(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(PostWhite)
+                //.background(PostWhite)
+                .background(MaterialTheme.colors.onBackground)
                 .padding(PaddingMedium),
             horizontalAlignment = Alignment.Start
         ) {
@@ -66,6 +67,7 @@ fun PostComposable(
                     text = post.title,
                     style = MaterialTheme.typography.body1,
                     overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colors.secondaryVariant,
                     maxLines = 1
                 )
                 Image(
@@ -83,9 +85,9 @@ fun PostComposable(
             Text(
                 text = post.description,
                 style = MaterialTheme.typography.caption,
-                color = DarkGray,
+                color = MaterialTheme.colors.onSurface,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }

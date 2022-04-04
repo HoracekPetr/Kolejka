@@ -106,6 +106,7 @@ fun PostDetailScreen(
                                             fontWeight = FontWeight.Medium,
                                             fontSize = 18.sp
                                         ),
+                                        color = MaterialTheme.colors.secondaryVariant,
                                         overflow = TextOverflow.Clip,
                                         maxLines = 1
                                     )
@@ -143,11 +144,11 @@ fun PostDetailScreen(
                                 Text(
                                     text = post?.description ?: "",
                                     style = MaterialTheme.typography.subtitle1,
-                                    color = DarkGray
+                                    color = MaterialTheme.colors.onSurface
                                 )
 
                                 Spacer(modifier = Modifier.size(Space12))
-                                Divider(color = DarkGray)
+                                Divider(color = MaterialTheme.colors.onSurface)
                                 Spacer(modifier = Modifier.size(Space12))
 
 
@@ -158,12 +159,12 @@ fun PostDetailScreen(
                                         Text(
                                             text = stringResource(id = R.string.date) + ": ",
                                             style = MaterialTheme.typography.caption,
-                                            color = BlackAccent
+                                            color = MaterialTheme.colors.secondaryVariant
                                         )
                                         Text(
                                             text = post?.date ?: "",
                                             style = MaterialTheme.typography.caption,
-                                            color = DarkGray
+                                            color = MaterialTheme.colors.onSurface
                                         )
                                     }
                                 }
@@ -176,12 +177,12 @@ fun PostDetailScreen(
                                     Text(
                                         text = stringResource(id = R.string.location) + ": ",
                                         style = MaterialTheme.typography.caption,
-                                        color = BlackAccent
+                                        color = MaterialTheme.colors.secondaryVariant
                                     )
                                     Text(
                                         text = post?.location ?: "",
                                         style = MaterialTheme.typography.caption,
-                                        color = DarkGray
+                                        color = MaterialTheme.colors.onSurface
                                     )
                                 }
 
@@ -202,7 +203,8 @@ fun PostDetailScreen(
                                         )
                                         Text(
                                             text = "${post?.available} / ${post?.limit}",
-                                            style = MaterialTheme.typography.h3
+                                            style = MaterialTheme.typography.h3,
+                                            color = MaterialTheme.colors.secondaryVariant
                                         )
                                     }
                                     if (requesterId != post?.userId) {

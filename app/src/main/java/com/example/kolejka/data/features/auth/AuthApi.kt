@@ -19,3 +19,4 @@ interface AuthApi {
     @GET("/api/user/authenticate")
     suspend fun authenticate()
 }
+

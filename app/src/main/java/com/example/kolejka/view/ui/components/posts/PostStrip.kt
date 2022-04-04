@@ -29,7 +29,7 @@ fun PostStrip(
 ) {
     Card(
         border = if (post.type == PostType.Event.type) BorderStroke(1.dp, PostStripEvent) else BorderStroke(1.dp, PostStripOffer),
-        backgroundColor = PostWhite,
+        backgroundColor = MaterialTheme.colors.onBackground,
         modifier = modifier,
         shape = RoundedCornerShape(Space12),
         elevation = Space12
@@ -52,10 +52,17 @@ fun PostStrip(
             )
             Spacer(modifier = Modifier.size(Space4))
             Column(modifier = Modifier.weight(4f),horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = post.title, style = MaterialTheme.typography.body1, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(
+                    text = post.title,
+                    style = MaterialTheme.typography.body1,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colors.secondaryVariant
+                )
                 Text(
                     text = if (post.type == PostType.Event.type) stringResource(id = R.string.event) else stringResource(id = R.string.offer),
-                    style = MaterialTheme.typography.caption
+                    style = MaterialTheme.typography.caption,
+                    color = MaterialTheme.colors.secondaryVariant
                 )
             }
         }

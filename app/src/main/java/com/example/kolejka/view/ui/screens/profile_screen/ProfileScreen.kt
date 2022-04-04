@@ -99,13 +99,14 @@ fun ProfileScreen(
                         RadioButton(
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = DarkPurple,
-                                unselectedColor = DarkGray
+                                unselectedColor = MaterialTheme.colors.onSurface
                             ),
                             selected = viewModel.eventsRadioEnabled.value,
                             onClick = { viewModel.setYourPostsRadioEnabled(true) })
                         Text(
                             text = stringResource(R.string.my_posts),
-                            style = MaterialTheme.typography.subtitle2
+                            style = MaterialTheme.typography.subtitle2,
+                            color = MaterialTheme.colors.secondaryVariant
                         )
                     }
                     Column(
@@ -115,13 +116,14 @@ fun ProfileScreen(
                         RadioButton(
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = DarkPurple,
-                                unselectedColor = DarkGray
+                                unselectedColor = MaterialTheme.colors.onSurface
                             ),
                             selected = viewModel.offersRadioEnabled.value,
                             onClick = { viewModel.setJoinedPostsRadioEnabled(true) })
                         Text(
                             stringResource(R.string.joined_posts),
-                            style = MaterialTheme.typography.subtitle2
+                            style = MaterialTheme.typography.subtitle2,
+                            color = MaterialTheme.colors.secondaryVariant
                         )
                     }
                 }

@@ -5,26 +5,33 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
 private val LightColorPalette = lightColors(
     primary = DarkPurple,
     background = LightBackgroundWhite,
     primaryVariant = MediumOpaquePurple,
-    secondary = DarkGray
+    secondary = DarkGray,
+    onBackground = PostWhite,
+    secondaryVariant = BlackAccent,
+    onSurface = DarkGray
 )
 
 private val DarkColorPalette = darkColors(
     primary = DarkPurple,
     background = DarkBackgroundGray,
     primaryVariant = LightOpaquePurple,
-    secondary = LightGray
+    secondary = LightGray,
+    secondaryVariant = Color.White,
+    onBackground = PostDark,
+    onSurface = Color.Black
 )
 
 @Composable
 fun KolejkaTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
 
-    //val colors = if(darkTheme) DarkColorPalette else LightColorPalette
-    val colors = LightColorPalette
+    val colors = if(darkTheme) DarkColorPalette else LightColorPalette
+    //val colors = LightColorPalette
 
     MaterialTheme(
         colors = colors,
