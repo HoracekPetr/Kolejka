@@ -106,7 +106,7 @@ fun EditProfileDialog(
                         },
                     painter = rememberImagePainter(
                         request = ImageRequest.Builder(LocalContext.current)
-                            .data(editProfileState.profileImageUrl)
+                            .data(if (viewModel.profileImageUri.value == null) editProfileState.profileImageUrl else viewModel.profileImageUri.value)
                             .build()
                     ),
                     contentDescription = null

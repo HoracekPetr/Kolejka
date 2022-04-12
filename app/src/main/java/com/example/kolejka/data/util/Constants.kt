@@ -10,4 +10,6 @@ object Constants {
     const val SHARED_PREFERENCES_NAME = "shared_pref"
     const val DEFAULT_PAGE_SIZE = 5
     const val DEFAULT_NOTIFICATIONS_PAGE_SIZE = 10
+
+    const val NOTIFICATION_UPDATE_DELAY = 5000L
 }

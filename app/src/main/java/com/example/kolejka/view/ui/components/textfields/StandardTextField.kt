@@ -32,7 +32,7 @@ fun StandardTextField(
     placeholderTextAlignment: TextAlign = TextAlign.Start,
     textfieldColors: TextFieldColors = TextFieldDefaults.textFieldColors(
         backgroundColor = ExtraLightGray,
-        textColor = MaterialTheme.colors.secondaryVariant
+        textColor = MaterialTheme.colors.onSurface
     ),
     maxLines: Int = 1,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),

@@ -32,6 +32,16 @@ interface PostRepository {
         postImageURL: String?
     ): SimpleResource
 
+    suspend fun editPostInfo(
+        postId: String,
+        title: String,
+        description: String,
+        limit: Int?,
+        date: String,
+        location: String,
+        postImageUrl: String?
+    ): SimpleResource
+
     suspend fun deletePost(postId: String): SimpleResource
 
 }

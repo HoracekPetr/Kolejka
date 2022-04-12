@@ -30,9 +30,9 @@ class AllPostsSource(
             val nextPage = params.key ?: currentPage
             val posts = api.getPostsByAll(page = nextPage, pageSize = DEFAULT_PAGE_SIZE)
             LoadResult.Page(
-                data = posts.reversed(),
+                data = posts,
                 prevKey = if (nextPage == 0) null else nextPage - 1,
-                nextKey = if (posts.isEmpty()) null else currentPage + 1
+                nextKey = if (posts.isEmpty()) null else nextPage + 1
             ).also {
                 currentPage++
             }
@@ -43,4 +43,3 @@ class AllPostsSource(
         }
     }
 }
-

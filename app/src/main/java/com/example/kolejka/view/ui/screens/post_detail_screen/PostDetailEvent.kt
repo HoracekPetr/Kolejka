@@ -4,6 +4,7 @@ sealed class PostDetailEvent{
     object Comment: PostDetailEvent()
     object AddMember: PostDetailEvent()
     object DeletePost: PostDetailEvent()
+    object EditPost: PostDetailEvent()
     object ConfirmPostDelete: PostDetailEvent()
     object DismissPostDelete: PostDetailEvent()
     object DeleteComment: PostDetailEvent()

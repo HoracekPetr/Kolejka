@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.kolejka.models.Post
+import com.example.kolejka.view.ui.screens.edit_post_screen.EditPostScreen
 import com.example.kolejka.view.ui.screens.login_screen.LoginScreen
 import com.example.kolejka.view.ui.screens.main_post_screen.PostScreen
 import com.example.kolejka.view.ui.screens.new_post_screen.NewPostScreen
@@ -66,6 +67,23 @@ fun AppNavigationHost(navController: NavHostController, secondaryNavController: 
         ) {
             val postId = it.arguments?.getString("postId")
             PostDetailScreen(
+                navController = navController,
+                postId = postId
+            )
+        }
+
+        composable(
+            route = Screen.EditPostScreen.route + "?postId={postId}",
+            arguments = listOf(
+                navArgument(name = "postId"){
+                    nullable = true
+                    defaultValue = null
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            val postId = it.arguments?.getString("postId")
+            EditPostScreen(
                 navController = navController,
                 postId = postId
             )

@@ -32,7 +32,4 @@ class EventScreenViewModel @Inject constructor(
             _isRefreshing.emit(false)
         }
     }
-
-
-
 }

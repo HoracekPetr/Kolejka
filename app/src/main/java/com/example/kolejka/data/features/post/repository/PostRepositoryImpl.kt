@@ -10,6 +10,7 @@ import com.example.kolejka.R
 import com.example.kolejka.data.features.post.PostApi
 import com.example.kolejka.data.features.post.dto.request.AddMemberRequest
 import com.example.kolejka.data.features.post.dto.request.NewPostRequest
+import com.example.kolejka.data.features.post.dto.request.UpdatePostRequest
 import com.example.kolejka.data.features.post.dto.response.PostDetailResponse
 import com.example.kolejka.data.features.post.paging.AllPostsSource
 import com.example.kolejka.data.features.post.paging.CreatorPostsSource
@@ -105,6 +106,43 @@ class PostRepositoryImpl(
                 } ?: Resource.Error(uiText = UiText.StringResource(R.string.an_unknown_error_occured))
             }
         } catch (e: IOException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
+        } catch (e: HttpException) {
+            Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))
+        }
+    }
+
+    override suspend fun editPostInfo(
+        postId: String,
+        title: String,
+        description: String,
+        limit: Int?,
+        date: String,
+        location: String,
+        postImageUrl: String?
+    ): SimpleResource {
+
+        val request = UpdatePostRequest(
+            postId = postId,
+            title = title,
+            description = description,
+            limit = limit,
+            date = date,
+            location = location,
+            postPictureUrl = postImageUrl
+        )
+
+        return try{
+            val response = postApi.editPostInfo(request)
+
+            if(response.successful){
+                Resource.Success(Unit)
+            } else {
+                response.message?.let{ msg ->
+                    Resource.Error(uiText = UiText.StringDynamic(msg))
+                } ?: Resource.Error(uiText = UiText.unknownError())
+            }
+        } catch (e: IOException){
             Resource.Error(uiText = UiText.StringResource(R.string.cant_reach_server))
         } catch (e: HttpException) {
             Resource.Error(uiText = UiText.StringResource(R.string.something_went_wrong))

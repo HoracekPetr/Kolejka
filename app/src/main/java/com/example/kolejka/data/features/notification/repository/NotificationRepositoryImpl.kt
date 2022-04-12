@@ -9,9 +9,11 @@ import com.example.kolejka.data.features.notification.dto.NotificationDto
 import com.example.kolejka.data.features.notification.paging.NotificationsSource
 import com.example.kolejka.data.features.post.paging.AllPostsSource
 import com.example.kolejka.data.util.Constants
+import com.example.kolejka.data.util.Constants.NOTIFICATION_UPDATE_DELAY
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.data.util.SimpleResource
 import com.example.kolejka.view.util.uitext.UiText
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -29,8 +31,8 @@ class NotificationRepositoryImpl(
     override fun getNotificationsCount(): Flow<Int> {
         return flow {
             while (true){
-
                 emit(api.getNotificationsCount())
+                delay(NOTIFICATION_UPDATE_DELAY)
             }
         }
     }

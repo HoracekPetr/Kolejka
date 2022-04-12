@@ -55,7 +55,6 @@ class AuthRepositoryImpl(
                 sharedPreferences.edit()
                     .putString(JWT_TOKEN, response.data?.token)
                     .apply()
-                println("The token: ${response.data?.token}")
                 Resource.Success(Unit)
 
             } else {

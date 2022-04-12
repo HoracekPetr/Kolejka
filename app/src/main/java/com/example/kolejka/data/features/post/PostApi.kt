@@ -2,6 +2,7 @@ package com.example.kolejka.data.features.post
 
 import com.example.kolejka.data.features.post.dto.request.AddMemberRequest
 import com.example.kolejka.data.features.post.dto.request.NewPostRequest
+import com.example.kolejka.data.features.post.dto.request.UpdatePostRequest
 import com.example.kolejka.data.features.post.dto.response.PostDetailResponse
 import com.example.kolejka.data.response.BasicApiResponse
 import com.example.kolejka.models.Post
@@ -55,4 +56,10 @@ interface PostApi {
     suspend fun deletePost(
         @Query("postId") postId: String
     ): BasicApiResponse<Unit>
+
+    @PUT("/api/post/edit")
+    suspend fun editPostInfo(
+        @Body request: UpdatePostRequest
+    ): BasicApiResponse<Unit>
 }
+

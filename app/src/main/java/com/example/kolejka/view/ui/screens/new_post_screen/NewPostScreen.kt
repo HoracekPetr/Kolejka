@@ -1,5 +1,6 @@
 package com.example.kolejka.view.ui.screens.new_post_screen
 
+import android.util.Log
 import android.widget.CalendarView
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -83,16 +84,20 @@ fun NewPostScreen(
 
     val scrollState = rememberScrollState()
 
+    val context = LocalContext.current
+
 
     val cropActivityLauncher = rememberLauncherForActivityResult(
         contract = CropActivityResultContract(aspectX = 16f, aspectY = 9f)
     ) {
+        Log.d("URI IS", "$it")
         viewModel.onEvent(NewPostEvent.CropImage(it))
     }
 
     val getImageFromGallery =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
             if (it != null) {
+                Log.d("URI IS", "$it")
                 cropActivityLauncher.launch(it)
             }
         }
@@ -410,7 +415,7 @@ fun NewPostScreen(
                             iconDescription = "",
                             uploadingImage = viewModel.imageUploading.value
                         ) {
-                            viewModel.cloudinaryUpload(imageUri.value)
+                            viewModel.cloudinaryUpload(imageUri.value, context)
                         }
                     }
                 }
@@ -545,7 +550,7 @@ fun NewPostScreen(
                             ),
                             iconDescription = ""
                         ) {
-                            viewModel.cloudinaryUpload(imageUri.value)
+                            viewModel.cloudinaryUpload(imageUri.value, context)
                         }
                     }
                 }
@@ -553,3 +558,4 @@ fun NewPostScreen(
         }
     }
 }
+

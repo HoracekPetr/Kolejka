@@ -12,6 +12,7 @@ import com.example.kolejka.use_cases.comment.GetCommentsForPostUseCase
 import com.example.kolejka.use_cases.post.AddPostMemberUseCase
 import com.example.kolejka.use_cases.post.DeletePostUseCase
 import com.example.kolejka.use_cases.post.GetPostByIdUseCase
+import com.example.kolejka.view.util.Screen
 import com.example.kolejka.view.util.UiEvent
 import com.example.kolejka.view.util.states.StandardTextfieldState
 import com.example.kolejka.view.util.uitext.UiText
@@ -71,6 +72,7 @@ class PostDetailScreenViewModel @Inject constructor(
                     showDeletePostDialog = true
                 )
             }
+
             is PostDetailEvent.ConfirmPostDelete -> savedStateHandle.get<String>("postId")?.let{ postId ->
                 deletePost(postId)
                 _state.value = _state.value.copy(
@@ -101,6 +103,18 @@ class PostDetailScreenViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     showDeleteCommentDialog = false
                 )
+            }
+            is PostDetailEvent.EditPost -> {
+                val postId = savedStateHandle.get<String>("postId")
+                if(postId != null){
+                    viewModelScope.launch {
+                        _eventFlow.emit(
+                            UiEvent.Navigate(
+                                route = Screen.EditPostScreen.route + "?postId=$postId"
+                            )
+                        )
+                    }
+                }
             }
         }
     }

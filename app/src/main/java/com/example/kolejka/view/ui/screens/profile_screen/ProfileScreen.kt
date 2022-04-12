@@ -106,7 +106,7 @@ fun ProfileScreen(
                         Text(
                             text = stringResource(R.string.my_posts),
                             style = MaterialTheme.typography.subtitle2,
-                            color = MaterialTheme.colors.secondaryVariant
+                            color = if (viewModel.eventsRadioEnabled.value) DarkPurple else MaterialTheme.colors.onSurface
                         )
                     }
                     Column(
@@ -123,7 +123,7 @@ fun ProfileScreen(
                         Text(
                             stringResource(R.string.joined_posts),
                             style = MaterialTheme.typography.subtitle2,
-                            color = MaterialTheme.colors.secondaryVariant
+                            color = if (viewModel.offersRadioEnabled.value) DarkPurple else MaterialTheme.colors.onSurface
                         )
                     }
                 }

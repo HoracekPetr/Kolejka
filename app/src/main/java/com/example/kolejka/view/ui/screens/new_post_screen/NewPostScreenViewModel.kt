@@ -1,14 +1,20 @@
 package com.example.kolejka.view.ui.screens.new_post_screen
 
+import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cloudinary.Cloudinary
+import com.cloudinary.Transformation
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
+import com.cloudinary.android.preprocess.BitmapEncoder
+import com.cloudinary.android.preprocess.ImagePreprocessChain
+import com.cloudinary.android.preprocess.PreprocessChain
 import com.example.kolejka.R
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.use_cases.post.NewPostUseCase
@@ -65,10 +71,6 @@ class NewPostScreenViewModel @Inject constructor(
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
-
-    private val config: HashMap<String, String> = HashMap()
-
-    private val cloudinary = Cloudinary()
 
     fun onEvent(event: NewPostEvent) {
         when (event) {
@@ -170,7 +172,7 @@ class NewPostScreenViewModel @Inject constructor(
         }
     }
 
-    fun cloudinaryUpload(uri: Uri?) {
+    fun cloudinaryUpload(uri: Uri?, context: Context) {
         viewModelScope.launch {
             if (uri == null) {
                 _eventFlow.emit(
@@ -185,7 +187,11 @@ class NewPostScreenViewModel @Inject constructor(
                 _limitState.value.text.isNotBlank()
             ) {
                 if(_optionsRadioState.value.offerEnabled || _selectedDate.value != NO_DATE_SELECTED){
-                    val requestId = MediaManager.get().upload(uri).callback(object : UploadCallback {
+                    MediaManager
+                        .get()
+                        .upload(uri)
+                        .preprocess(ImagePreprocessChain().saveWith(BitmapEncoder(BitmapEncoder.Format.JPEG, 85)))
+                        .callback(object : UploadCallback {
                         override fun onStart(requestId: String?) {
                             _isLoading.value = true
                         }
@@ -211,7 +217,7 @@ class NewPostScreenViewModel @Inject constructor(
 
                         override fun onReschedule(requestId: String?, error: ErrorInfo?) {
                         }
-                    }).dispatch()
+                    }).dispatch(context)
                 }
                 else{
                     _eventFlow.emit(
