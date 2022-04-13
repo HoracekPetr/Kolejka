@@ -19,4 +19,6 @@ sealed class Screen(val route: String) {
     object OtherUserScreen: Screen("other_user_screen")
     object NewPostScreen: Screen("new_post_screen")
     object EditPostScreen: Screen("edit_post_screen")
+    object NewsScreen: Screen("news_screen")
+    object NewsDetailScreen: Screen("news_detail_screen")
 }

@@ -98,4 +98,5 @@
     <string name="add_price">Add price?</string>
     <string name="price">Price</string>
     <string name="czk">CZK</string>
+    <string name="news">News</string>
 </resources>

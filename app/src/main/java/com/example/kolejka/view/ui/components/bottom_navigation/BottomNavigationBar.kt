@@ -6,6 +6,7 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Feed
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
@@ -24,6 +25,7 @@ import com.example.kolejka.KolejkaApp
 import com.example.kolejka.R
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.util.Screen
+import kotlin.math.max
 
 @Composable
 fun BottomNavigationBar(
@@ -38,24 +40,30 @@ fun BottomNavigationBar(
         BottomNavItem(
             name = stringResource(id = R.string.posts),
             route = Screen.PostScreen.route,
-            Icons.Outlined.Menu
+            icon = Icons.Outlined.Menu
         ),
         BottomNavItem(
             name = stringResource(id = R.string.notifications),
             route = Screen.NotificationScreen.route,
-            Icons.Outlined.Notifications,
+            icon = Icons.Outlined.Notifications,
+        ),
+        BottomNavItem(
+            name = stringResource(id = R.string.news),
+            route = Screen.NewsScreen.route,
+            icon = Icons.Outlined.Feed
         ),
         BottomNavItem(
             name = stringResource(id = R.string.profile),
             route = Screen.ProfileScreen.route,
-            Icons.Outlined.Person
+            icon = Icons.Outlined.Person
         )
     )
 
     val screensWithBottomBar = listOf(
         Screen.PostScreen.route,
         Screen.NotificationScreen.route,
-        Screen.ProfileScreen.route
+        Screen.ProfileScreen.route,
+        Screen.NewsScreen.route
     )
 
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -78,7 +86,8 @@ fun BottomNavigationBar(
                             text = item.name,
                             style = Typography.h5,
                             color = DarkPurple,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
                         )
                     },
                     selectedContentColor = DarkPurple,
