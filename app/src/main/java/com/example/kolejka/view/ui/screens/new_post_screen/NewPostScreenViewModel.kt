@@ -2,6 +2,7 @@ package com.example.kolejka.view.ui.screens.new_post_screen
 
 import android.content.Context
 import android.net.Uri
+import android.text.style.TabStopSpan
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
@@ -53,6 +54,12 @@ class NewPostScreenViewModel @Inject constructor(
 
     private var _limitState = mutableStateOf(StandardTextfieldState())
     var limitState: State<StandardTextfieldState> = _limitState
+
+    private val _priceState = mutableStateOf(StandardTextfieldState())
+    val priceState: State<StandardTextfieldState> = _priceState
+
+    private val _priceVisibility = mutableStateOf<Boolean>(false)
+    val priceVisibility: State<Boolean> = _priceVisibility
 
     private var _optionsRadioState = mutableStateOf(NewPostRadioState())
     var optionsRadioState: State<NewPostRadioState> = _optionsRadioState
@@ -130,6 +137,14 @@ class NewPostScreenViewModel @Inject constructor(
             is NewPostEvent.CreatePost -> {
 
             }
+            is NewPostEvent.SetPriceVisibility -> {
+                _priceVisibility.value = !_priceVisibility.value
+            }
+            is NewPostEvent.EnteredPrice -> {
+                _priceState.value = _priceState.value.copy(
+                    text = event.price 
+                )
+            }
         }
     }
 
@@ -148,7 +163,8 @@ class NewPostScreenViewModel @Inject constructor(
                 },
                 date = selectedDate.value,
                 location = locationState.value.text,
-                postImageURL = _imageUrl.value
+                postImageURL = _imageUrl.value,
+                price = if (_priceState.value.text.isBlank()) null else _priceState.value.text.toIntOrNull()
             )
 
             _isLoading.value = false

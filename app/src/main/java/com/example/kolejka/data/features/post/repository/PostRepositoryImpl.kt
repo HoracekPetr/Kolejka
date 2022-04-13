@@ -1,11 +1,8 @@
 package com.example.kolejka.data.features.post.repository
 
-import android.net.Uri
-import androidx.core.net.toFile
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.data.requests.CreatePostRequest
 import com.example.kolejka.R
 import com.example.kolejka.data.features.post.PostApi
 import com.example.kolejka.data.features.post.dto.request.AddMemberRequest
@@ -23,8 +20,6 @@ import com.example.kolejka.models.Post
 import com.example.kolejka.view.util.uitext.UiText
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -83,16 +78,18 @@ class PostRepositoryImpl(
         type: Int,
         date: String?,
         location: String?,
-        postImageURL: String?
+        postImageURL: String?,
+        price: Int?
     ): SimpleResource {
         val request = NewPostRequest(
-            title,
-            description,
-            limit ?: 0,
-            type,
-            date ?: "",
-            location ?: "",
-            postImageURL ?: ""
+            title = title,
+            description = description,
+            limit = limit ?: 0,
+            type = type,
+            date = date ?: "",
+            location = location ?: "",
+            postImageURL = postImageURL ?: "",
+            price = price
         )
 
         return try {
@@ -119,7 +116,8 @@ class PostRepositoryImpl(
         limit: Int?,
         date: String,
         location: String,
-        postImageUrl: String?
+        postImageUrl: String?,
+        price: Int?
     ): SimpleResource {
 
         val request = UpdatePostRequest(
@@ -129,7 +127,8 @@ class PostRepositoryImpl(
             limit = limit,
             date = date,
             location = location,
-            postPictureUrl = postImageUrl
+            postPictureUrl = postImageUrl,
+            price = price
         )
 
         return try{

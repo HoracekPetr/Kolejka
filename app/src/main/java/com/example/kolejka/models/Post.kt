@@ -14,5 +14,6 @@ data class Post(
         val profilePictureUrl: String? = "",
         val date: String? = null,
         val location: String? = null,
-        val timestamp: Long? = 0
+        val timestamp: Long? = 0,
+        val price: Int? = null
 )

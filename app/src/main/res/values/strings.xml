@@ -95,4 +95,7 @@
     <string name="close">Close</string>
     <string name="delete">Delete</string>
     <string name="update_post">Update post!</string>
+    <string name="add_price">Add price?</string>
+    <string name="price">Price</string>
+    <string name="czk">CZK</string>
 </resources>

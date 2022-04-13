@@ -29,7 +29,8 @@ interface PostRepository {
         type: Int,
         date: String?,
         location: String?,
-        postImageURL: String?
+        postImageURL: String?,
+        price: Int?
     ): SimpleResource
 
     suspend fun editPostInfo(
@@ -39,7 +40,8 @@ interface PostRepository {
         limit: Int?,
         date: String,
         location: String,
-        postImageUrl: String?
+        postImageUrl: String?,
+        price: Int?
     ): SimpleResource
 
     suspend fun deletePost(postId: String): SimpleResource

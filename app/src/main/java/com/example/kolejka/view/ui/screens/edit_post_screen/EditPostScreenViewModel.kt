@@ -59,6 +59,12 @@ class EditPostScreenViewModel @Inject constructor(
     private var _limitState = mutableStateOf(StandardTextfieldState())
     var limitState: State<StandardTextfieldState> = _limitState
 
+    private val _priceState = mutableStateOf(StandardTextfieldState())
+    val priceState: State<StandardTextfieldState> = _priceState
+
+    private val _priceVisibility = mutableStateOf(false)
+    val priceVisibility: State<Boolean> = _priceVisibility
+
     private var _showCalendarView = mutableStateOf(false)
     var showCalendarView: State<Boolean> = _showCalendarView
 
@@ -127,6 +133,14 @@ class EditPostScreenViewModel @Inject constructor(
             EditPostEvent.UpdatePost -> {
                 TODO()
             }
+            is EditPostEvent.EnteredPrice -> {
+                _priceState.value = _priceState.value.copy(
+                    text = event.price
+                )
+            }
+            EditPostEvent.SetPriceVisibility -> {
+                _priceVisibility.value = !_priceVisibility.value
+            }
         }
     }
 
@@ -173,6 +187,14 @@ class EditPostScreenViewModel @Inject constructor(
 
                     _postType.value = postResult.data?.post?.type
 
+                    _priceState.value = _priceState.value.copy(
+                        text = postResult.data?.post?.price?.toString() ?: ""
+                    )
+
+                    if(postResult.data?.post?.price != null){
+                        _priceVisibility.value = !_priceVisibility.value
+                    }
+
                 }
             }
         }
@@ -187,10 +209,11 @@ class EditPostScreenViewModel @Inject constructor(
                     postId = postId,
                     description = _descriptionState.value.text,
                     title = _titleState.value.text,
-                    limit = _limitState.value.text.toInt(),
+                    limit = _limitState.value.text.toIntOrNull(),
                     date = _selectedDate.value,
                     location = _locationState.value.text,
-                    postImageUrl = _newImageUrl.value
+                    postImageUrl = _newImageUrl.value,
+                    price = if (_priceState.value.text.isBlank()) null else _priceState.value.text.toIntOrNull()
                 )
 
                 when(editPostRequest){

@@ -1,4 +1,4 @@
-package com.example.data.requests
+package com.example.kolejka.data.features.post.dto.request
 
 data class CreatePostRequest(
     val title: String,
@@ -6,5 +6,5 @@ data class CreatePostRequest(
     val limit: Int,
     val type: Int,
     val date: String,
-    val location: String
+    val location: String,
 )

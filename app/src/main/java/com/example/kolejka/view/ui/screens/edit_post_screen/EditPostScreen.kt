@@ -16,9 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddAPhoto
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Event
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -339,35 +337,110 @@ fun EditPostScreen(
             //IF OFFER
             if (type == PostType.Offer.type) {
 
-                //LIMIT
-
-                StandardTextField(
-                    modifier = Modifier
-                        .width(90.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .onFocusEvent {
-                            if (it.isFocused) {
-                                coroutineScope.launch {
-                                    delay(200)
-                                    viewRequester.bringIntoView()
-                                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (!viewModel.priceVisibility.value) {
+                        TextButton(onClick = { viewModel.onEvent(EditPostEvent.SetPriceVisibility) }) {
+                            Icon(
+                                imageVector = Icons.Default.AttachMoney,
+                                tint = MaterialTheme.colors.primary,
+                                contentDescription = "Add price"
+                            )
+                            Spacer(modifier = Modifier.size(4.dp))
+                            Text(
+                                text = stringResource(com.example.kolejka.R.string.add_price),
+                                color = MaterialTheme.colors.primary,
+                                style = TextStyle(
+                                    fontFamily = roboto_mono,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 18.sp,
+                                )
+                            )
+                        }
+                    } else {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            StandardTextField(
+                                modifier = Modifier
+                                    .width(140.dp)
+                                    .onFocusEvent {
+                                        if (it.isFocused) {
+                                            coroutineScope.launch {
+                                                delay(200)
+                                                viewRequester.bringIntoView()
+                                            }
+                                        }
+                                    }
+                                    .bringIntoViewRequester(viewRequester),
+                                text = viewModel.priceState.value.text,
+                                hint = stringResource(com.example.kolejka.R.string.price),
+                                onTextChanged = { viewModel.onEvent(EditPostEvent.EnteredPrice(it)) },
+                                placeholderTextColor = DarkGray,
+                                textStyle = TextStyle(
+                                    fontFamily = roboto_mono,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 18.sp,
+                                    textAlign = TextAlign.Center
+                                ),
+                                trailingIcon = {
+                                    Text(
+                                        modifier = Modifier.background(
+                                            PostWhite,
+                                            shape = CircleShape
+                                        ).padding(Space4),
+                                        text = stringResource(com.example.kolejka.R.string.czk),
+                                        style = MaterialTheme.typography.h5
+                                    )
+                                },
+                                placeholderTextStyle = MaterialTheme.typography.h3,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            )
+                            Spacer(modifier = Modifier.size(4.dp))
+                            IconButton(onClick = {
+                                viewModel.onEvent(EditPostEvent.SetPriceVisibility)
+                                viewModel.onEvent(EditPostEvent.EnteredPrice(""))
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.MoneyOff,
+                                    tint = MaterialTheme.colors.primary,
+                                    contentDescription = "No price"
+                                )
                             }
                         }
-                        .bringIntoViewRequester(viewRequester),
-                    text = limit.text,
-                    hint = stringResource(id = com.example.kolejka.R.string.limit),
-                    onTextChanged = { viewModel.onEvent(EditPostEvent.EnteredLimit(it)) },
-                    placeholderTextColor = DarkGray,
-                    textStyle = TextStyle(
-                        fontFamily = roboto_mono,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Center
-                    ),
-                    //placeholderTextAlignment = TextAlign.Justify,
-                    placeholderTextStyle = MaterialTheme.typography.h3,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
+                    }
+
+                    //LIMIT
+
+
+                    StandardTextField(
+                        modifier = Modifier
+                            .width(90.dp)
+                            .onFocusEvent {
+                                if (it.isFocused) {
+                                    coroutineScope.launch {
+                                        delay(200)
+                                        viewRequester.bringIntoView()
+                                    }
+                                }
+                            }
+                            .bringIntoViewRequester(viewRequester),
+                        text = limit.text,
+                        hint = stringResource(id = com.example.kolejka.R.string.limit),
+                        onTextChanged = { viewModel.onEvent(EditPostEvent.EnteredLimit(it)) },
+                        placeholderTextColor = DarkGray,
+                        textStyle = TextStyle(
+                            fontFamily = roboto_mono,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 18.sp,
+                            textAlign = TextAlign.Center
+                        ),
+                        //placeholderTextAlignment = TextAlign.Justify,
+                        placeholderTextStyle = MaterialTheme.typography.h3,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.size(Space24))
@@ -399,3 +472,4 @@ fun EditPostScreen(
         }
     }
 }
+

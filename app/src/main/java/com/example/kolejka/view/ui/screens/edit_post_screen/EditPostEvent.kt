@@ -8,6 +8,8 @@ sealed class EditPostEvent{
     data class EnteredDescription(val description: String): EditPostEvent()
     data class EnteredLocation(val location: String): EditPostEvent()
     data class EnteredLimit(val limit: String): EditPostEvent()
+    data class EnteredPrice(val price: String): EditPostEvent()
+    object SetPriceVisibility: EditPostEvent()
     data class PickedImage(val uri: Uri?): EditPostEvent()
     data class CropImage(val uri: Uri?): EditPostEvent()
     data class CalendarEnabled(val enabled: Boolean): EditPostEvent()

@@ -11,14 +11,12 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddAPhoto
-import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Event
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -153,7 +151,9 @@ fun NewPostScreen(
                     }
             ) {
                 Icon(
-                    modifier = Modifier.align(Alignment.Center).size(75.dp),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(75.dp),
                     tint = MaterialTheme.colors.onSurface,
                     imageVector = Icons.Default.AddAPhoto,
                     contentDescription = stringResource(R.string.add_a_new_photo)
@@ -500,33 +500,108 @@ fun NewPostScreen(
 
                 //LIMIT
 
-                StandardTextField(
-                    modifier = Modifier
-                        .width(90.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .onFocusEvent {
-                            if (it.isFocused) {
-                                coroutineScope.launch {
-                                    delay(200)
-                                    viewRequester.bringIntoView()
-                                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (!viewModel.priceVisibility.value) {
+                        TextButton(onClick = { viewModel.onEvent(NewPostEvent.SetPriceVisibility) }) {
+                            Icon(
+                                imageVector = Icons.Default.AttachMoney,
+                                tint = MaterialTheme.colors.primary,
+                                contentDescription = "Add price"
+                            )
+                            Spacer(modifier = Modifier.size(4.dp))
+                            Text(
+                                text = stringResource(R.string.add_price),
+                                color = MaterialTheme.colors.primary,
+                                style = TextStyle(
+                                    fontFamily = roboto_mono,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 18.sp,
+                                )
+                            )
+                        }
+                    } else {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            StandardTextField(
+                                modifier = Modifier
+                                    .width(140.dp)
+                                    .onFocusEvent {
+                                        if (it.isFocused) {
+                                            coroutineScope.launch {
+                                                delay(200)
+                                                viewRequester.bringIntoView()
+                                            }
+                                        }
+                                    }
+                                    .bringIntoViewRequester(viewRequester),
+                                text = viewModel.priceState.value.text,
+                                hint = stringResource(R.string.price),
+                                onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredPrice(it)) },
+                                placeholderTextColor = DarkGray,
+                                textStyle = TextStyle(
+                                    fontFamily = roboto_mono,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 18.sp,
+                                    textAlign = TextAlign.Center
+                                ),
+                                trailingIcon = {
+                                    Text(
+                                        modifier = Modifier.background(
+                                            PostWhite,
+                                            shape = CircleShape
+                                        ).padding(Space4),
+                                        text = stringResource(R.string.czk),
+                                        style = MaterialTheme.typography.h5
+                                    )
+                                },
+                                placeholderTextStyle = MaterialTheme.typography.h3,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            )
+                            Spacer(modifier = Modifier.size(4.dp))
+                            IconButton(onClick = {
+                                viewModel.onEvent(NewPostEvent.SetPriceVisibility)
+                                viewModel.onEvent(NewPostEvent.EnteredPrice(""))
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.MoneyOff,
+                                    tint = MaterialTheme.colors.primary,
+                                    contentDescription = "No price"
+                                )
                             }
                         }
-                        .bringIntoViewRequester(viewRequester),
-                    text = limit.value.text,
-                    hint = stringResource(id = R.string.limit),
-                    onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredLimit(it)) },
-                    placeholderTextColor = DarkGray,
-                    textStyle = TextStyle(
-                        fontFamily = roboto_mono,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Center
-                    ),
-                    //placeholderTextAlignment = TextAlign.Justify,
-                    placeholderTextStyle = MaterialTheme.typography.h3,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
+                    }
+
+                    StandardTextField(
+                        modifier = Modifier
+                            .width(90.dp)
+                            .onFocusEvent {
+                                if (it.isFocused) {
+                                    coroutineScope.launch {
+                                        delay(200)
+                                        viewRequester.bringIntoView()
+                                    }
+                                }
+                            }
+                            .bringIntoViewRequester(viewRequester),
+                        text = limit.value.text,
+                        hint = stringResource(id = R.string.limit),
+                        onTextChanged = { viewModel.onEvent(NewPostEvent.EnteredLimit(it)) },
+                        placeholderTextColor = DarkGray,
+                        textStyle = TextStyle(
+                            fontFamily = roboto_mono,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 18.sp,
+                            textAlign = TextAlign.Center
+                        ),
+                        //placeholderTextAlignment = TextAlign.Justify,
+                        placeholderTextStyle = MaterialTheme.typography.h3,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+                }
+
                 //}
 
                 Spacer(modifier = Modifier.size(Space24))

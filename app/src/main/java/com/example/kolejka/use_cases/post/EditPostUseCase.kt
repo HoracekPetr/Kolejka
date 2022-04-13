@@ -13,7 +13,8 @@ class EditPostUseCase(
         limit: Int?,
         date: String,
         location: String,
-        postImageUrl: String?
+        postImageUrl: String?,
+        price: Int?
     ): SimpleResource {
         return repository.editPostInfo(
             postId = postId,
@@ -22,7 +23,8 @@ class EditPostUseCase(
             limit = limit,
             date = date,
             location = location,
-            postImageUrl = postImageUrl
+            postImageUrl = postImageUrl,
+            price = price
         )
     }
 }

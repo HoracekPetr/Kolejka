@@ -212,6 +212,26 @@ fun PostDetailScreen(
                                         )
                                     }
 
+                                    //PRICE
+
+                                    if(post?.price != null) {
+
+                                        Spacer(modifier = Modifier.size(Space12))
+
+                                        Row {
+                                            Text(
+                                                text = stringResource(id = R.string.price) + ": ",
+                                                style = MaterialTheme.typography.caption,
+                                                color = MaterialTheme.colors.secondaryVariant
+                                            )
+                                            Text(
+                                                text = post.price.toString() + " " + stringResource(id = R.string.czk),
+                                                style = MaterialTheme.typography.caption,
+                                                color = MaterialTheme.colors.onSurface
+                                            )
+                                        }
+                                    }
+
                                     Spacer(modifier = Modifier.size(Space8))
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
@@ -382,4 +402,5 @@ fun PostDetailScreen(
         }
     }
 }
+
 
