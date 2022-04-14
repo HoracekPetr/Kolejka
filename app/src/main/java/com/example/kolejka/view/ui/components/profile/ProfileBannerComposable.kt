@@ -11,15 +11,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.EditAttributes
 import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material.icons.filled.Palette
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.colorspace.ColorSpaces
@@ -32,6 +27,7 @@ import com.example.kolejka.R
 import com.example.kolejka.models.User
 import com.example.kolejka.view.theme.*
 import com.example.kolejka.view.util.Constants.SUM_THRESHOLD
+import kotlin.math.abs
 
 
 @Composable
@@ -72,7 +68,7 @@ fun ProfileBannerComposable(
             Text(
                 text = user.username,
                 style = Typography.body1,
-                color = if ((user.bannerR + user.bannerB + user.bannerG) < SUM_THRESHOLD) Color.White else Color.Black
+                color = bannerTextColor(red = user.bannerR, green = user.bannerG, blue = user.bannerB)
             )
             Spacer(modifier = Modifier.size(Space8))
             if (isLoggedUser) {
@@ -81,14 +77,14 @@ fun ProfileBannerComposable(
                         modifier = Modifier.clickable { onEditIconClick() },
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit",
-                        tint = if ((user.bannerR + user.bannerB + user.bannerG) < SUM_THRESHOLD) Color.White else Color.Black
+                        tint = bannerTextColor(red = user.bannerR, green = user.bannerG, blue = user.bannerB)
                     )
                     Spacer(modifier = Modifier.size(Space36))
                     Icon(
                         modifier = Modifier.clickable { onLogoutIconClick() },
                         imageVector = Icons.Default.Logout,
                         contentDescription = "Logout",
-                        tint = if ((user.bannerR + user.bannerB + user.bannerG) < SUM_THRESHOLD) Color.White else Color.Black
+                        tint = bannerTextColor(red = user.bannerR, green = user.bannerG, blue = user.bannerB)
                     )
                 }
             }
@@ -96,3 +92,18 @@ fun ProfileBannerComposable(
         }
     }
 }
+
+fun bannerTextColor(red: Float, green: Float, blue: Float): Color{
+
+    if(red == 255F || green == 255F){
+        return Color.Black
+    }
+
+    if(red < 122F || green < 122F){
+        return Color.White
+    }
+
+    return Color.Black
+
+}
+

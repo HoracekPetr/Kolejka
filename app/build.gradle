@@ -133,4 +133,6 @@ dependencies {
     //MAIL DROID
     implementation 'com.github.nedimf:maildroid:v0.0.8-release'
 
+    implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
+
 }

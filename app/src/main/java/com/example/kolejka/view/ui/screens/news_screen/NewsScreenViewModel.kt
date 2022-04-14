@@ -2,13 +2,11 @@ package com.example.kolejka.view.ui.screens.news_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.compose.LazyPagingItems
 import com.example.kolejka.data.features.news.dto.NewsDto
 import com.example.kolejka.use_cases.news.GetNewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject

@@ -77,7 +77,7 @@ fun NotificationScreen(
                             Icon(
                                 imageVector = Icons.Default.Check,
                                 contentDescription = stringResource(R.string.delete),
-                                tint = MediumGreen
+                                tint = LightGreen
                             )
                         }
                         IconButton(onClick = {
@@ -86,7 +86,7 @@ fun NotificationScreen(
                             Icon(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = stringResource(R.string.close),
-                                tint = MediumRed
+                                tint = LightRed
                             )
                         }
                     },

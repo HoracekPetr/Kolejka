@@ -12,4 +12,5 @@ object Constants {
     const val DEFAULT_NOTIFICATIONS_PAGE_SIZE = 10
 
     const val NOTIFICATION_UPDATE_DELAY = 5000L
+    const val NEWS_UPDATE_DELAY = 10000L
 }

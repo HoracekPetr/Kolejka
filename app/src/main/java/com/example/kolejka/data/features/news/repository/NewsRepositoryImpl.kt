@@ -8,8 +8,11 @@ import com.example.kolejka.data.features.news.NewsApi
 import com.example.kolejka.data.features.news.dto.NewsDto
 import com.example.kolejka.data.features.news.paging.NewsSource
 import com.example.kolejka.data.util.Constants.DEFAULT_PAGE_SIZE
+import com.example.kolejka.data.util.Constants.NEWS_UPDATE_DELAY
+import com.example.kolejka.data.util.Constants.NOTIFICATION_UPDATE_DELAY
 import com.example.kolejka.data.util.Resource
 import com.example.kolejka.view.util.uitext.UiText
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -23,6 +26,7 @@ class NewsRepositoryImpl(
         get() = Pager(PagingConfig(pageSize = DEFAULT_PAGE_SIZE)){
             NewsSource(newsApi = newsApi)
         }.flow
+
 
     override suspend fun getNewsById(newsId: String): Resource<NewsDto> {
         return try {
