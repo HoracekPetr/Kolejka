@@ -10,7 +10,7 @@ import dagger.hilt.android.HiltAndroidApp
 class KolejkaApp:Application() {
     companion object {
         var notificationsCount = 0
-        private const val ONESIGNAL_APP_ID = "898f4b60-155f-45cb-a592-2c7adaa0dc3d"
+        private const val ONESIGNAL_APP_ID = "ONESIGNAL"
     }
 
     override fun onCreate() {
