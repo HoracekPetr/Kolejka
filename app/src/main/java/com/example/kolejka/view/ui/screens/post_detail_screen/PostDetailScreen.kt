@@ -129,13 +129,21 @@ fun PostDetailScreen(
                                         Text(
                                             modifier = Modifier.weight(4f),
                                             text = post?.title ?: "",
-                                            style = if (post?.title?.length ?: 0 < 15) MaterialTheme.typography.body1 else TextStyle(
-                                                fontFamily = roboto_mono,
-                                                fontWeight = FontWeight.Medium,
-                                                fontSize = 18.sp
-                                            ),
+                                            style = when {
+                                                post?.title?.length ?: 0 < 10 -> MaterialTheme.typography.body1
+                                                post?.title?.length ?: 0 < 15 -> TextStyle(
+                                                    fontFamily = roboto_mono,
+                                                    fontWeight = FontWeight.Medium,
+                                                    fontSize = 20.sp
+                                                )
+                                                else -> TextStyle(
+                                                    fontFamily = roboto_mono,
+                                                    fontWeight = FontWeight.Medium,
+                                                    fontSize = 18.sp
+                                                )
+                                            },
                                             color = MaterialTheme.colors.onSurface,
-                                            overflow = TextOverflow.Clip,
+                                            overflow = TextOverflow.Ellipsis,
                                             maxLines = 1
                                         )
                                         Column(

@@ -192,9 +192,9 @@ class RegisterScreenViewModel @Inject constructor(
 
         sendEmail {
             isStartTLSEnabled(true)
-            smtp("rumburak.mydreams.cz")
-            smtpUsername("kolejka@kolejka-app.eu")
-            smtpPassword("aaxzyULQPF8#5")
+            smtp("SMTP")
+            smtpUsername("USERNAME")
+            smtpPassword("PASSWORD")
             port("587")
             type(MaildroidXType.HTML)
             to(_emailState.value.text)

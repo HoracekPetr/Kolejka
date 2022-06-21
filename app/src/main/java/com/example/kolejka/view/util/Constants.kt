@@ -10,7 +10,7 @@ object Constants {
 }
 
 object CloudinaryConsts {
-    const val api_key = "734235877855918"
-    const val secret = "GKGe9IoYIGmOKJDbhxcw4IH-gSQ"
-    const val cloud = "kolejka-app-imagecloud"
+    const val api_key = "CLOUDINARY-KEY"
+    const val secret = "CLOUDINARY-SECRET"
+    const val cloud = "CLOUDINARY-CLOUD"
 }
